@@ -664,7 +664,7 @@ class MasterAssetController extends Controller
 						  $file_qrcode = '\app\qrcode_tempe.png';
 					}
 					// $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
-					$file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(400)->generate(''.$qrcode.'')); 
+					$file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(300)->generate(''.$qrcode.'')); 
 					$file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.jpeg';
 					@list($type, $file_data) = explode(';', $file_data);
 					@list(, $file_data) = explode(',', $file_data); 
