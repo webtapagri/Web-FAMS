@@ -67,7 +67,7 @@ return [
             'driver'    => 'mysql',
             'database'  => 'tap_fams_dev',
             'username'  => 'root',
-            'port'      => env('DB_PORT', '3307'),
+            'port'      => env('DB_PORT', '3306'),
             'password'  => '',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',

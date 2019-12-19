@@ -36,6 +36,7 @@ class MasterAssetController extends Controller
         $data['ctree_mod'] = 'Master Data';
         $data['ctree'] = 'master-asset';
         $data["access"] = (object)$access;
+        dd($access);
         return view('masterdata.master_asset')->with(compact('data'));
     }
 

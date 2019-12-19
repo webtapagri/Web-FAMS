@@ -34,7 +34,7 @@
 
     @if(config('adminlte.plugins.datatables'))
     <!-- DataTables with bootstrap 3 style -->
-    <link rel="stylesheet" href="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/datatables.min.css') }}">
     @endif
 
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/datepicker/datepicker3.css') }}">
@@ -42,7 +42,7 @@
 
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/adminlte/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css') }}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/adminlte/css/responsive.bootstrap.min.css') }}">
 
 
     @yield('adminlte_css')
@@ -64,7 +64,7 @@
     <script src="{{ asset('vendor/smooth-products/js/smoothproducts.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/jquery-blockui/jquery.blockui.js') }}"></script>
     <script src="{{ asset('vendor/jstree/jstree.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="{{ asset('vendor/adminlte/vendor/js/toastr.min.js') }}"></script>
     <script src="{{ asset('vendor/jquery-ui/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('js/custom.js') }}"></script>
     <script src="{{ asset('js/jquery.serialize-object.js') }}"></script>
@@ -72,14 +72,14 @@
     @if(config('adminlte.plugins.select2'))
     <!-- Select2 -->
     <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.full.min.js"></script>
+    <script src="{{ asset('vendor/adminlte/vendor/js/select2.full.min.js') }}"></script>
     @endif
 
     @if(config('adminlte.plugins.datatables'))
     <!-- DataTables with bootstrap 3 renderer -->
-    <script src="//cdn.datatables.net/v/bs/dt-1.10.18/datatables.min.js"></script>
+    <script src="{{ asset('vendor/adminlte/vendor/js/datatables.min.js') }}"></script>
     @endif
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="{{ asset('vendor/adminlte/vendor/js/moment.min.js') }}"></script>
 
     <script src="{{ asset('vendor/adminlte/plugins/datatables/app.js') }}"></script>
     <script src="{{ asset('vendor/adminlte/plugins/datatables/metronic.js') }}"></script>
@@ -91,7 +91,7 @@
 
     @if(config('adminlte.plugins.chartjs'))
     <!-- ChartJS -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js"></script>
+    <script src="{{ asset('vendor/adminlte/vendor/js/Chart.bundle.min.js') }}"></script>
     @endif
 
     @yield('adminlte_js')

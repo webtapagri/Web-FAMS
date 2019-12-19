@@ -14,15 +14,16 @@
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.3",
+        "intervention/image": "^2.5",
         "jeroennoten/laravel-adminlte": "^1.24",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "lawiet/nusoap": "^0.1.0",
         "maatwebsite/excel": "^3.1",
         "nahidulhasan/html2pdf": "^1.3",
+        "simplesoftwareio/simple-qrcode": "~2",
         "spipu/html2pdf": "^5.2",
-        "vyuldashev/xml-to-array": "^1.0",
-        "simplesoftwareio/simple-qrcode": "~2"
+        "vyuldashev/xml-to-array": "^1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
