@@ -645,12 +645,13 @@ class MasterAssetController extends Controller
                     WHERE a.KODE_ASSET_AMS BETWEEN $ori_a and $ori_b ";
 
         $getLup = DB::SELECT($sql);
-		
+
 		foreach($getLup as $k=> $dt){
+            // print_r($dt);
 			$trg = base64_encode($dt->KODE_ASSET_AMS);
 			
-			$data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
-			if( count($data['content']) > 0 ){
+            $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
+			if( $data['content'] !="" ){
 				
 				if( $this->gen_png_img($data) ){
 				
@@ -662,7 +663,8 @@ class MasterAssetController extends Controller
 					}else{
 						  $file_qrcode = '\app\qrcode_tempe.png';
 					}
-					$file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
+					// $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
+					$file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(400)->generate(''.$qrcode.'')); 
 					$file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.jpeg';
 					@list($type, $file_data) = explode(';', $file_data);
 					@list(, $file_data) = explode(',', $file_data); 
