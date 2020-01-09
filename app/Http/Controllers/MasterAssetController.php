@@ -20,20 +20,7 @@ use App\TM_MSTR_ASSET;
 use App\TR_REG_ASSET_DETAIL;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MasterAssetExport;
-// use Mike42\Escpos\Printer; 
-// use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-// use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
-// use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-// use Mike42\Escpos\CapabilityProfile;
-// use Mike42\Escpos\EscposImage;
 
-// include_once(app_path() . '\WebClientPrint\WebClientPrint.php');
-// use Neodynamic\SDK\Web\WebClientPrint;
-// use Neodynamic\SDK\Web\Utils;
-// use Neodynamic\SDK\Web\DefaultPrinter;
-// use Neodynamic\SDK\Web\InstalledPrinter;
-// use Neodynamic\SDK\Web\PrintFile;
-// use Neodynamic\SDK\Web\ClientPrintJob;
 
 class MasterAssetController extends Controller
 {
@@ -665,118 +652,76 @@ class MasterAssetController extends Controller
         $getLup = DB::SELECT($sql);
         $data['qrdata'] = $getLup;
 
-		foreach($getLup as $k=> $dt){
-            // print_r($dt);
-            $trg = base64_encode($dt->KODE_ASSET_AMS);
-            			
-            $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
-			if( $data['content'] !="" ){
-				
-				if( $this->gen_png_img($data) ){
-				
-					$qrcode = url('master-asset/show-data/'.$trg.'');
-					// echo \QrCode::margin(0)->size(250)->generate(''.$qrcode.'').'<br/>'; 
-                    $os = PHP_OS; 
-					if( $os != "WINNT" ){
-						  $file_qrcode = '/app/qrcode_tempe.png';
-					}else{
-						  $file_qrcode = '\app\qrcode_tempe.png';
-					}
-					// $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
-					$file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(0)->size(300)->generate(''.$qrcode.'')); 
-                    $file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
-                    $file_img[] = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
-					@list($type, $file_data) = explode(';', $file_data);                                                                                                                            
-					@list(, $file_data) = explode(',', $file_data); 
-					if($file_data!=""){ 
-						  \Storage::disk('public')->put($file_name,base64_decode($file_data)); 
-					}		
-				}
-			}
-			
-        }
         if(Input::get('submit')== "Print"){
+                foreach($getLup as $k=> $dt){
+                    // print_r($dt);
+                    $trg = base64_encode($dt->KODE_ASSET_AMS);
+                                
+                    $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
+                    if( $data['content'] !="" ){
+                        
+                        if( $this->gen_png_img_nodesc($data) ){
+                        
+                            $qrcode = url('master-asset/show-data/'.$trg.'');
+                            // echo \QrCode::margin(0)->size(250)->generate(''.$qrcode.'').'<br/>'; 
+                            $os = PHP_OS; 
+                            if( $os != "WINNT" ){
+                                $file_qrcode = '/app/qrcode_tempe.png';
+                            }else{
+                                $file_qrcode = '\app\qrcode_tempe.png';
+                            }
+                            // $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
+                            $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(0)->size(300)->generate(''.$qrcode.'')); 
+                            $file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
+                            $file_img[] = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
+                            @list($type, $file_data) = explode(';', $file_data);                                                                                                                            
+                            @list(, $file_data) = explode(',', $file_data); 
+                            if($file_data!=""){ 
+                                \Storage::disk('public')->put($file_name,base64_decode($file_data)); 
+                            }		
+                        }
+                    }
+                    
+                }
 
             // //print from view
             PDF::setOptions(['dpi' => 300]);
             $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a7');;
             return $qr_data->stream();
 
-            // try {
-            //     $printer = 'TOSHIBA'; // Nama Printer yang di sharing
-            //     // $profile = CapabilityProfile::load("simple");
-            //     $connector = new WindowsPrintConnector($printer);
-            //     $printer = new Printer($connector);  
-            //     // $printer = new Printer($connector, $profile);  
-            //     for($i = 0 ; $i < count($file_img) ; $i++){
-            //         $img_src = storage_path("app/public/").$file_img[$i];
-            //         $img = EscposImage::load($img_src,false);
-            //         $printer->bitImage($img);
-            //         $printer->feed();               
-            //         $printer->cut();
-            //     }
-            //     // dd($printer);
-            //     $printer -> close();
-            //     $response =  ['status' => true, "message" => 'Print is successfully '];
-
-                
-            //     // $ip =  '10.20.1.11'; // IP Komputer kita atau printer lain yang masih satu jaringan
-            //     // $printer = 'MobilePrint-PCL'; // Nama Printer yang di sharing
-            //     // $connector = new WindowsPrintConnector("smb://" . $ip . "/" . $printer);
-            // } catch (Exception $e) {
-            //     $response = ['status' => false, "message" => 'Print data failed '];
-            // }
-            // $cpj = new ClientPrintJob();
-            // $cpj->clientPrinter = new DefaultPrinter();
-            // $cpj->printerCommands = 'PRINTER_COMMANDS_GO_HERE';
-            // dd($cpj);
-            // try {
-            //     // Enter the share name for your USB printer here
-            //     $connector = new WindowsPrintConnector("TOSHIBA");
-            //     /* Print a "Hello world" receipt" */
-            //     $printer = new Printer($connector);
-            //     $printer -> text("Hello World!\n");
-            //     $printer -> pulse();
-            //     $printer -> cut();
-            //     $printer -> close();
-            
-                $response =  ['status' => true, "message" => 'Print is successfully '];
-            //     /* Close printer */
-            // } catch(Exception $e) {
-            //     echo "Couldn't print to this printer: " . $e -> getMessage() . "\n";
-            // }
-
-            // dd($printer);
-            // Session::flash('alert', $response['message']);
-            // return Redirect::to('/bulk-download');
-
-            //bit image
-            // try {
-            //     $ip =  request()->getHttpHost(); // IP Komputer kita atau printer lain yang masih satu jaringan
-            //     // $printer = 'doPDF'; // Nama Printer yang di sharing
-            //     $connector = new NetworkPrintConnector("$ip","9100");
-            //     $printer = new Printer($connector);
-            //     for($i = 0 ; $i < count($file_img) ; $i++){
-            //         $img_src = storage_path("app/public/").$file_img[$i];
-            //         $img = EscposImage::load($img_src);
-            //         $printer->bitImage($img);
-            //         $printer->feed();
-            //         $printer->text("Sample.\n");
-            //         // dd($printer);
-            //         $printer->cut();
-            //     }
-            //     $response =  ['status' => true, "message" => 'Print is successfully '];
-            //     // return response()->download($img_src, basename($img_src))->deleteFileAfterSend(true);
-            // } catch (Exception $e) {
-            //     /* Images not supported on your PHP, or image file not found */
-            //     $printer->text($e->getMessage() . "\n");
-            //     $response = ['status' => false, "message" => 'Print data failed '];
-            // }
-            // $printer->close();
+            $response =  ['status' => true, "message" => 'Print is successfully '];
 
             return response()->json($response);
         }
         else{
+            foreach($getLup as $k=> $dt){
+                // print_r($dt);
+                $trg = base64_encode($dt->KODE_ASSET_AMS);
+                            
+                $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
+                if( $data['content'] !="" ){
+                    
+                    if( $this->gen_png_img($data) ){
+                    
+                        $qrcode = url('master-asset/show-data/'.$trg.'');
+                        // echo \QrCode::margin(0)->size(250)->generate(''.$qrcode.'').'<br/>'; 
+                        $os = PHP_OS; 
+                        if( $os != "WINNT" ){
+                            $file_qrcode = '/app/qrcode_tempe.png';
+                        }else{
+                            $file_qrcode = '\app\qrcode_tempe.png';
+                        }
+                        $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(300)->generate(''.$qrcode.'')); 
+                        $file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
+                        @list($type, $file_data) = explode(';', $file_data);                                                                                                                            
+                        @list(, $file_data) = explode(',', $file_data); 
+                        if($file_data!=""){ 
+                            \Storage::disk('public')->put($file_name,base64_decode($file_data)); 
+                        }		
+                    }
+                }
+                
+            }
             $this->gen_zip();
             
             $headers = array(
@@ -832,12 +777,9 @@ class MasterAssetController extends Controller
 		$string3 = 'LOKASI : '.@$data['content']->LOKASI_BA_CODE.' ('.@$data['content']->LOKASI_BA_DESCRIPTION.')';
 		$string4 = @$data['content']->KODE_ASSET_CONTROLLER;
 
-		// $width  = 350;
-		// $height = 450;
-		$width  = 300;
-		$height = 300;
-        $font = 14;
-        $fontfam = storage_path("app\\")."arial.ttf";
+		$width  = 350;
+		$height = 450;
+        $font = 2;
         // dd($fontfam);
 		$im = @imagecreate ($width, $height);
 		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
@@ -848,25 +790,72 @@ class MasterAssetController extends Controller
 		imagefill($im, 0, 0, $transparent);
 		imagesavealpha($im, true);
 	  
-        // $width1 = imagefontwidth($font) * strlen($string); 
-        // // imagestring ($im, $font,($width/2)-($width1/2), 40, $string, $text_color);
-        // // imagettftext(image, size, angle, x, y, color, font, text); 
-        // imagettftext ($im, $font, 0, ($width/2)-($width1/2), 40, $text_color, $fontfam, $string); 
+        $width1 = imagefontwidth($font) * strlen($string); 
+        imagestring ($im, $font,($width/2)-($width1/2), 40, $string, $text_color);
 
-		// $width0 = imagefontwidth($font) * strlen($string1); 
-		// $width2 = imagefontwidth($font) * strlen($string2); 
-		// // imagestring ($im, $font, ($width/2)-($width0/2), 55, $string1, $text_color);
-		// // imagestring ($im, $font, ($width/2)-($width2/2), 380, $string2, $text_color);
-        // imagettftext ($im, $font, 0, ($width/2)-($width0/2), 60, $text_color, $fontfam, $string1); 
-        // imagettftext ($im, $font, 0, ($width/2)-($width2/2), 395, $text_color, $fontfam, $string2); 
+		$width0 = imagefontwidth($font) * strlen($string1); 
+		$width2 = imagefontwidth($font) * strlen($string2); 
+		imagestring ($im, $font, ($width/2)-($width0/2), 55, $string1, $text_color);
+		imagestring ($im, $font, ($width/2)-($width2/2), 380, $string2, $text_color);
 
-		// $width3 = imagefontwidth($font) * strlen($string3); 
-		// // imagestring ($im, $font, ($width/2)-($width3/2), 395, $string3, $text_color);
-        // imagettftext ($im, $font, 0, ($width/2)-($width3/2), 420, $text_color, $fontfam, $string3); 
+		$width3 = imagefontwidth($font) * strlen($string3); 
+		imagestring ($im, $font, ($width/2)-($width3/2), 395, $string3, $text_color);
 
-		// $width4 = imagefontwidth($font) * strlen($string4); 
-		// // imagestring ($im, $font, ($width/2)-($width4/2), 410, $string4, $text_color);
-        // imagettftext ($im, $font, 0, ($width/2)-($width4/2), 425, $text_color, $fontfam, $string4); 
+		$width4 = imagefontwidth($font) * strlen($string4); 
+		imagestring ($im, $font, ($width/2)-($width4/2), 410, $string4, $text_color);
+	  
+        ob_start();
+        imagealphablending($im, false);
+        imagesavealpha($im, true);
+		imagepng($im);
+		$imstr = base64_encode(ob_get_clean());
+		imagedestroy($im);
+
+		// Save Image in folder from string base64
+		$img = 'data:image/png;base64,'.$imstr;
+		$image_parts = explode(";base64,", $img);
+		$image_type_aux = explode("image/", $image_parts[0]);
+		$image_type = $image_type_aux[1];
+		$image_base64 = base64_decode($image_parts[1]);
+		$folderPath = app_path();
+		$file = $folderPath . '/qrcode_tempe.png';
+		// MOve to folder
+		if(file_put_contents($file, $image_base64)){
+			return true;
+		}else{
+			return false;
+		}
+    }
+
+    function gen_png_img_nodesc($data){
+		$string = @$data['content']->KODE_ASSET_AMS; 
+		$nnasset = (@$data['content']->NAMA_ASSET);
+		if(strlen($nnasset)> 30){
+			$nnasset = substr($nnasset,0,30);
+		}
+		$string1 = $nnasset;
+		$string2 = 'M I L I K : '.@$data['content']->BA_PEMILIK_ASSET.' ('.@$data['content']->BA_PEMILIK_ASSET_DESCRIPTION.')';
+		$string3 = 'LOKASI : '.@$data['content']->LOKASI_BA_CODE.' ('.@$data['content']->LOKASI_BA_DESCRIPTION.')';
+		$string4 = @$data['content']->KODE_ASSET_CONTROLLER;
+
+		$width  = 300;
+		$height = 300;
+        $font = 14;
+        $os = PHP_OS; 
+        if( $os != "WINNT" ){
+            $fontfam = storage_path("app/")."arial.ttf";
+        }else{
+            $fontfam = storage_path("app\\")."arial.ttf";
+        }
+        // dd($fontfam);
+		$im = @imagecreate ($width, $height);
+		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
+		// white background
+		// $background_color = imagecolorallocate ($im, 255, 255, 255);
+		// transparent background
+		$transparent = imagecolorallocatealpha($im, 0, 0, 0, 127);
+		imagefill($im, 0, 0, $transparent);
+		imagesavealpha($im, true);
 	  
         ob_start();
         imagealphablending($im, false);
