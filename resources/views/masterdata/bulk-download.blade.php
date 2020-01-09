@@ -15,15 +15,19 @@
 						@csrf
 						<div class="form-group">
 							<label for="">From</label>
-							<input type="text" name="id" id="" class="form-control">
+							<input type="text" name="id" class="form-control">
 						</div>
 						<div class="form-group">
 							<label for="">To</label>
-							<input type="text" name="di" id="" class="form-control">
+							<input type="text" name="di" class="form-control">
 						</div>
-						<div class="form-group">
+						<div class="form-group col-xs-6">
 							<label for=""></label>
-							<input type="submit" name="submit" id="" value="Export" class="form-control btn btn-primary">
+							<input type="submit" name="submit" value="Export" class="form-control btn btn-primary">
+						</div>
+						<div class="form-group col-xs-6">
+							<label for=""></label>
+							<input type="submit" name="submit" value="Print" class="form-control btn btn-success">
 						</div>
 					</form>
 				
