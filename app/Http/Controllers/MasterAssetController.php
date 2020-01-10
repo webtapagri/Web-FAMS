@@ -685,8 +685,10 @@ class MasterAssetController extends Controller
                 }
 
             // //print from view
-            PDF::setOptions(['dpi' => 300]);
-            $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a7');;
+            PDF::setOptions(['dpi' => 150]);
+            $customPaper = array(0,0,50,70);
+            // $customPaper = 'a8';
+            $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a8','potrait');
             return $qr_data->stream();
 
             $response =  ['status' => true, "message" => 'Print is successfully '];

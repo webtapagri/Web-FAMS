@@ -1,10 +1,29 @@
-<style>
-.main {
-  font-family:Arial,Verdana,sans-serif;
-  font-size:10px;
-}
-.page_break { page-break-before: always; }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+        <style>
+            .main {
+            font-family:Arial,Verdana,sans-serif;
+            font-size:  10px; 
+            }
+            .dm {  margin-left: 2px; margin-top: 10px; margin-bottom: 2px;margin-right: 2px; }
+            @page {  margin-left: 2px; margin-top: 2px; margin-bottom: 2px;margin-right: 2px; }
+            .page_break { 
+                    page-break-inside: avoid;
+            } 
+            img { 
+                width:85%; 
+                height:85%; 
+                object-fit:cover; 
+            } 
+        </style>
+</head>
+<body>
+
 
 <?php 
     // $qrdata = $data['qrdata'];
@@ -17,13 +36,15 @@
     }
 ?>
     @for($i = 0; $i < count($file_img) ; $i++)
-    <div style="page-break-inside: avoid;">
-        <div style = "margin: 40px 20px 20px 60px">
-            <table class="main">
+    <div width="100%" class="page_break">
+        <div class = "dm">
+        <!-- <div> -->
+            <table class="main" width="188px">
                 <?php
                     echo "<tr><td align='center'>".$string[$i] ."</td></tr>";
                     echo "<tr><td align='center'>".$string1[$i] ."</td></tr>";
-                    echo "<tr><td align='center'>"."<img src='".storage_path("app/public/").$file_img[$i]."' width='150px' />" ."</td></tr>";
+                    echo "<tr><td align='center'>"."<img src='".storage_path("app/public/").$file_img[$i]."' />" ."</td></tr>";
+                    // echo "<tr><td align='center'>"."<img src='".storage_path("app/public/").$file_img[$i]."' width='150px' />" ."</td></tr>";
                     echo "<tr><td align='center'>".$string2[$i] ."</td></tr>";
                     echo "<tr><td align='center'>".$string3[$i] ."</td></tr>";
                     
@@ -35,4 +56,17 @@
 
 <script type="text/javascript">
     window.print();
+    $('td').each(function() {
+    var $self = $(this), 
+		fs = parseInt($self.css('font-size'));
+    
+    while($self.height() > threshold) {
+        $self.css({'font-size': fs-- });
+    }
+    $self.height(threshold);
+});
 </script>
+
+    
+</body>
+</html>
