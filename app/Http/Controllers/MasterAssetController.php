@@ -638,10 +638,14 @@ class MasterAssetController extends Controller
     }
 	
 	function download_masterasset_qrcode(Request $req){
-		\File::deleteDirectory( storage_path("app/public/tmp_download") );
+        \File::deleteDirectory( storage_path("app/public/tmp_download") );
+        $validatedData = $req->validate([
+            'from' => 'required', 
+            'to' => 'required',
+        ]);
 		
-		$ori_a = ($req->id);
-		$ori_b = ($req->di);
+		$ori_a = ($req->from);
+		$ori_b = ($req->to);
 		
 		$sql = " SELECT a.*, b.DESCRIPTION AS BA_PEMILIK_ASSET_DESCRIPTION, c.DESCRIPTION AS LOKASI_BA_DESCRIPTION 
                     FROM TM_MSTR_ASSET a 
@@ -686,9 +690,23 @@ class MasterAssetController extends Controller
 
             // //print from view
             PDF::setOptions(['dpi' => 150]);
-            $customPaper = array(0,0,50,70);
-            // $customPaper = 'a8';
-            $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a8','potrait');
+            
+            $papersize = ($req->paper);
+            if($papersize == "reg"){
+                $customPaper ='a8'; 
+                $page_url = 'report.qrcode';
+                $orien ='potrait';
+
+            }else{
+                $customPaper = 'a9'; 
+                $page_url = 'report.smallqrcode';
+                $orien ='potrait';
+            }
+
+            $qr_data = PDF::loadView($page_url,["file_img" => $file_img, "data" => $data['qrdata']])->setPaper($customPaper,$orien);
+            
+
+            // $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a8','potrait');
             return $qr_data->stream();
 
             $response =  ['status' => true, "message" => 'Print is successfully '];

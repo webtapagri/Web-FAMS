@@ -8,16 +8,16 @@
         <style>
             .main {
             font-family:Arial,Verdana,sans-serif;
-            font-size:  10px; 
+            font-size:  7px; 
             }
             .dm {  margin-left: 2px; margin-top: 10px; margin-bottom: 2px;margin-right: 2px; }
-            @page {  margin-left: 2px; margin-top: 2px; margin-bottom: 2px;margin-right: 2px; }
+            @page {  margin-left: 17px; margin-top: 7px; margin-bottom: 2px;margin-right: 2px; }
             .page_break { 
                     page-break-inside: avoid;
             } 
             img { 
-                width:85%; 
-                height:85%; 
+                width:90%; 
+                height:90%; 
                 object-fit:cover; 
             } 
         </style>
@@ -39,7 +39,7 @@
     <div width="100%" class="page_break">
         <div class = "dm">
         <!-- <div> -->
-            <table class="main" width="188px">
+            <table class="main" width="100px">
                 <?php
                     echo "<tr><td align='center'>".$string[$i] ."</td></tr>";
                     echo "<tr><td align='center'>".$string1[$i] ."</td></tr>";
