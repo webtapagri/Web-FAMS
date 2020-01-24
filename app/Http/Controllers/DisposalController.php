@@ -109,11 +109,22 @@ class DisposalController extends Controller
     	$user_id = Session::get('user_id');
 		$kode_asset_ams = base64_decode($id);
 		$row = TM_MSTR_ASSET::find($kode_asset_ams);
-
 		$validasi_asset = $this->check_asset($kode_asset_ams,1);
-		if( $validasi_asset > 0 )
+		// if( $validasi_asset > 0 )
+		// {
+		// 	Session::flash('alert', 'Data sudah di Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+		// 	return Redirect::to('/disposal-penjualan');
+		// 	exit;
+		// }
+		if( $validasi_asset == "1" )
 		{
-			Session::flash('alert', 'Data sudah di Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+			Session::flash('alert', 'Data sudah ditambahkan dalam daftar Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+			return Redirect::to('/disposal-penjualan');
+			exit;
+		}
+		else
+		{
+			Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->NO_REG.' ) ');
 			return Redirect::to('/disposal-penjualan');
 			exit;
 		}
@@ -206,12 +217,23 @@ class DisposalController extends Controller
 		$kode_asset_ams = base64_decode($id);
 
 		$row = TM_MSTR_ASSET::find($kode_asset_ams);
-		
 		///
 		$validasi_asset = $this->check_asset($kode_asset_ams,2);
-		if( $validasi_asset > 0 )
+		// if( $validasi_asset > 0 )
+		// {
+		// 	Session::flash('alert', 'Data sudah di Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+		// 	return Redirect::to('/disposal-hilang');
+		// 	exit;
+		// }
+		if( $validasi_asset == "1" )
 		{
-			Session::flash('alert', 'Data sudah di Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+			Session::flash('alert', 'Data sudah ditambahkan dalam daftar Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+			return Redirect::to('/disposal-hilang');
+			exit;
+		}
+		else
+		{
+			Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->DISPOSAL_FLAG.' ) ');
 			return Redirect::to('/disposal-hilang');
 			exit;
 		}
@@ -282,23 +304,33 @@ class DisposalController extends Controller
     {
     	$total = 0;
 
-    	$data = DB::SELECT(" SELECT COUNT(*) AS TOTAL FROM v_asset_submitted WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ");
-    	//$total = $data[0]->TOTAL;
+    	// $data = DB::SELECT(" SELECT COUNT(*) AS TOTAL FROM v_asset_submitted WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ");
+    	// //$total = $data[0]->TOTAL;
 
-    	if( $data[0]->TOTAL == 0)
-    	{
-    		// #2 JIKA ASET DETAIL NULL VALIDASI DI DISPOSAL ASET TEMP
-    		$sql2 = "SELECT COUNT(*) AS TOTAL FROM TR_DISPOSAL_TEMP WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ";
-    		$dt = DB::SELECT($sql2);
+    	// if( $data[0]->TOTAL == 0)
+    	// {
+    	// 	// #2 JIKA ASET DETAIL NULL VALIDASI DI DISPOSAL ASET TEMP
+    	// 	$sql2 = "SELECT COUNT(*) AS TOTAL FROM TR_DISPOSAL_TEMP WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ";
+    	// 	$dt = DB::SELECT($sql2);
 
-    		$total = $dt[0]->TOTAL;
-    	}
-    	else
-    	{
-    		$total = $data[0]->TOTAL;
-    	}
-
-    	return $total;
+		// 	$total = $dt[0]->TOTAL;
+		// 	//asset sudah dalam dafar disposal
+    	// }
+    	// else
+    	// {
+		// 	$total = $data[0]->TOTAL;
+		// 	//asset sudah disposal
+		// }
+		
+		$data = DB::SELECT(" SELECT NO_REG FROM V_DISPOSAL_STATUS WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ");
+		if($data[0]->NO_REG == null){
+			$status = "1"; //baru masuk daftar disposal
+		}
+		else
+		{
+			$status = "2"; //proses disposal
+		}
+    	return $status;
     }
 
     public function index_rusak()
@@ -335,9 +367,15 @@ class DisposalController extends Controller
 
 		$validasi_asset = $this->check_asset($kode_asset_ams,3);
 
-		if( $validasi_asset > 0 )
+		if( $validasi_asset == "1" )
 		{
-			Session::flash('alert', 'Data sudah di Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+			Session::flash('alert', 'Data sudah ditambahkan dalam daftar Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.') ');
+			return Redirect::to('/disposal-rusak');
+			exit;
+		}
+		else
+		{
+			Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->DISPOSAL_FLAG.' ) ');
 			return Redirect::to('/disposal-rusak');
 			exit;
 		}
