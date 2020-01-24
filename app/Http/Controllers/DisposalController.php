@@ -122,7 +122,7 @@ class DisposalController extends Controller
 			return Redirect::to('/disposal-penjualan');
 			exit;
 		}
-		else
+		else if( $validasi_asset == "2" )
 		{
 			Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->NO_REG.' ) ');
 			return Redirect::to('/disposal-penjualan');
@@ -231,7 +231,7 @@ class DisposalController extends Controller
 			return Redirect::to('/disposal-hilang');
 			exit;
 		}
-		else
+		else if( $validasi_asset == "2" )
 		{
 			Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->DISPOSAL_FLAG.' ) ');
 			return Redirect::to('/disposal-hilang');
@@ -302,7 +302,7 @@ class DisposalController extends Controller
 
     function check_asset($kode_asset_ams,$jenis_pengajuan)
     {
-    	$total = 0;
+    	// $total = 0;
 
     	// $data = DB::SELECT(" SELECT COUNT(*) AS TOTAL FROM v_asset_submitted WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ");
     	// //$total = $data[0]->TOTAL;
@@ -322,13 +322,18 @@ class DisposalController extends Controller
 		// 	//asset sudah disposal
 		// }
 		
-		$data = DB::SELECT(" SELECT NO_REG FROM V_DISPOSAL_STATUS WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ");
-		if($data[0]->NO_REG == null){
-			$status = "1"; //baru masuk daftar disposal
-		}
-		else
-		{
-			$status = "2"; //proses disposal
+		$data = DB::SELECT(" SELECT count(*) as TOTAL FROM v_disposal_status WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ");
+		if($data[0]->TOTAL == 1){
+			$sql2 = "SELECT NO_REG FROM v_disposal_status WHERE KODE_ASSET_AMS = '{$kode_asset_ams}' ";
+				$dt = DB::SELECT($sql2);
+				if($dt[0]->NO_REG == null){
+					$status = "1"; //baru masuk daftar disposal
+				}
+				else{
+					$status = "2"; //proses disposal
+				}
+		}else{
+			$status = "3"; //belum disposal
 		}
     	return $status;
     }
@@ -373,7 +378,7 @@ class DisposalController extends Controller
 			return Redirect::to('/disposal-rusak');
 			exit;
 		}
-		else
+		else if( $validasi_asset == "2" )
 		{
 			Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->DISPOSAL_FLAG.' ) ');
 			return Redirect::to('/disposal-rusak');
