@@ -40,9 +40,10 @@ class DisposalController extends Controller
 		//echo "1<pre>"; print_r(session()->all()); die();
 
 		$user_id = Session::get('user_id');
+		// $area_code = explode(',',Session::get('area_code'));
 		$area_code = Session::get('area_code');
 		$role = Session::get('role');
-
+		// dd(Session::get('role'));
 		//$created_by = $u['username'];
 		
 		if($role == 'PGA'){$where = '1=1'; }else { $where = '1=0'; }
@@ -52,13 +53,13 @@ class DisposalController extends Controller
 		if($area_code != 'All')
 		{
 			$where .= " AND a.LOKASI_BA_CODE in (".$area_code.") ";
+			// $where .= "";
 		}
 
-		$sql = " SELECT a.* FROM TR_DISPOSAL_TEMP a WHERE $where "; //echo $sql; die();
+		$sql = " SELECT a.* FROM TR_DISPOSAL_TEMP a  WHERE $where"; //echo $sql; die();
 		
 		$dt = DB::SELECT($sql);
 		//echo "<pre>"; print_r($dt); die();
-		
 		return $dt;
 	}
 
@@ -70,7 +71,8 @@ class DisposalController extends Controller
     	
     	if( $area_code != 'All' )
     	{
-    		$where .= " AND BA_PEMILIK_ASSET in ($area_code) ";
+    		$where .= " AND LOKASI_BA_CODE in ($area_code) ";
+    		// $where .= " AND BA_PEMILIK_ASSET in ($area_code) ";
     	}
 
     	$sql = " SELECT a.kode_asset_ams AS kode_asset_ams, a.kode_material AS kode_material, a.nama_material AS nama_material, a.nama_asset_1 AS nama_asset_1, a.kode_asset_sap AS kode_asset_sap, a.lokasi_ba_description, a.ba_pemilik_asset 
@@ -186,10 +188,10 @@ class DisposalController extends Controller
         $data['ctree'] = 'disposal-hilang';
 
         $data['autocomplete'] = $this->get_autocomplete();
-        $data['data'] = $this->get_data_cart(2);
+		$data['data'] = $this->get_data_cart(2);
+		// dd( $data);
         $data['list_kategori_upload'] = $this->list_kategori_upload(2);
 		$data['list_skip_harga_perolehan'] = $this->get_list_skip_harga_perolehan(); //$this->get_totalcartnotif();
-
         return view('disposal.index_hilang')->with(compact('data'));
     }
 
@@ -204,7 +206,8 @@ class DisposalController extends Controller
 		$kode_asset_ams = base64_decode($id);
 
 		$row = TM_MSTR_ASSET::find($kode_asset_ams);
-
+		
+		///
 		$validasi_asset = $this->check_asset($kode_asset_ams,2);
 		if( $validasi_asset > 0 )
 		{
@@ -224,6 +227,8 @@ class DisposalController extends Controller
 			{
 
 				$HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+				
+				// dd($HARGA_PEROLEHAN);
 
 				$sql = "INSERT INTO TR_DISPOSAL_TEMP(KODE_ASSET_AMS,KODE_ASSET_SAP,NAMA_MATERIAL,BA_PEMILIK_ASSET,LOKASI_BA_CODE,LOKASI_BA_DESCRIPTION,NAMA_ASSET_1,CREATED_BY,JENIS_PENGAJUAN,CHECKLIST,HARGA_PEROLEHAN)
 							VALUES('{$row->KODE_ASSET_AMS}','{$row->KODE_ASSET_SAP}','{$row->NAMA_MATERIAL}','{$row->BA_PEMILIK_ASSET}','{$row->LOKASI_BA_CODE}','{$row->LOKASI_BA_DESCRIPTION}','{$row->NAMA_ASSET_1}','{$user_id}','{$jenis_pengajuan}',0,'{$HARGA_PEROLEHAN}')";
@@ -380,7 +385,6 @@ class DisposalController extends Controller
 
 		$sql = " SELECT * FROM TR_DISPOSAL_TEMP WHERE JENIS_PENGAJUAN = $jenis AND CREATED_BY = $user_id AND CHECKLIST = 0 ";
 		$data = DB::SELECT($sql);
-
 		if(!empty($data))
 		{
 			DB::beginTransaction();
@@ -399,6 +403,7 @@ class DisposalController extends Controller
 	           	 	Session::flash('alert', 'Asset Controller not found (KODE ASSET AMS : '.$data[0]->KODE_ASSET_AMS.' )');
 					return Redirect::to('/disposal-'.$jp.''); 
 				}
+				
 
 				foreach($data as $k => $v)
 				{
@@ -576,7 +581,7 @@ class DisposalController extends Controller
     	$hp_default = 50000000;
     	$nilai_temp_plus = array();
     	$nilai_temp_minus = array();
-
+		// dd($nilai);
     	if($nilai->HARGA_PEROLEHAN == 0)
     	{
     		$result = array('result'=> 0, 'message'=> 'Gagal Proses, Harga Perolehan tidak boleh kosong (0) (Rp. '.number_format($nilai->HARGA_PEROLEHAN,0,',','.').' / KODE ASSET AMS : '.$nilai->KODE_ASSET_AMS.' - '.$nilai->NAMA_ASSET_1.' ) ');
@@ -698,7 +703,7 @@ class DisposalController extends Controller
     {
     	
     	$BUKRS = substr($row->BA_PEMILIK_ASSET,0,2);
-    	$YEAR = date('Y');
+		$YEAR = date('Y');
 
     	$ANLN1 = $this->get_anln1($row->KODE_ASSET_SAP);
     	
@@ -710,16 +715,18 @@ class DisposalController extends Controller
     	{
     		$ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
     	}
+		
+		
 
     	$service = API::exec(array(
             'request' => 'GET',
-            'host' => 'ldap',
+			'host' => 'ldap',
             'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=15&GJAHR={$YEAR}", 
             //'method' => "assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019", 
             //http://tap-ldapdev.tap-agri.com/data-sap/assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019
-        ));
+		));
         
-        $data = $service;
+		$data = $service;
 
         if(!empty($data))
         {
@@ -730,6 +737,7 @@ class DisposalController extends Controller
         	$nilai = 0;
         }
 
+		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
         return $nilai*100;
     }
 
@@ -1252,8 +1260,8 @@ class DisposalController extends Controller
     function berkas_disposal($kode_asset_ams)
     {
         $sql = " SELECT b.DOC_SIZE, b.FILE_NAME, b.FILE_CATEGORY, b.FILE_UPLOAD, b.JENIS_FILE
-FROM TR_DISPOSAL_TEMP_FILE b
-WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' "; 
+					FROM TR_DISPOSAL_TEMP_FILE b
+					WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' "; 
         $data = DB::SELECT($sql);
         
         $l = "";
@@ -1354,8 +1362,8 @@ WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' ";
     function berkas_serah_terima($kode_asset_ams)
     {
         $sql = " SELECT b.DOC_SIZE, b.FILE_NAME, b.FILE_CATEGORY, b.FILE_UPLOAD, b.JENIS_FILE
-FROM TR_DISPOSAL_TEMP_FILE b
-WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' AND b.FILE_CATEGORY = 'serah_terima' "; 
+					FROM TR_DISPOSAL_TEMP_FILE b
+					WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' AND b.FILE_CATEGORY = 'serah_terima' "; 
         $data = DB::SELECT($sql);
         
         $l = "";
@@ -1394,8 +1402,8 @@ WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' AND b.FILE_CATEGORY = 'serah_teri
     function berkas_disposal_detail($kode_asset_ams,$file_category)
     {
         $sql = " SELECT b.DOC_SIZE, b.FILE_NAME, b.FILE_CATEGORY, b.FILE_UPLOAD, b.JENIS_FILE
-FROM TR_DISPOSAL_TEMP_FILE b
-WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' AND b.FILE_CATEGORY = '".$file_category."' "; 
+					FROM TR_DISPOSAL_TEMP_FILE b
+					WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' AND b.FILE_CATEGORY = '".$file_category."' "; 
         $data = DB::SELECT($sql);
         
         $l = "";
