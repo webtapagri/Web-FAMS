@@ -116,7 +116,7 @@ class DisposalController extends Controller
 				$dt = DB::SELECT($sql);
 				if($dt[0]->TOTAL > 0 ){
 						Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->NO_REG.' ) ');
-						return Redirect::to('/disposal-hilang');
+						return Redirect::to('/disposal-penjualan');
 						exit;
 				}
 				else{
@@ -366,7 +366,7 @@ class DisposalController extends Controller
 				$dt = DB::SELECT($sql);
 				if($dt[0]->TOTAL > 0 ){
 						Session::flash('alert', 'Data sedang dalam proses approval Disposal (KODE AMS : '.$row->KODE_ASSET_AMS.' , DOCUMENT CODE : '.$row->NO_REG.' ) ');
-						return Redirect::to('/disposal-hilang');
+						return Redirect::to('/disposal-rusak');
 						exit;
 				}
 				else{
