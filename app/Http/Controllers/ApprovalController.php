@@ -440,7 +440,8 @@ class ApprovalController extends Controller
             // VALIDASI UOM ASSET SAP
             $sql = " SELECT UOM_ASSET_SAP FROM TR_REG_ASSET_DETAIL a WHERE a.ID = $id AND a.NO_REG = '{$request->getnoreg}' AND a.NO_REG_ITEM = {$request->no_reg_item} ";
             $uom_now_data = DB::SELECT($sql);
-            $uom_now = @$uom_now_data[0]->UOM_ASSET_SAP;
+            // $uom_now = @$uom_now_data[0]->UOM_ASSET_SAP;
+            $uom_now = $uom_now_data[0]->UOM_ASSET_SAP;
             //echo "1<pre>"; print_r($uom_now);die();
 
             if( $uom_now != $uom_asset_sap )
