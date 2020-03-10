@@ -1347,9 +1347,16 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
 
     public function get_validasi_last_approve($noreg)
     {
-        $sql = " SELECT COUNT(*) AS jml FROM v_history WHERE status_dokumen = 'Disetujui' AND document_code = '{$noreg}' ";
-        $data = DB::SELECT($sql);
+        // $sql = " SELECT COUNT(*) AS jml FROM v_history WHERE status_dokumen = 'Disetujui' AND document_code = '{$noreg}' ";
+        // $data = DB::SELECT($sql);
         
+
+        $data = DB::table('v_history')
+							->selectRaw(" COUNT(*) AS jml")
+							->whereRaw ("status_dokumen = 'Disetujui' AND document_code = $noreg")
+                            ->get();
+                            
+
         if($data)
         { 
             $dt = $data[0]->jml; 
