@@ -75,7 +75,8 @@ class Select2Controller extends Controller
         $arr = array();
         foreach ($data as $row) {
             $arr[] = array(
-                "id" => $row->id.'__'.$row->text,
+                // "id" => $row->id.'__'.$row->text,
+                "id" => $row->id,
                 "text" => $row->id .'-' . $row->text
             );
         }

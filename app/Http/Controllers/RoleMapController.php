@@ -45,6 +45,30 @@ class RoleMapController extends Controller
 
         $selectedColumn = ['id','code_role_x_general_data','id_role', 'role_name', 'description_code', 'description', 'id_user', 'username'];
 
+        // $field = array
+        // (
+        //     array("index" => "0", "field" => "ID", "alias" => "ID"),
+        //     array("index" => "1", "field" => "CODE_ROLE_X_GENERAL_DATA", "alias" => "CODE_ROLE"),
+        //     array("index" => "2", "field" => "ID_ROLE", "alias" => "ID_ROLE"),
+        //     array("index" => "3", "field" => "ROLE_NAME", "alias" => "ROLE_NAME"),
+        //     array("index" => "4", "field" => "DESCRIPTION", "alias" => "DESCRIPTION"),
+        //     array("index" => "5", "field" => "ID_USER", "alias" => "ID_USER"),
+        //     array("index" => "6", "field" => "USERNAME", "alias" => "USERNAME"),
+        // );
+
+        // foreach ($field as $row) 
+        // {
+        //     if ($row["alias"]) {
+        //         $selectedColumn[] = $row["field"] . " as " . $row["alias"];
+        //     } else {
+        //         $selectedColumn[] = $row["field"];
+        //     }
+
+        //     if ($row["index"] == $orderColumn) {
+        //         $orderColumnName = $row["field"];
+        //     }
+        // }
+
         if ($orderColumn) {
             $order = explode("as", $selectedColumn[$orderColumn]);
             if (count($order) > 1) {
@@ -71,9 +95,26 @@ class RoleMapController extends Controller
         if ($request->username)
         $sql .= " AND username like'%" . $request->username . "%'";
 
+        if ($request->id)
+        $sql .= " AND id like'%" . $request->id . "%'";
+
+
+        if ($request->code_role_x_general_data)
+        $sql .= " AND code_role_x_general_data like'%" . $request->code_role_x_general_data . "%'";
+
+        if ($request->id_role)
+        $sql .= " AND id_role ='" . $request->id_role . "'";
+
+        if ($request->description_code)
+        $sql .= " AND description_code ='" . $request->description_code . "'";
+
+        if ($request->id_user)
+        $sql .= " AND id_user ='" . $request->id_user . "'";
+
         if ($orderColumn != "") {
             $sql .= " ORDER BY " . $orderBy . " " . $dirColumn;
         }
+
 
         $data = DB::select(DB::raw($sql));
 
