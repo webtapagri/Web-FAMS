@@ -32,8 +32,7 @@
                                 <th><input type="text" class="form-control input-xs form-filter" name="id_role" autocomplete="off"></th>
                                 <th><input type="text" class="form-control input-xs form-filter" name="role_name" autocomplete="off"></th>
                                 <th><input type="text" class="form-control input-xs form-filter" name="description_code" autocomplete="off"></th>
-                                <th><input type="text" class="form-control input-xs form-filter" name="description" autocomplete="off"></th>
-                                 <th><input type="text" class="form-control input-xs form-filter" name="id_user" autocomplete="off"></th>
+                                <th><input type="text" class="form-control input-xs form-filter" name="description" autocomplete="off"></th><th><input type="text" class="form-control input-xs form-filter" name="id_user" autocomplete="off"></th>
                                 <th><input type="text" class="form-control input-xs form-filter" name="username" autocomplete="off"></th>
                                 <th></th>
                             </tr>
