@@ -120,7 +120,8 @@
                 columns: [
                     {
                         data: 'id',
-                        name: 'id'
+                        name: 'id',
+                        width: '30px',
                     },
                     {
                         data: 'code_role_x_general_data',
@@ -205,7 +206,7 @@
         var role_id = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.select_role_idname") !!}')));
         $('input[name="id_role"], #id_role').select2({
             data: role_id,
-            width: '100%',
+            width: '120px',
             placeholder: ' ',
             allowClear: true
         });
@@ -213,7 +214,7 @@
         var role_description = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.generaldata_assetcontroller") !!}')));
         $('input[name="description_code"], #description_code').select2({
             data: role_description,
-            width: '100%',
+            width: '120px',
             placeholder: ' ',
             allowClear: true
         });
@@ -221,7 +222,7 @@
         var role_user = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.select_user") !!}')));
         $('input[name="id_user"], #id_user').select2({
             data: role_user,
-            width: '100%',
+            width: '140px',
             placeholder: ' ',
             allowClear: true
         });

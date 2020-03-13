@@ -902,7 +902,6 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
                 //echo $note;die();
 
                 $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
-
                 if( $validasi_last_approve == 0 )
                 {
                     //echo "1".$asset_type; die();
@@ -931,7 +930,8 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
                     }
                     else
                     {
-                        $validasi_check_gi = $this->get_validasi_check_gi($request,$no_registrasi);
+                        // $validasi_check_gi = $this->get_validasi_check_gi($request,$no_registrasi);
+                        $validasi_check_gi = $this->get_validasi_check_gi($req,$no_registrasi);
                     }
                     
                     //echo "1<pre>"; print_r($validasi_check_gi); die();
@@ -1058,6 +1058,7 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
             //Cek sekali lagi utk penginputan GI Number dan GI Year
             $sql = " SELECT * FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '".$noreg."' AND ((GI_NUMBER is null OR GI_NUMBER = '') OR (GI_YEAR is null OR GI_YEAR = '')) AND (DELETED is null OR DELETED = '') ";
             $data = DB::SELECT($sql);
+
             //echo "4<pre>"; print_r($data); die();
             if(!empty($data))
             {
@@ -1136,8 +1137,16 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
             //die();
 
             // MELAKUKAN CEK SEKALI LAGI JIKA INPUTAN GI MASIH ADA YG BLM DIINPUT IT@160719
-            $sql = " SELECT * FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '".$noreg."' AND ((GI_NUMBER is null OR GI_NUMBER = '') OR (GI_YEAR is null OR GI_YEAR = '')) AND (DELETED is null OR DELETED = '') ";
-            $data = DB::SELECT($sql);
+            // $sql = " SELECT * FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '".$noreg."' AND ((GI_NUMBER is null OR GI_NUMBER = '') OR (GI_YEAR is null OR GI_YEAR = '')) AND (DELETED is null OR DELETED = '') ";
+            // $data = DB::SELECT($sql);
+
+            
+            $data = DB::table('TR_REG_ASSET_DETAIL')
+            ->selectRaw("*")
+            ->whereRaw ("NO_REG = '$noreg' AND ((GI_NUMBER is null OR GI_NUMBER = '') OR (GI_YEAR is null OR GI_YEAR = '')) AND (DELETED is null OR DELETED = '')")
+            ->get();
+            // dd($data);
+
             //echo "4<pre>"; print_r($data); die();
             if(!empty($data))
             {
@@ -1350,10 +1359,10 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         // $sql = " SELECT COUNT(*) AS jml FROM v_history WHERE status_dokumen = 'Disetujui' AND document_code = '{$noreg}' ";
         // $data = DB::SELECT($sql);
         
-
+        // $noreg = str_replace("-", "/", $noreg);
         $data = DB::table('v_history')
 							->selectRaw(" COUNT(*) AS jml")
-							->whereRaw ("status_dokumen = 'Disetujui' AND document_code = $noreg")
+							->whereRaw ("status_dokumen = 'Disetujui' AND document_code = '$noreg'")
                             ->get();
                             
 
