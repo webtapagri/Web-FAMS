@@ -853,6 +853,10 @@
                     {
                         targets: [2],
                         width: '8%'
+                    },
+                    {
+                        orderable: true,
+                        targets: [4]
                     }
                 ],
                 oLanguage: {
