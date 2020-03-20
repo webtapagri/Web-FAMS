@@ -218,6 +218,7 @@ class MutasiController extends Controller
         //echo "<pre>"; print_r($request->all()); die();
         $role_id = Session::get('role_id');
         $user_id = Session::get('user_id');
+        $area_code = Session::get('area_code');
 
         $orderColumn = $request->order[0]["column"];
         $dirColumn = $request->order[0]["dir"];
@@ -252,7 +253,7 @@ class MutasiController extends Controller
         // it@140619 JOIN W v_outstanding
         $sql = ' SELECT DISTINCT(ASSET.KODE_ASSET_AMS) AS KODE_ASSET_AMS '.implode(", ", $selectedColumn).'
             FROM TM_MSTR_ASSET AS ASSET 
-            WHERE (DISPOSAL_FLAG IS NULL OR DISPOSAL_FLAG = "") AND (ASSET_CONTROLLER IS NOT NULL OR ASSET_CONTROLLER != "" ) ';
+            WHERE (DISPOSAL_FLAG IS NULL OR DISPOSAL_FLAG = "") AND (ASSET_CONTROLLER IS NOT NULL OR ASSET_CONTROLLER != "" ) AND LOKASI_BA_CODE = "'.$area_code.'" ';
 
         /*if($role_id != 4)
             $sql .= " AND ASSET.CREATED_BY = '{$user_id}' ";*/ 
