@@ -1905,7 +1905,6 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         ));
         
         $data = $service;
-        dd($data->item->TYPE);
         if( !empty($data->item->TYPE) )
         {
             #2
