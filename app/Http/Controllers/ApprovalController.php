@@ -1853,7 +1853,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
             return response()->json(['status' => true, "message" => "Synchronize success"]);
         }
         else
-        {
+        { 
             $sql = " UPDATE TR_REG_ASSET_DETAIL SET KODE_ASSET_SAP = '' WHERE NO_REG = '{$no_reg}' "; 
                 DB::UPDATE($sql);
             return response()->json(['status' => false, "message" => "Synchronize failed, data not found"]);
@@ -1905,7 +1905,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         ));
         
         $data = $service;
-        
+        dd($data->item->TYPE);
         if( !empty($data->item->TYPE) )
         {
             #2
