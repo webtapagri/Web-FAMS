@@ -1055,6 +1055,10 @@
             $("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load();
         });
 
+
+
+     
+
     });
 
     function approval(id)
@@ -2347,6 +2351,18 @@
             }); 
         }
     }
+
+    //replace old value
+    
+    $('input').each(function() {
+        var inputVal = $(this).val();
+            $(this).on('change', function() {
+                console.log('Current Value: ',$(this).val());
+                console.log('Old Value: ', inputVal);
+                inputVal = $(this).val();
+        });
+    }); 
+    
 
     function saveAssetSap(id,no_po,no_reg_item)
     {

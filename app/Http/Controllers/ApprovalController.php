@@ -1845,6 +1845,8 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 
                 if($proses['status']=='error')
                 {
+                               
+                    dd($proses);
                     return response()->json(['status' => false, "message" => $proses['message']]);
                     die();
                 }
