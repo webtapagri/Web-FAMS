@@ -494,7 +494,7 @@ class ApprovalController extends Controller
                             a.group_deprec_30 = '{$request->fiscal_deprec_15}',
                             a.updated_by = '{$user_id}',
                             a.updated_at = current_timestamp()
-                    WHERE a.ID = $id AND a.NO_REG = '{$request->getnoreg}' AND a.NO_REG_ITEM = {$request->no_reg_item} ";
+                    WHERE a.ID = $id AND a.NO_REG = '{$request->getnoreg}' AND a.NO_REG_ITEM = '{$request->no_reg_item}' ";
             DB::UPDATE($sql);    
 
             DB::commit();

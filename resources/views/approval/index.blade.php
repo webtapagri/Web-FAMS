@@ -2420,19 +2420,20 @@
         {
             $.ajaxSetup({
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                    'Access-Control-Allow-Methods': 'GET, POST',
                 }
             });
             $.ajax({
                 url: "{{ url('approval/save_asset_sap') }}/"+id,
                 method: "POST",
                 data: param+"&nama_asset_1="+nama_asset_1+"&nama_asset_2="+nama_asset_2+"&nama_asset_3="+nama_asset_3+"&quantity="+quantity+"&uom="+uom+"&capitalized_on="+capitalized_on+"&deactivation_on="+deactivation_on+"&cost_center="+cost_center+"&book_deprec_01="+book_deprec_01+"&fiscal_deprec_15="+fiscal_deprec_15+"&group_deprec_30="+group_deprec_30+"&getnoreg="+getnoreg+"&no_po="+no_po+"&no_reg_item="+no_reg_item,
-                beforeSend: function() {
-                    $('.loading-event').fadeIn();
-                },
+                // beforeSend: function() {
+                //     $('.loading-event').fadeIn();
+                // },
                 success: function(result) 
                 {
-                    //alert(result.status);
                     if (result.status) 
                     {
                         //$("#approve-modal").modal("hide");
