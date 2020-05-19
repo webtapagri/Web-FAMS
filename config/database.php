@@ -65,7 +65,7 @@ return [
             ],
             'strict' => false,
             'driver'    => 'mysql',
-            'database'  => 'ams', //tap_fams_dev
+            'database'  => 'tap_fams_dev',
             'username'  => 'root',
             'port'      => env('DB_PORT', '3306'),
             'password'  => '',
