@@ -1750,7 +1750,7 @@
                     $("#box-detail-item-history").html(item);
                 }
 
-                if( val.po_type == 1 || val.po_type == 2 )
+                if( val.po_type == 0 || val.po_type == 2 )
                 {
                         $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
                 }
@@ -2182,7 +2182,7 @@
                     $("#box-detail-item-history").fadeIn();
                     $("#box-detail-item-history").html(item);
                 }
-                if( val.po_type == 1 || val.po_type == 2 )
+                if( val.po_type == 0 || val.po_type == 2 )
                 {
                         $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
                 }
