@@ -1750,10 +1750,6 @@
                     $("#box-detail-item-history").html(item);
                 }
 
-                if( val.po_type == 0 || val.po_type == 2 )
-                {
-                        $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
-                }
                 //alert(noreg);
 
                 /*$('#quantity-'+val.no_reg_item+'').keypress(function(event){
@@ -1766,6 +1762,13 @@
                 $.each(data, function(key, val) 
                 {
                     trigger_edit_asset(val.no_reg_item,val.jenis_asset,val.group,val.sub_group,val.uom_asset_sap);
+                });
+                $.each(data, function(key, val) 
+                {
+                    if( val.po_type == 0 || val.po_type == 2 )
+                        {
+                                $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
+                        }
                 });
                 <?php } ?>
 
@@ -2182,17 +2185,22 @@
                     $("#box-detail-item-history").fadeIn();
                     $("#box-detail-item-history").html(item);
                 }
-                if( val.po_type == 0 || val.po_type == 2 )
-                {
-                        $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
-                }
-
+               
 
                 <?php if( $user_role == 'AMS' ){ ?>
                 $.each(data, function(key, val) 
                 {
                     trigger_edit_asset(val.no_reg_item,val.jenis_asset,val.group,val.sub_group,val.uom_asset_sap);
                 });
+
+                $.each(data, function(key, val) 
+                {
+                    if( val.po_type == 0 || val.po_type == 2 )
+                        {
+                                $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
+                        }
+                });
+
                 <?php } ?>
 
                 var tipekendaraan = $.parseJSON(JSON.stringify(dataJson('{!! route("get.select_jenis_kendaraan") !!}')));
