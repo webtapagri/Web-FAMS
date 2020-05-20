@@ -63,7 +63,7 @@ Route::post('/approval/active', 'ApprovalController@active');
 Route::get('/approval/view/{no_reg}', 'ApprovalController@view')->name('no_reg');
 Route::get('/approval/view_detail/{no_reg}/{id}', 'ApprovalController@get_asset_detail');
 Route::post('/approval/delete_asset/{id}','ApprovalController@delete_asset');
-Route::get('/approval/save_asset_sap/{id}','ApprovalController@save_asset_sap');
+Route::post('/approval/save_asset_sap/{id}','ApprovalController@save_asset_sap');
 Route::post('/approval/save_item_detail/{id}','ApprovalController@save_item_detail');
 Route::post('/approval/update_status/{status}/{no_reg}','ApprovalController@update_status');
 Route::get('/approval/log_history/{no_reg}', 'ApprovalController@log_history')->name('no_reg');

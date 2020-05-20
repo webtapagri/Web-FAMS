@@ -433,7 +433,7 @@ class ApprovalController extends Controller
         // IF UOM NULL or OBJECT VAL
         $uom_asset_sap = $request->uom; //echo $uom_asset_sap; die();
         $request_uom = '';
-        
+        dd($request);
         if (strpos($uom_asset_sap, '[object Object]') !== false) 
         {
             

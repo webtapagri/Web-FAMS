@@ -1749,6 +1749,11 @@
                     $("#box-detail-item-history").fadeIn();
                     $("#box-detail-item-history").html(item);
                 }
+
+                if( val.po_type == 1 || val.po_type == 2 )
+                {
+                        $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
+                }
                 //alert(noreg);
 
                 /*$('#quantity-'+val.no_reg_item+'').keypress(function(event){
@@ -2177,6 +2182,11 @@
                     $("#box-detail-item-history").fadeIn();
                     $("#box-detail-item-history").html(item);
                 }
+                if( val.po_type == 1 || val.po_type == 2 )
+                {
+                        $('#uom-"+val.no_reg_item+"').val(val.uom_asset_sap)
+                }
+
 
                 <?php if( $user_role == 'AMS' ){ ?>
                 $.each(data, function(key, val) 
