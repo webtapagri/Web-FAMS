@@ -19,7 +19,7 @@
                                 <tr role="row" class="heading">
                                     <th>img</th>
                                     <th>Username</th>
-                                    <th>Role</th>
+                                    <th width="13%">Role</th>
                                     <th>Name</th>
                                     <th>Email</th>
                                     <th>Job Code</th>

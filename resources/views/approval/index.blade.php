@@ -791,7 +791,7 @@
                     },
                     {
                         data: 'REQUEST_DATE',
-                        name: 'REQUEST_DATE'
+                        name: 'REQUEST_DATE',
                     },
                     {
                         data: 'REQUESTOR',
