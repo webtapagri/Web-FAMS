@@ -1110,10 +1110,11 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         }      
     }
 
-    function get_validasi_check_gi(Request $request, $noreg)
-    // function get_validasi_check_gi($request, $noreg)
+    // function get_validasi_check_gi(Request $request, $noreg)
+    function get_validasi_check_gi($request, $noreg)
     {
-        $req = $request->all();
+        // $req = $request->all();
+        $req = $request;
         
         $request_gi = json_decode($req['request_gi']);
         //echo "3<pre>"; print_r($request_gi); die();

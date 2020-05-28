@@ -79,6 +79,8 @@ html, body {
             $bp = "";
             $rltp = "";
             $status_document = "";
+            $milik = "";
+            $sewa = "";
 
             foreach( $data['report'] as $k => $v )
             {
@@ -101,6 +103,15 @@ html, body {
                 if($v['STATUS_DOCUMENT'] != '')
                 {
                     $status_document = "<i class='fa fa-check'></i>";
+                }
+                else{
+                    if(substr($v['BA_PEMILIK_ASSET'],0,2)<>12){
+                        $milik =  "<i class='fa fa-check'></i>";
+                        $sewa = "";
+                    }else{
+                        $milik =  "";
+                        $sewa = "<i class='fa fa-check'></i>";
+                    }
                 }
 
                 $l .= "<tr> 
@@ -142,8 +153,8 @@ html, body {
                     <td>".$v['JENIS_ASSET']."</td>
                     <td>".$v['GROUP']."</td>
                     <td>".$v['SUB_GROUP']."</td>
-                    <td></td>
-                    <td></td>
+                    <td>".$milik."</td>
+                    <td>".$sewa."</td>
                     <td>".$status_document."</td>
                 </tr>
                 ";

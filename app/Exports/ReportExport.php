@@ -64,7 +64,6 @@ class ReportExport implements FromView
                 ); 
             }
         }
-        // dd((object)$result);
         $data['report'] = (object)$result;
         // dd($data['report']);
         return view('report.list_asset',$data);
