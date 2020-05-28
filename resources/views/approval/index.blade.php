@@ -856,6 +856,7 @@
                     },
                     {
                         orderable: true,
+                        // targets: 'no-sort',
                         targets: [4]
                     }
                 ],

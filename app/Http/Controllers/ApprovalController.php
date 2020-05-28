@@ -442,7 +442,7 @@ class ApprovalController extends Controller
 
             $uom_now_data = DB::table('TR_REG_ASSET_DETAIL AS a')
 							->selectRaw("UOM_ASSET_SAP")
-							->whereRaw ("a.ID = $id AND a.NO_REG = '$request->getnoreg' AND a.NO_REG_ITEM = $request->no_reg_item")
+							->whereRaw ("a.ID = $id AND a.NO_REG = '$request->getnoreg' AND a.NO_REG_ITEM = '$request->no_reg_item' ")
 							->get();
                          
             // $uom_now = @$uom_now_data[0]->UOM_ASSET_SAP;
@@ -1110,8 +1110,8 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         }      
     }
 
-    // function get_validasi_check_gi(Request $request, $noreg)
-    function get_validasi_check_gi($request, $noreg)
+    function get_validasi_check_gi(Request $request, $noreg)
+    // function get_validasi_check_gi($request, $noreg)
     {
         $req = $request->all();
         
