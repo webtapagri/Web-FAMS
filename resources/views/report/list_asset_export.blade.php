@@ -101,11 +101,11 @@
                 }
                 else{
                     if(substr($v->BA_PEMILIK_ASSET,0,2)<>12){
-                        $milik =  "&#10004;";
+                        $milik =  "&#x2714;";
                         $sewa = "";
                     }else{
                         $milik =  "";
-                        $sewa = "&#10004;";
+                        $sewa = "&#x2714;";
                     }
                 }
 
