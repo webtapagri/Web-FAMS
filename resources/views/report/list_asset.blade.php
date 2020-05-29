@@ -103,15 +103,15 @@ html, body {
                 if($v['STATUS_DOCUMENT'] != '')
                 {
                     $status_document = "<i class='fa fa-check'></i>";
+                    
                 }
-                else{
-                    if(substr($v['BA_PEMILIK_ASSET'],0,2)<>12){
-                        $milik =  "<i class='fa fa-check'></i>";
-                        $sewa = "";
-                    }else{
-                        $milik =  "";
-                        $sewa = "<i class='fa fa-check'></i>";
-                    }
+
+                if(substr($v['BA_PEMILIK_ASSET'],0,2) == 12){
+                    $milik =  "";
+                    $sewa = "<i class='fa fa-check'></i>";
+                }else{
+                    $milik =  "<i class='fa fa-check'></i>";
+                    $sewa = "";
                 }
 
                 $l .= "<tr> 
