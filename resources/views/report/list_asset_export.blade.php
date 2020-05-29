@@ -82,22 +82,22 @@
 
                 if($v->KONDISI_ASSET == 'B')
                 {
-                    $b = "<i class='fa fa-check'></i>";
+                    $b = "&#x2714;";
                 }
 
                 if($v->KONDISI_ASSET == 'BP')
                 {
-                    $bp = "<i class='fa fa-check'></i>";
+                    $bp = "&#x2714;";
                 }
 
                 if($v->KONDISI_ASSET == 'RLTP')
                 {
-                    $rltp = "<i class='fa fa-check'></i>";
+                    $rltp = "&#x2714;";
                 }
 
                 if($v->STATUS_DOCUMENT != '')
                 {
-                    $status_document = "<i class='fa fa-check'></i>";
+                    $status_document = "&#x2714;";
                 }
                 else{
                     if(substr($v->BA_PEMILIK_ASSET,0,2)<>12){
