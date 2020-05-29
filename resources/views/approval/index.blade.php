@@ -791,7 +791,7 @@
                     },
                     {
                         data: 'REQUEST_DATE',
-                        name: 'REQUEST_DATE',
+                        name: 'REQUEST_DATE'
                     },
                     {
                         data: 'REQUESTOR',
@@ -865,7 +865,6 @@
                     sLoadingRecords: ""
                 },
                 "order": [],
-                // "order": [[4, 'desc']],
             },
         });
 
