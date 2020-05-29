@@ -856,7 +856,6 @@
                     },
                     {
                         orderable: true,
-                        // targets: 'no-sort',
                         targets: [4]
                     }
                 ],
@@ -866,6 +865,7 @@
                     sLoadingRecords: ""
                 },
                 "order": [],
+                // "order": [[4, 'desc']],
             },
         });
 

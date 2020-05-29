@@ -118,29 +118,51 @@ class ReportController extends Controller
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
 
-        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR,
-                    CASE WHEN FILE_CATEGORY = 'asset' THEN
-                            c.FILE_UPLOAD
-                    END AS FOTO_ASET,
-                    CASE WHEN FILE_CATEGORY = 'no seri' THEN
-                            c.FILE_UPLOAD
-                    END AS FOTO_SERI,
-                    CASE WHEN FILE_CATEGORY = 'imei' THEN
-                        c.FILE_UPLOAD
-                    END AS FOTO_MESIN,
+        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, CONVERT(c.FOTO_ASET USING utf8) as FOTO_ASET , c.FOTO_SERI, c.FOTO_MESIN,
                         f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
                         g.GROUP_DESCRIPTION as GROUP_NAME, 
                         h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
                         a.DISPOSAL_FLAG AS STATUS_DOCUMENT
-                    FROM TM_MSTR_ASSET a LEFT JOIN TR_REG_ASSET_DETAIL_FILE c ON c.NO_REG_ITEM_FILE = a.NO_REG_ITEM
-                    and c.NO_REG = a.NO_REG
-                    LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
-                    LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
-                    LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
-                    LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
-                        AND h.SUBGROUP_CODE = a.SUB_GROUP
-                    LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
-                    WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
+                        FROM TM_MSTR_ASSET a
+                        LEFT JOIN (select 
+                                    GROUP_CONCAT(case when FILE_CATEGORY = 'asset' then FILE_UPLOAD end) as FOTO_ASET,
+                                    GROUP_CONCAT(case when FILE_CATEGORY = 'no seri' then FILE_UPLOAD end) as FOTO_SERI,
+                                    GROUP_CONCAT(case when FILE_CATEGORY = 'imei' then FILE_UPLOAD end) as FOTO_MESIN,
+                                    NO_REG, NO_REG_ITEM_FILE
+                                    from TR_REG_ASSET_DETAIL_FILE group by NO_REG) c 
+                                    ON c.NO_REG = a.NO_REG
+                        LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
+                        LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
+                        LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
+                        LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
+                                    AND h.SUBGROUP_CODE = a.SUB_GROUP
+                        LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
+                        WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' )  $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
+                    // SELECT * FROM TR_REG_ASSET_DETAIL_FILE
+                    // SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR,
+                    // CASE WHEN FILE_CATEGORY = 'asset' THEN
+                    //         c.FILE_UPLOAD
+                    // END AS FOTO_ASET,
+                    // CASE WHEN FILE_CATEGORY = 'no seri' THEN
+                    //         c.FILE_UPLOAD
+                    // END AS FOTO_SERI,
+                    // CASE WHEN FILE_CATEGORY = 'imei' THEN
+                    //     c.FILE_UPLOAD
+                    // END AS FOTO_MESIN,
+                    //     f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
+                    //     g.GROUP_DESCRIPTION as GROUP_NAME, 
+                    //     h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
+                    //     a.DISPOSAL_FLAG AS STATUS_DOCUMENT
+                    // FROM TM_MSTR_ASSET a LEFT JOIN TR_REG_ASSET_DETAIL_FILE c ON c.NO_REG_ITEM_FILE = a.NO_REG_ITEM
+                    // and c.NO_REG = a.NO_REG
+                    // LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
+                    // LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
+                    // LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
+                    // LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
+                    //     AND h.SUBGROUP_CODE = a.SUB_GROUP
+                    // LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
+                    // WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) 
+                    // $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
 
         /*$sql1 = " SELECT a.*,b.DESCRIPTION AS NAMA_PT_PEMILIK,(SELECT NAMA_VENDOR FROM TR_REG_ASSET WHERE NO_REG = a.NO_REG) AS NAMA_VENDOR,(SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID AND FILE_CATEGORY = 'asset' ) AS FOTO_ASET, (SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID AND FILE_CATEGORY = 'no seri' ) AS FOTO_SERI, (SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND FILE_CATEGORY = 'imei' AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID ) AS FOTO_MESIN, 
 (SELECT JENIS_ASSET_DESCRIPTION FROM TM_JENIS_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET) AS JENIS_ASSET_NAME,
@@ -152,7 +174,8 @@ class ReportController extends Controller
                     WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
         
         $dt = DB::SELECT($sql);
-
+        
+        // dd($dt);
         if(!empty($dt))
         {
             foreach( $dt as $k => $v )
@@ -193,7 +216,6 @@ class ReportController extends Controller
                 ); 
             }
         }
-
         $access = AccessRight::access();    
         $data['page_title'] = 'Report List Asset';
         $data['ctree_mod'] = 'Report';
@@ -211,7 +233,6 @@ class ReportController extends Controller
         $where = "";
         $result = array();
         $req = $request->all();
-// dd($req);
         if( !empty($req['kode-aset-fams']) )
         {
             $where .= " AND UPPER(a.KODE_ASSET_AMS) LIKE UPPER('%{$req['kode-aset-fams']}%') ";
@@ -262,40 +283,26 @@ class ReportController extends Controller
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
 
-        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR,
-                    CASE WHEN FILE_CATEGORY = 'asset' THEN
-                            c.FILE_UPLOAD
-                    END AS FOTO_ASET,
-                    CASE WHEN FILE_CATEGORY = 'no seri' THEN
-                            c.FILE_UPLOAD
-                    END AS FOTO_SERI,
-                    CASE WHEN FILE_CATEGORY = 'imei' THEN
-                        c.FILE_UPLOAD
-                    END AS FOTO_MESIN,
-                    f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
-                    g.GROUP_DESCRIPTION as GROUP_NAME, 
-                    h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
-                    a.DISPOSAL_FLAG AS STATUS_DOCUMENT
-
-                    FROM TM_MSTR_ASSET a LEFT JOIN TR_REG_ASSET_DETAIL_FILE c ON c.NO_REG_ITEM_FILE = a.NO_REG_ITEM
-                    and c.NO_REG = a.NO_REG
-                    LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
-                    LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
-                    LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
-                    LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
-                        AND h.SUBGROUP_CODE = a.SUB_GROUP
-                    LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
-                    WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
-
-        /*$sql1 = " SELECT a.*,b.DESCRIPTION AS NAMA_PT_PEMILIK,(SELECT NAMA_VENDOR FROM TR_REG_ASSET WHERE NO_REG = a.NO_REG) AS NAMA_VENDOR,(SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID AND FILE_CATEGORY = 'asset' ) AS FOTO_ASET, (SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID AND FILE_CATEGORY = 'no seri' ) AS FOTO_SERI, (SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND FILE_CATEGORY = 'imei' AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID ) AS FOTO_MESIN, 
-(SELECT JENIS_ASSET_DESCRIPTION FROM TM_JENIS_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET) AS JENIS_ASSET_NAME,
-(SELECT GROUP_DESCRIPTION FROM TM_GROUP_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET AND GROUP_CODE = a.GROUP) AS GROUP_NAME,
-(SELECT SUBGROUP_DESCRIPTION FROM TM_SUBGROUP_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET AND GROUP_CODE = a.GROUP AND SUBGROUP_CODE = a.SUB_GROUP) AS SUB_GROUP_NAME, c.DISPOSAL_FLAG AS STATUS_DOCUMENT 
-                    FROM TR_REG_ASSET_DETAIL a 
-                        LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant'
-                        LEFT JOIN TM_MSTR_ASSET c ON a.KODE_ASSET_AMS = c.KODE_ASSET_AMS
-                    WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
-        
+        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, CONVERT(c.FOTO_ASET USING utf8) as FOTO_ASET , c.FOTO_SERI, c.FOTO_MESIN,
+                f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
+                g.GROUP_DESCRIPTION as GROUP_NAME, 
+                h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
+                a.DISPOSAL_FLAG AS STATUS_DOCUMENT
+                FROM TM_MSTR_ASSET a
+                LEFT JOIN (select 
+                            GROUP_CONCAT(case when FILE_CATEGORY = 'asset' then FILE_UPLOAD end) as FOTO_ASET,
+                            GROUP_CONCAT(case when FILE_CATEGORY = 'no seri' then FILE_UPLOAD end) as FOTO_SERI,
+                            GROUP_CONCAT(case when FILE_CATEGORY = 'imei' then FILE_UPLOAD end) as FOTO_MESIN,
+                            NO_REG, NO_REG_ITEM_FILE
+                            from TR_REG_ASSET_DETAIL_FILE group by NO_REG) c 
+                            ON c.NO_REG = a.NO_REG
+                LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
+                LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
+                LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
+                LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
+                            AND h.SUBGROUP_CODE = a.SUB_GROUP
+                LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
+                WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
         
         return Excel::download(new ReportExport($sql), 'REPORT.xlsx');
     }
