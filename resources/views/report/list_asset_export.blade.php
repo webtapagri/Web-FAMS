@@ -101,11 +101,11 @@
                 }
                 else{
                     if(substr($v->BA_PEMILIK_ASSET,0,2)<>12){
-                        $milik =  "<i class='fa fa-check'></i>";
+                        $milik =  "&#10004;";
                         $sewa = "";
                     }else{
                         $milik =  "";
-                        $sewa = "<i class='fa fa-check'></i>";
+                        $sewa = "&#10004;";
                     }
                 }
 
