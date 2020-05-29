@@ -284,7 +284,7 @@ class ReportController extends Controller
         }
 
         $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, CONVERT(c.FOTO_ASET USING utf8) as FOTO_ASET , c.FOTO_SERI, c.FOTO_MESIN,
-                f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
+                REPLACE(REPLACE(f.JENIS_ASSET_DESCRIPTION,'&',''),'/','') as JENIS_ASSET_NAME,
                 REPLACE(REPLACE(g.GROUP_DESCRIPTION,'&',''),'/','') as GROUP_NAME, 
                 REPLACE(REPLACE(h.SUBGROUP_DESCRIPTION,'&',''),'/','') as SUB_GROUP_NAME, 
                 a.DISPOSAL_FLAG AS STATUS_DOCUMENT

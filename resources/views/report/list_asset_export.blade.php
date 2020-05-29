@@ -51,7 +51,7 @@
                 <th rowspan='2'>QTY</th>
                 <th rowspan='2'>UOM</th>
                 <th rowspan='2'>MRP</th>
-                <th colspan='5'>ASSET</th>
+                <th colspan='6'>ASSET</th>
                 <th colspan='3'>STATUS</th>
             </tr>
             <tr>
@@ -61,6 +61,7 @@
                 <th>BP</th>
                 <th>RTLP</th>
                 <th>JENIS</th>
+                <th>JENIS ASSET DESC</th>
                 <th>GROUP</th>
                 <th>GROUP DESC</th>
                 <th>SUB GROUP</th>
@@ -146,6 +147,7 @@
                     <td>".$v->UOM_ASSET_SAP."</td>
                     <td></td>
                     <td>".$v->JENIS_ASSET."</td>
+                    <td>".$v->JENIS_ASSET_NAME."</td>
                     <td>".$v->GROUP."</td>
                     <td>".$v->GROUP_NAME."</td>
                     <td>".$v->SUB_GROUP."</td>
