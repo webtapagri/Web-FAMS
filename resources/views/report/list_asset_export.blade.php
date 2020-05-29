@@ -51,7 +51,7 @@
                 <th rowspan='2'>QTY</th>
                 <th rowspan='2'>UOM</th>
                 <th rowspan='2'>MRP</th>
-                <th colspan='3'>ASSET</th>
+                <th colspan='5'>ASSET</th>
                 <th colspan='3'>STATUS</th>
             </tr>
             <tr>
@@ -62,7 +62,9 @@
                 <th>RTLP</th>
                 <th>JENIS</th>
                 <th>GROUP</th>
+                <th>GROUP DESC</th>
                 <th>SUB GROUP</th>
+                <th>SUB GROUP DESC</th>
                 <th>ASET</th>
                 <th>SEWA</th>
                 <th>DISPOSAL</th>
@@ -145,7 +147,9 @@
                     <td></td>
                     <td>".$v->JENIS_ASSET."</td>
                     <td>".$v->GROUP."</td>
+                    <td>".$v->GROUP_NAME."</td>
                     <td>".$v->SUB_GROUP."</td>
+                    <td>".$v->SUB_GROUP_NAME."</td>
                     <td>".$milik."</td>
                     <td>".$sewa."</td>
                     <td>".$status_document."</td>
