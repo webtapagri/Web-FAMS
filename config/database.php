@@ -56,28 +56,6 @@ return [
             'engine' => null,
         ], */
 
-        // 'mysql' => [
-        //     'read' => [
-        //         'host' => '149.129.251.28',
-        //     ],
-        //     'write' => [
-        //         'host' => '149.129.251.28'
-        //     ],
-        //     'strict' => false,
-        //     'driver'    => 'mysql',
-        //     'database'  => 'ams',   
-        //     'username'  => 'app_ams',
-        //     'port'      => env('DB_PORT', '3306'),
-        //     'password'  => '4msD3v4pp88!/.,',
-        //     'charset'   => 'utf8',
-        //     'collation' => 'utf8_unicode_ci',
-        //     'prefix'    => '',
-        //     //'unix_socket'    => '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock', <=== for mysql port 3306
-        //     'strict'    => false,
-        //     'options'  => array(
-        //         PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', false),
-        //     ),
-        // ],
         'mysql' => [
             'read' => [
                 'host' => '127.0.0.1',

@@ -119,7 +119,7 @@ class ReportController extends Controller
         }
 
         
-        DB::unprepared("SET SESSION group_concat_max_len = 40000000;");
+        DB::unprepared("SET SESSION group_concat_max_len = 1000000;");
         $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN,
                         f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
                         g.GROUP_DESCRIPTION as GROUP_NAME, 
@@ -176,6 +176,8 @@ class ReportController extends Controller
                     WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
         
         $dt = DB::SELECT($sql);
+
+        dd($dt);
         
         // dd($dt);
         if(!empty($dt))
