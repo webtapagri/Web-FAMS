@@ -672,6 +672,9 @@
 
 @stop
 @section('js')
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.19/sorting/datetime-moment.js"></script>
 <script>
     var request_item = [];
     var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
@@ -856,6 +859,7 @@
                     },
                     {
                         orderable: true,
+                        type: "date-dd-MMM-yyyy",
                         targets: [4]
                     }
                 ],
