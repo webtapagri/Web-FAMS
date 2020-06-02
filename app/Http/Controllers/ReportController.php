@@ -66,8 +66,8 @@ class ReportController extends Controller
 
         $where = "";
         $result = array();
+        
         $req = $request->all();
-
         if( !empty($req['kode-aset-fams']) )
         {
             $where .= " AND UPPER(a.KODE_ASSET_AMS) LIKE UPPER('%{$req['kode-aset-fams']}%') ";
@@ -118,7 +118,9 @@ class ReportController extends Controller
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
 
-        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, CONVERT(c.FOTO_ASET USING utf8) as FOTO_ASET , c.FOTO_SERI, c.FOTO_MESIN,
+        
+        DB::unprepared("SET SESSION group_concat_max_len = 1000000;");
+        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN,
                         f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
                         g.GROUP_DESCRIPTION as GROUP_NAME, 
                         h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
@@ -222,6 +224,7 @@ class ReportController extends Controller
         $data['ctree'] = 'report/list-asset';
         $data['access'] = (object)$access;
         $data['report'] = $result;
+        // return view('report.list_asset',$data);
         return view('report.list_asset')->with(compact('data'));
     }
 
