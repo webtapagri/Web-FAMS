@@ -176,8 +176,6 @@ class ReportController extends Controller
                     WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
         
         $dt = DB::SELECT($sql);
-
-        dd($dt);
         
         // dd($dt);
         if(!empty($dt))
