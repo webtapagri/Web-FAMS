@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Database\ConnectionInterface;
 use function GuzzleHttp\json_encode;
+use Debugbar;
 use Session;
 use API;
 use AccessRight;
@@ -118,8 +119,8 @@ class ReportController extends Controller
         {
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
-        DB::unprepared("SET SESSION group_concat_max_len = 5000000000;");
-        // $dbu = DB::SELECT('show variables like "%concat%";');
+        DB::unprepared(DB::raw("SET GLOBAL group_concat_max_len = 5000000000;"));
+        Debugbar::info(DB::SELECT('show variables like "%concat%";'));
         // dd($dbu);
         $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN,
                         f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
@@ -177,7 +178,7 @@ class ReportController extends Controller
                     WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
         
         $dt = DB::SELECT($sql);
-        
+        Debugbar::info($dt);
         // dd($dt);
         if(!empty($dt))
         {

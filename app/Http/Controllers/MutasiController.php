@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
+use Debugbar;
 use App\TrUser;
 use function GuzzleHttp\json_encode;
 use Session;
@@ -219,6 +220,7 @@ class MutasiController extends Controller
         $role_id = Session::get('role_id');
         $user_id = Session::get('user_id');
         $area_code = Session::get('area_code');
+        $code = '';
 
         $orderColumn = $request->order[0]["column"];
         $dirColumn = $request->order[0]["dir"];
@@ -249,15 +251,18 @@ class MutasiController extends Controller
                 $orderColumnName = $row["field"];
             }
         }
+        if($area_code <> "All"){
+            $code = " AND LOKASI_BA_CODE = '".$area_code."'";
+        }
 
         // it@140619 JOIN W v_outstanding
         $sql = ' SELECT DISTINCT(ASSET.KODE_ASSET_AMS) AS KODE_ASSET_AMS '.implode(", ", $selectedColumn).'
             FROM TM_MSTR_ASSET AS ASSET 
-            WHERE (DISPOSAL_FLAG IS NULL OR DISPOSAL_FLAG = "") AND (ASSET_CONTROLLER IS NOT NULL OR ASSET_CONTROLLER != "" ) AND LOKASI_BA_CODE = "'.$area_code.'" ';
+            WHERE (DISPOSAL_FLAG IS NULL OR DISPOSAL_FLAG = "") AND (ASSET_CONTROLLER IS NOT NULL OR ASSET_CONTROLLER != "" ) '.$code;
 
         /*if($role_id != 4)
             $sql .= " AND ASSET.CREATED_BY = '{$user_id}' ";*/ 
-
+        
         if ($request->KODE_ASSET_AMS)
             $sql .= " AND ASSET.KODE_ASSET_AMS like '%" . $request->KODE_ASSET_AMS . "%'";
        
@@ -288,6 +293,8 @@ class MutasiController extends Controller
         }
 
         $data = DB::select(DB::raw($sql));
+        // $data = DB::select($sql);
+        Debugbar::info($data);
 
         $iTotalRecords = count($data);
         $iDisplayLength = intval($request->length);

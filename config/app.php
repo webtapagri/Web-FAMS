@@ -164,6 +164,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         NahidulHasan\Html2pdf\Html2pdfServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -240,7 +241,8 @@ return [
         'API' => App\Providers\ApiHelper::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Pdf'  => NahidulHasan\Html2pdf\Facades\Pdf::class,
-		'Image' => Intervention\Image\Facades\Image::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
 
     ],
 ];
