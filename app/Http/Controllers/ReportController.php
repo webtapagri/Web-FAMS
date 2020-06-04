@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use \Cache;
 use function GuzzleHttp\json_encode;
 use Session;
 use API;
@@ -117,8 +118,10 @@ class ReportController extends Controller
         {
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
-
-        DB::unprepared("SET SESSION group_concat_max_len = 5000000000;");
+        Cache::flush();
+        DB::SELECT("SET SESSION group_concat_max_len = 5000000000;");
+        // $dbu = DB::SELECT('show variables like "%concat%";');
+        // dd($dbu);
         $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN,
                         f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
                         g.GROUP_DESCRIPTION as GROUP_NAME, 
