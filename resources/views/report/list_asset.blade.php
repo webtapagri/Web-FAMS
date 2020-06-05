@@ -138,9 +138,10 @@ html, body {
                     <td>".$v['NO_PO']."</td>
                     <td>".$v['NAMA_VENDOR']."</td>
                     <td>".$v['INFORMASI']."</td>
-                    <td><img src='".$v['FOTO_ASET']."' width='100px' /></td>
-                    <td><img src='".$v['FOTO_SERI']."' width='100px' /></td>
-                    <td><img src='".$v['FOTO_MESIN']."' width='100px' /></td>
+                    
+                    <td><img src='/storage/".$v['FOTO_ASET']."' width='100px' /></td>
+                    <td><img src='/storage/".$v['FOTO_SERI']."' width='100px' /></td>
+                    <td><img src='/storage/".$v['FOTO_MESIN']."' width='100px' /></td>
                     <td>".$v['ASSET_CLASS']."</td>
                     <td>".$v['TAHUN_ASSET']."</td>
                     <td></td>

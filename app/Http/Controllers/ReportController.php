@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Database\ConnectionInterface;
+use Illuminate\Support\Facades\Storage;
 use function GuzzleHttp\json_encode;
 use Debugbar;
 use Session;
@@ -184,6 +185,24 @@ class ReportController extends Controller
         {
             foreach( $dt as $k => $v )
             {
+                $img_aset = $v->FOTO_ASET;  // your base64 encoded
+                $img_aset = str_replace('data:image/jpeg;base64,', '', $img_aset);
+                $img_aset = str_replace(' ', '+', $img_aset);
+                $foto_aset = str_random(10).'.'.'jpg';
+                \File::put(storage_path(). '/app/public/' . $foto_aset, base64_decode($img_aset));
+
+                $img_seri = $v->FOTO_SERI;  // your base64 encoded
+                $img_seri = str_replace('data:image/jpeg;base64,', '', $img_seri);
+                $img_seri = str_replace(' ', '+', $img_seri);
+                $foto_seri = str_random(10).'.'.'jpg';
+                \File::put(storage_path(). '/app/public/' . $foto_seri, base64_decode($img_aset));
+
+                $img_mesin = $v->FOTO_MESIN;  // your base64 encoded
+                $img_mesin = str_replace('data:image/jpeg;base64,', '', $img_mesin);
+                $img_mesin = str_replace(' ', '+', $img_mesin);
+                $foto_mesin = str_random(10).'.'.'jpg';
+                \File::put(storage_path(). '/app/public/' . $foto_mesin, base64_decode($img_mesin));
+                
                 $result[] = array(
                     'KODE_ASSET_AMS' => $v->KODE_ASSET_AMS,
                     'KODE_ASSET_SAP' => $v->KODE_ASSET_SAP,
@@ -203,9 +222,9 @@ class ReportController extends Controller
                     'NO_PO' => $v->NO_PO,
                     'NAMA_VENDOR' => $v->NAMA_VENDOR,
                     'INFORMASI' => $v->INFORMASI,
-                    'FOTO_ASET' => $v->FOTO_ASET,
-                    'FOTO_SERI' => $v->FOTO_SERI,
-                    'FOTO_MESIN' => $v->FOTO_MESIN,
+                    'FOTO_ASET' => $foto_aset,
+                    'FOTO_SERI' => $foto_seri,
+                    'FOTO_MESIN' => $foto_mesin,
                     'ASSET_CLASS' => $v->ASSET_CLASS,
                     'TAHUN_ASSET' => $v->TAHUN_ASSET,
                     'BOOK_DEPREC_01' => $v->BOOK_DEPREC_01,
