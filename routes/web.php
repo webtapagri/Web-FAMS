@@ -336,9 +336,12 @@ Route::get('/disposal/delete_berkas_temp','DisposalController@delete_berkas_temp
 /* END DISPOSAL */
 
 
-Route::get('storage/{filename}', function ($filename)
-{
-    return Image::make(storage_path('public/' . $filename))->response();
-});
+// Route::get('storage/{filename}', function ($filename)
+// {
+//     return Image::make(storage_path('public/' . $filename))->response();
+// });
 
 
+
+#image
+// Route::get( '/storage/{filename}', 'StorageController@image' );
