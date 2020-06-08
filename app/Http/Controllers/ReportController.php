@@ -120,7 +120,7 @@ class ReportController extends Controller
         {
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
-        DB::unprepared(DB::raw("SET GLOBAL group_concat_max_len = 5000000000;"));
+        DB::unprepared(DB::raw("SET SESSION group_concat_max_len = 5000000000;"));
         Debugbar::info(DB::SELECT('show variables like "%concat%";'));
         // dd($dbu);
         $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN,

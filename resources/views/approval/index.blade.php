@@ -794,7 +794,10 @@
                     },
                     {
                         data: 'REQUEST_DATE',
-                        name: 'REQUEST_DATE'
+                        name: 'REQUEST_DATE', 
+                        "render": function(data, type) {
+                            return type === 'sort' ? data : moment(data).format('L');
+                        }
                     },
                     {
                         data: 'REQUESTOR',
