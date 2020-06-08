@@ -795,9 +795,9 @@
                     {
                         data: 'REQUEST_DATE',
                         name: 'REQUEST_DATE', 
-                        "render": function(data, type) {
-                            return type === 'sort' ? data : moment(data).format('L');
-                        }
+                        // "render": function(data, type) {
+                        //     return type === 'sort' ? data : moment(data).format('ll');
+                        // }
                     },
                     {
                         data: 'REQUESTOR',
@@ -814,7 +814,7 @@
                     {
                         data: 'VENDOR_NAME',
                         name: 'VENDOR_NAME'
-                    }, 
+                    },  
                     {
                         "render": function(data, type, row) 
                         {
