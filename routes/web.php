@@ -344,4 +344,4 @@ Route::get('/disposal/delete_berkas_temp','DisposalController@delete_berkas_temp
 
 
 #image
-// Route::get( '/storage/{filename}', 'StorageController@image' );
+Route::get( 'storage/{filename}', 'StorageController@image' );

@@ -130,9 +130,9 @@ class ReportController extends Controller
                         a.DISPOSAL_FLAG AS STATUS_DOCUMENT
                         FROM TM_MSTR_ASSET a
                         LEFT JOIN (select 
-                                    GROUP_CONCAT(case when FILE_CATEGORY = 'asset' then FILE_UPLOAD end) as FOTO_ASET,
-                                    GROUP_CONCAT(case when FILE_CATEGORY = 'no seri' then FILE_UPLOAD end) as FOTO_SERI,
-                                    GROUP_CONCAT(case when FILE_CATEGORY = 'imei' then FILE_UPLOAD end) as FOTO_MESIN,
+                                    GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'asset' then FILE_UPLOAD end)) as FOTO_ASET,
+                                    GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'no seri' then FILE_UPLOAD end)) as FOTO_SERI,
+                                    GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'imei' then FILE_UPLOAD end)) as FOTO_MESIN,
                                     NO_REG, NO_REG_ITEM_FILE
                                     from TR_REG_ASSET_DETAIL_FILE group by NO_REG) c 
                                     ON c.NO_REG = a.NO_REG
@@ -185,23 +185,23 @@ class ReportController extends Controller
         {
             foreach( $dt as $k => $v )
             {
-                // $img_aset = $v->FOTO_ASET;  // your base64 encoded
-                // $img_aset = str_replace('data:image/jpeg;base64,', '', $img_aset);
-                // $img_aset = str_replace(' ', '+', $img_aset);
-                // $foto_aset = str_random(10).'.'.'jpg';
-                // \File::put(storage_path(). '/app/public/' . $foto_aset, base64_decode($img_aset));
+                $img_aset = $v->FOTO_ASET;  // your base64 encoded
+                $img_aset = str_replace('data:image/jpeg;base64,', '', $img_aset);
+                $img_aset = str_replace(' ', '+', $img_aset);
+                $foto_aset = str_random(10).'.'.'jpg';
+                \File::put(storage_path(). '/app/public/' . $foto_aset, base64_decode($img_aset));
 
-                // $img_seri = $v->FOTO_SERI;  // your base64 encoded
-                // $img_seri = str_replace('data:image/jpeg;base64,', '', $img_seri);
-                // $img_seri = str_replace(' ', '+', $img_seri);
-                // $foto_seri = str_random(10).'.'.'jpg';
-                // \File::put(storage_path(). '/app/public/' . $foto_seri, base64_decode($img_aset));
+                $img_seri = $v->FOTO_SERI;  // your base64 encoded
+                $img_seri = str_replace('data:image/jpeg;base64,', '', $img_seri);
+                $img_seri = str_replace(' ', '+', $img_seri);
+                $foto_seri = str_random(10).'.'.'jpg';
+                \File::put(storage_path(). '/app/public/' . $foto_seri, base64_decode($img_seri));
 
-                // $img_mesin = $v->FOTO_MESIN;  // your base64 encoded
-                // $img_mesin = str_replace('data:image/jpeg;base64,', '', $img_mesin);
-                // $img_mesin = str_replace(' ', '+', $img_mesin);
-                // $foto_mesin = str_random(10).'.'.'jpg';
-                // \File::put(storage_path(). '/app/public/' . $foto_mesin, base64_decode($img_mesin));
+                $img_mesin = $v->FOTO_MESIN;  // your base64 encoded
+                $img_mesin = str_replace('data:image/jpeg;base64,', '', $img_mesin);
+                $img_mesin = str_replace(' ', '+', $img_mesin);
+                $foto_mesin = str_random(10).'.'.'jpg';
+                \File::put(storage_path(). '/app/public/' . $foto_mesin, base64_decode($img_mesin));
                 
                 $result[] = array(
                     'KODE_ASSET_AMS' => $v->KODE_ASSET_AMS,
@@ -222,9 +222,9 @@ class ReportController extends Controller
                     'NO_PO' => $v->NO_PO,
                     'NAMA_VENDOR' => $v->NAMA_VENDOR,
                     'INFORMASI' => $v->INFORMASI,
-                    'FOTO_ASET' => $v->FOTO_ASET,
-                    'FOTO_SERI' => $v->FOTO_SERI,
-                    'FOTO_MESIN' => $v->FOTO_MESIN,
+                    'FOTO_ASET' => $foto_aset,//$v->FOTO_ASET,
+                    'FOTO_SERI' => $foto_seri,//$v->FOTO_SERI,
+                    'FOTO_MESIN' => $foto_mesin,//$v->FOTO_MESIN,
                     'ASSET_CLASS' => $v->ASSET_CLASS,
                     'TAHUN_ASSET' => $v->TAHUN_ASSET,
                     'BOOK_DEPREC_01' => $v->BOOK_DEPREC_01,

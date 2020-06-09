@@ -24,6 +24,10 @@ class StorageController extends Controller {
 	# -------------------------------------------------------------------------------------
 	public function image($filename) {
 	
+		// $filePath = 'public/'.$filename;
+		// $content = Storage::disk('public')->get($filePath);
+		
+		// return $content;//Image::make($content)->response();;
 		return Image::make(storage_path('public/' . $filename))->response();
 	}
 

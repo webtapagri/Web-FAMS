@@ -81,7 +81,10 @@ html, body {
             $status_document = "";
             $milik = "";
             $sewa = "";
-
+            $foto_aset = "";
+            $foto_seri = "";
+            $foto_mesin = "";
+            
             foreach( $data['report'] as $k => $v )
             {
 
@@ -113,6 +116,15 @@ html, body {
                     $milik =  "<i class='fa fa-check'></i>";
                     $sewa = "";
                 }
+                if($v['FOTO_ASET'] <>''){
+                    $foto_aset = "<img src='/storage/".$v['FOTO_ASET']."' width='100px' onerror="."this.style.display='none'"." />";
+                }
+                if($v['FOTO_SERI'] <>''){
+                    $foto_seri = "<img src='/storage/".$v['FOTO_SERI']."' width='100px' onerror="."this.style.display='none'"." />";
+                }
+                if($v['FOTO_MESIN'] <>''){
+                    $foto_mesin = "<img src='/storage/".$v['FOTO_MESIN']."' width='100px' onerror="."this.style.display='none'"." />";
+                }
 
                 $l .= "<tr> 
                     <td>$no</td>
@@ -138,9 +150,9 @@ html, body {
                     <td>".$v['NO_PO']."</td>
                     <td>".$v['NAMA_VENDOR']."</td>
                     <td>".$v['INFORMASI']."</td>
-                    <td><img src='".$v['FOTO_ASET']."' width='100px' /></td>
-                    <td><img src='".$v['FOTO_SERI']."' width='100px' /></td>
-                    <td><img src='".$v['FOTO_MESIN']."' width='100px' /></td>
+                    <td>".$foto_aset."</td>
+                    <td>".$foto_seri."</td>
+                    <td>".$foto_mesin."</td>
                     <td>".$v['ASSET_CLASS']."</td>
                     <td>".$v['TAHUN_ASSET']."</td>
                     <td></td>

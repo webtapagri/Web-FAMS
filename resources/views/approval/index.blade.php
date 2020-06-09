@@ -861,8 +861,8 @@
                         width: '8%'
                     },
                     {
-                        orderable: true,
-                        type: "date-dd-MMM-yyyy",
+                        // orderable: true,
+                        type: "date-dd MMM yyyy",
                         targets: [4]
                     }
                 ],
