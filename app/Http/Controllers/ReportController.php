@@ -120,22 +120,37 @@ class ReportController extends Controller
         {
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
-        DB::unprepared(DB::raw("SET SESSION group_concat_max_len = 5000000000;"));
+		
+		$sqk_o = "select a.*, c.FILE_CATEGORY, c.NO_REG, c.FILE_UPLOAD FROM TM_MSTR_ASSET a
+                        LEFT JOIN TR_REG_ASSET_DETAIL_FILE c 
+                                    ON c.NO_REG = a.NO_REG $where ";
+		
+		$geti = DB::select($sqk_o);
+		
+		$tampung = [];
+		foreach($geti as $gti){
+			$tampung[$gti->NO_REG][$gti->FILE_CATEGORY] = $gti->FILE_UPLOAD;
+		}
+		
+		// dd($tampung);
+		
+        //DB::unprepared(DB::raw("SET SESSION group_concat_max_len = 5000000000;"));
         // Debugbar::info(DB::SELECT('show variables like "%concat%";'));
         // dd($dbu);
-        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN,
+        $sql = " SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR, 
+					/*c.FOTO_ASET,c.FOTO_SERI,c.FOTO_MESIN, */
                         f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
                         g.GROUP_DESCRIPTION as GROUP_NAME, 
                         h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
                         a.DISPOSAL_FLAG AS STATUS_DOCUMENT
                         FROM TM_MSTR_ASSET a
-                        LEFT JOIN (select 
+                       /* LEFT JOIN (select 
                                     GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'asset' then FILE_UPLOAD end)) as FOTO_ASET,
                                     GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'no seri' then FILE_UPLOAD end)) as FOTO_SERI,
                                     GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'imei' then FILE_UPLOAD end)) as FOTO_MESIN,
                                     NO_REG, NO_REG_ITEM_FILE
                                     from TR_REG_ASSET_DETAIL_FILE group by NO_REG) c 
-                                    ON c.NO_REG = a.NO_REG
+                                    ON c.NO_REG = a.NO_REG */
                         LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
                         LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
                         LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
@@ -178,6 +193,7 @@ class ReportController extends Controller
                         LEFT JOIN TM_MSTR_ASSET c ON a.KODE_ASSET_AMS = c.KODE_ASSET_AMS
                     WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
         
+		DB::unprepared("SET SESSION group_concat_max_len = 1000000;");
         $dt = DB::SELECT($sql);
         Debugbar::info($dt);
         // dd($dt);
@@ -185,23 +201,23 @@ class ReportController extends Controller
         {
             foreach( $dt as $k => $v )
             {
-                $img_aset = $v->FOTO_ASET;  // your base64 encoded
-                $img_aset = str_replace('data:image/jpeg;base64,', '', $img_aset);
-                $img_aset = str_replace(' ', '+', $img_aset);
-                $foto_aset = str_random(10).'.'.'jpg';
-                \File::put(storage_path(). '/app/public/' . $foto_aset, base64_decode($img_aset));
+                // $img_aset = $v->FOTO_ASET;  // your base64 encoded
+                // $img_aset = str_replace('data:image/jpeg;base64,', '', $img_aset);
+                // $img_aset = str_replace(' ', '+', $img_aset);
+                // $foto_aset = str_random(10).'.'.'jpg';
+                // \File::put(storage_path(). '/app/public/' . $foto_aset, base64_decode($img_aset));
 
-                $img_seri = $v->FOTO_SERI;  // your base64 encoded
-                $img_seri = str_replace('data:image/jpeg;base64,', '', $img_seri);
-                $img_seri = str_replace(' ', '+', $img_seri);
-                $foto_seri = str_random(10).'.'.'jpg';
-                \File::put(storage_path(). '/app/public/' . $foto_seri, base64_decode($img_seri));
+                // $img_seri = $v->FOTO_SERI;  // your base64 encoded
+                // $img_seri = str_replace('data:image/jpeg;base64,', '', $img_seri);
+                // $img_seri = str_replace(' ', '+', $img_seri);
+                // $foto_seri = str_random(10).'.'.'jpg';
+                // \File::put(storage_path(). '/app/public/' . $foto_seri, base64_decode($img_seri));
 
-                $img_mesin = $v->FOTO_MESIN;  // your base64 encoded
-                $img_mesin = str_replace('data:image/jpeg;base64,', '', $img_mesin);
-                $img_mesin = str_replace(' ', '+', $img_mesin);
-                $foto_mesin = str_random(10).'.'.'jpg';
-                \File::put(storage_path(). '/app/public/' . $foto_mesin, base64_decode($img_mesin));
+                // $img_mesin = $v->FOTO_MESIN;  // your base64 encoded
+                // $img_mesin = str_replace('data:image/jpeg;base64,', '', $img_mesin);
+                // $img_mesin = str_replace(' ', '+', $img_mesin);
+                // $foto_mesin = str_random(10).'.'.'jpg';
+                // \File::put(storage_path(). '/app/public/' . $foto_mesin, base64_decode($img_mesin));
                 
                 $result[] = array(
                     'KODE_ASSET_AMS' => $v->KODE_ASSET_AMS,
@@ -222,9 +238,10 @@ class ReportController extends Controller
                     'NO_PO' => $v->NO_PO,
                     'NAMA_VENDOR' => $v->NAMA_VENDOR,
                     'INFORMASI' => $v->INFORMASI,
-                    'FOTO_ASET' => $foto_aset,//$v->FOTO_ASET,
-                    'FOTO_SERI' => $foto_seri,//$v->FOTO_SERI,
-                    'FOTO_MESIN' => $foto_mesin,//$v->FOTO_MESIN,
+                    'NO_REG' => $v->NO_REG,
+                    'FOTO_ASET' => @$tampung[$v->NO_REG]['asset'],//$v->FOTO_ASET,
+                    'FOTO_SERI' => @$tampung[$v->NO_REG]['no seri'],//$v->FOTO_SERI,
+                    'FOTO_MESIN' => @$tampung[$v->NO_REG]['imei'],//$v->FOTO_MESIN,
                     'ASSET_CLASS' => $v->ASSET_CLASS,
                     'TAHUN_ASSET' => $v->TAHUN_ASSET,
                     'BOOK_DEPREC_01' => $v->BOOK_DEPREC_01,
@@ -239,6 +256,7 @@ class ReportController extends Controller
                 ); 
             }
         }
+		// dd($result);
         $access = AccessRight::access();    
         $data['page_title'] = 'Report List Asset';
         $data['ctree_mod'] = 'Report';
