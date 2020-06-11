@@ -62,15 +62,96 @@ class ReportController extends Controller
 
     }
 
+    function get_harga_perolehan($row)
+    {
+        $nilai = array();
+
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
+            
+            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+            {
+                $ANLN2 = '0000';
+            }
+            else
+            {
+                $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+            }
+            
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=15&GJAHR={$YEAR}", 
+                //'method' => "assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019", 
+                //http://tap-ldapdev.tap-agri.com/data-sap/assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+
+		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
+        }
+
+        // dd($nilai);
+        return $nilai;
+
+    	
+    }
+
+    function get_anln1($kode)
+    {
+    	$total = strlen($kode); //12 DIGIT
+
+    	if( $total == 8 )
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	elseif( $total == 7 )
+    	{
+    		$ksap = '00000'.$kode.'';
+    	}
+    	else
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	return $ksap;
+    }
+
     function list_asset_submit(Request $request)
     {
         if (empty(Session::get('authenticated')))
             return redirect('/login');
 
+
         $where = "";
         $result = array();
         
         $req = $request->all();
+
+        
+        $kode_asset_ams = $req['kode-aset-fams'];
+        // $dt = '4160101682,4160101665';
+        $row = TM_MSTR_ASSET::where('KODE_ASSET_AMS','LIKE','%'.$kode_asset_ams.'%')->get()->all();
+        // dd($row);
+                // $row = TM_MSTR_ASSET::find($filter);
+        $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+        // dd($HARGA_PEROLEHAN);
+
+
         if( !empty($req['kode-aset-fams']) )
         {
             $where .= " AND UPPER(a.KODE_ASSET_AMS) LIKE UPPER('%{$req['kode-aset-fams']}%') ";
@@ -252,7 +333,8 @@ class ReportController extends Controller
                     'GROUP' => $v->GROUP_NAME,
                     'SUB_GROUP' => $v->SUB_GROUP_NAME,
                     'KONDISI_ASSET' => $v->KONDISI_ASSET,
-                    'STATUS_DOCUMENT' => $v->STATUS_DOCUMENT
+                    'STATUS_DOCUMENT' => $v->STATUS_DOCUMENT,
+                    'HARGA_PEROLEHAN' => $HARGA_PEROLEHAN[$k]
                 ); 
             }
         }
@@ -275,6 +357,12 @@ class ReportController extends Controller
         $where = "";
         $result = array();
         $req = $request->all();
+        
+        $kode_asset_ams = $req['kode-aset-fams'];
+        $row = TM_MSTR_ASSET::where('KODE_ASSET_AMS','LIKE','%'.$kode_asset_ams.'%')->get()->all();
+        $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+
+        
         if( !empty($req['kode-aset-fams']) )
         {
             $where .= " AND UPPER(a.KODE_ASSET_AMS) LIKE UPPER('%{$req['kode-aset-fams']}%') ";
@@ -346,7 +434,7 @@ class ReportController extends Controller
                 LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
                 WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
         
-        return Excel::download(new ReportExport($sql), 'REPORT.xlsx');
+        return Excel::download(new ReportExport($sql,$HARGA_PEROLEHAN), 'REPORT.xlsx');
     }
 
     public function dataGrid(Request $request)

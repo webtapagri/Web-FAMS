@@ -77,6 +77,7 @@
             $status_document = "";
             $milik = "";
             $sewa = "";
+            $i = 0;
 
             foreach( $report as $v )
             {
@@ -139,7 +140,7 @@
                     <td><img src='".$v->FOTO_MESIN."' width='100px' /></td>
                     <td>".$v->ASSET_CLASS."</td>
                     <td>".$v->TAHUN_ASSET."</td>
-                    <td></td>
+                    <td>".$harga[$i]."</td>
                     <td></td>
                     <td>".$v->BOOK_DEPREC_01."</td>
                     <td>".$v->COST_CENTER."</td>
@@ -158,6 +159,7 @@
                 </tr>
                 ";
 
+                $i++;
                 $no++;
             }
             

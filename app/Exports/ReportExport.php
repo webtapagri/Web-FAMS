@@ -16,15 +16,17 @@ class ReportExport implements FromView
 	
 	use Exportable;
 	
-	public function __construct(string $sql)
+	public function __construct(string $sql, $harga)
 	{
-		$this->sql = $sql;
+        $this->sql = $sql;
+        $this->harga = $harga;
 	}
 	
     public function view():View
     {
         $dt = DB::select($this->sql);
         $data['report'] = $dt;
+        $data['harga']= $this->harga;
         return view('report.list_asset_export',$data);
     }
 }
