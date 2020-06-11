@@ -117,13 +117,13 @@ html, body {
                     $sewa = "";
                 }
                 if($v['FOTO_ASET'] <>''){
-                    $foto_aset = "<img src='/storage/".$v['FOTO_ASET']."' width='100px' onerror="."this.style.display='none'"." />";
+                    $foto_aset = "<img src='{$v['FOTO_ASET']}' width='100px' onerror="."this.style.display='none'"." />";
                 }
                 if($v['FOTO_SERI'] <>''){
-                    $foto_seri = "<img src='/storage/".$v['FOTO_SERI']."' width='100px' onerror="."this.style.display='none'"." />";
+                    $foto_seri = "<img src='{$v['FOTO_SERI']}' width='100px' onerror="."this.style.display='none'"." />";
                 }
                 if($v['FOTO_MESIN'] <>''){
-                    $foto_mesin = "<img src='/storage/".$v['FOTO_MESIN']."' width='100px' onerror="."this.style.display='none'"." />";
+                    $foto_mesin = "<img src='{$v['FOTO_MESIN']}' width='100px' onerror="."this.style.display='none'"." />";
                 }
 
                 $l .= "<tr> 
