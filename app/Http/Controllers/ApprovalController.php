@@ -22,7 +22,6 @@ class ApprovalController extends Controller
 
         /*if (AccessRight::granted() == false)
             return response(view('errors.403'), 403);*/
-
         if( !empty($_GET) )
         {
             $role_id = Session::get('role_id');
@@ -34,7 +33,7 @@ class ApprovalController extends Controller
         {
             $data['outstanding'] = 1;   
         }
-
+        // dd($data['outstanding']);
         $access = AccessRight::access();
         $data['page_title'] = "Approval";
         $data['ctree_mod'] = 'Approval';
@@ -54,15 +53,21 @@ class ApprovalController extends Controller
         $sortColumn = "";
         $selectedColumn[] = "";
         $addwhere = "";
-        
+               
         $field = array
         (
             array("index" => "0", "field" => "APPROVAL.DOCUMENT_CODE", "alias" => "NO_REG"),
             array("index" => "1", "field" => "ASSET.TYPE_TRANSAKSI ", "alias" => "TYPE"),
             array("index" => "2", "field" => "ASSET.PO_TYPE", "alias" => "PO_TYPE"),
             array("index" => "3", "field" => "ASSET.NO_PO", "alias" => "NO_PO"),
-            array("index" => "4", "field" => "DATE_FORMAT(ASSET.TANGGAL_REG, '%d %b %Y')", "alias" => "REQUEST_DATE"),
-            array("index" => "5", "field" => "REQUESTOR.NAME", "alias" => "REQUESTOR"),
+            array("index" => "4", "field" => " CASE WHEN LOCATE('DSPA',APPROVAL.DOCUMENT_CODE) THEN DATE_FORMAT(TD.TANGGAL_REG, '%d %b %Y') 
+            WHEN LOCATE('MTSA',APPROVAL.DOCUMENT_CODE) THEN DATE_FORMAT(TM.CREATED_AT, '%d %b %Y') 
+            ELSE DATE_FORMAT(ASSET.TANGGAL_REG, '%d %b %Y') END", "alias" => "REQUEST_DATE"),
+            // array("index" => "4", "field" => "DATE_FORMAT(ASSET.TANGGAL_REG, '%d %b %Y')", "alias" => "REQUEST_DATE"),
+            array("index" => "5", "field" => "CASE WHEN LOCATE('DSPA',APPROVAL.DOCUMENT_CODE) THEN (SELECT U.NAME FROM TBM_USER U WHERE U.ID = TD.CREATED_BY)
+            WHEN LOCATE('MTSA',APPROVAL.DOCUMENT_CODE) THEN (SELECT U.NAME FROM TBM_USER U WHERE U.ID = TM.CREATED_BY)
+            ELSE REQUESTOR.NAME END", "alias" => "REQUESTOR"),
+            // array("index" => "5", "field" => "REQUESTOR.NAME", "alias" => "REQUESTOR"),
             array("index" => "6", "field" => "DATE_FORMAT(ASSET.TANGGAL_PO, '%d %b %Y')", "alias" => "PO_DATE"),
             array("index" => "7", "field" => "ASSET.KODE_VENDOR", "alias" => "VENDOR_CODE"),
             array("index" => "8", "field" => "ASSET.NAMA_VENDOR", "alias" => "VENDOR_NAME"),
@@ -84,7 +89,9 @@ class ApprovalController extends Controller
         // it@140619 JOIN W v_outstanding
         $sql = ' SELECT DISTINCT(ASSET.ID) AS ID '.implode(", ", $selectedColumn).'
             FROM v_outstanding AS APPROVAL 
-                LEFT JOIN TR_REG_ASSET AS ASSET ON ( APPROVAL.DOCUMENT_CODE = ASSET.NO_REG)
+                LEFT JOIN TR_REG_ASSET AS ASSET ON ( APPROVAL.DOCUMENT_CODE = ASSET.NO_REG )
+                LEFT JOIN TR_DISPOSAL_ASSET AS TD ON ( APPROVAL.DOCUMENT_CODE = TD.NO_REG )
+                LEFT JOIN TR_MUTASI_ASSET_DETAIL AS TM ON ( APPROVAL.DOCUMENT_CODE = TM.NO_REG )
                 LEFT JOIN TBM_USER AS REQUESTOR ON (REQUESTOR.ID=ASSET.CREATED_BY)
             WHERE 1=1 ';
 
@@ -98,7 +105,7 @@ class ApprovalController extends Controller
             $sql .= " AND APPROVAL.DOCUMENT_CODE  like '%" . $request->NO_REG . "%'";
 
         if ($request->REQUESTOR)
-            $sql .= " AND requestor.NAME  like '%" . $request->REQUESTOR . "%'";
+            $sql .= " AND REQUESTOR.NAME  like '%" . $request->REQUESTOR . "%'";
 
         if ($request->VENDOR_CODE)
             $sql .= " AND ASSET.KODE_VENDOR  like '%" . $request->VENDOR_CODE . "%'";

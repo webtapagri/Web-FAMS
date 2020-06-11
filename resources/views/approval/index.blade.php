@@ -793,11 +793,19 @@
                         name: 'NO_PO'
                     },
                     {
+                        // "render": function(data, type, row) 
+                        // {
+                        //     var req= row.REQUEST_DATE;
+
+                        //     if (req == 0) {
+                        //         var content = 'tidak ada';
+                        //     }else{
+                        //         var content = req;
+                        //     }
+                        //     return content;
+                        // }
                         data: 'REQUEST_DATE',
                         name: 'REQUEST_DATE', 
-                        // "render": function(data, type) {
-                        //     return type === 'sort' ? data : moment(data).format('ll');
-                        // }
                     },
                     {
                         data: 'REQUESTOR',
@@ -861,8 +869,8 @@
                         width: '8%'
                     },
                     {
-                        // orderable: true,
-                        type: "date-dd MMM yyyy",
+                        orderable: true,
+                        // type: "date-dd MMM yyyy",
                         targets: [4]
                     }
                 ],
