@@ -60,15 +60,15 @@ class ApprovalController extends Controller
             array("index" => "1", "field" => "ASSET.TYPE_TRANSAKSI ", "alias" => "TYPE"),
             array("index" => "2", "field" => "ASSET.PO_TYPE", "alias" => "PO_TYPE"),
             array("index" => "3", "field" => "ASSET.NO_PO", "alias" => "NO_PO"),
-            array("index" => "4", "field" => " CASE WHEN LOCATE('DSPA',APPROVAL.DOCUMENT_CODE) THEN DATE_FORMAT(TD.TANGGAL_REG, '%d %b %Y') 
-            WHEN LOCATE('MTSA',APPROVAL.DOCUMENT_CODE) THEN DATE_FORMAT(TM.CREATED_AT, '%d %b %Y') 
-            ELSE DATE_FORMAT(ASSET.TANGGAL_REG, '%d %b %Y') END", "alias" => "REQUEST_DATE"),
+            array("index" => "4", "field" => " CASE WHEN LOCATE('DSPA',APPROVAL.DOCUMENT_CODE) THEN TD.TANGGAL_REG 
+            WHEN LOCATE('MTSA',APPROVAL.DOCUMENT_CODE) THEN TM.CREATED_AT
+            ELSE ASSET.TANGGAL_REG END", "alias" => "REQUEST_DATE"),
             // array("index" => "4", "field" => "DATE_FORMAT(ASSET.TANGGAL_REG, '%d %b %Y')", "alias" => "REQUEST_DATE"),
             array("index" => "5", "field" => "CASE WHEN LOCATE('DSPA',APPROVAL.DOCUMENT_CODE) THEN (SELECT U.NAME FROM TBM_USER U WHERE U.ID = TD.CREATED_BY)
             WHEN LOCATE('MTSA',APPROVAL.DOCUMENT_CODE) THEN (SELECT U.NAME FROM TBM_USER U WHERE U.ID = TM.CREATED_BY)
             ELSE REQUESTOR.NAME END", "alias" => "REQUESTOR"),
             // array("index" => "5", "field" => "REQUESTOR.NAME", "alias" => "REQUESTOR"),
-            array("index" => "6", "field" => "DATE_FORMAT(ASSET.TANGGAL_PO, '%d %b %Y')", "alias" => "PO_DATE"),
+            array("index" => "6", "field" => "ASSET.TANGGAL_PO", "alias" => "PO_DATE"),
             array("index" => "7", "field" => "ASSET.KODE_VENDOR", "alias" => "VENDOR_CODE"),
             array("index" => "8", "field" => "ASSET.NAMA_VENDOR", "alias" => "VENDOR_NAME"),
         );

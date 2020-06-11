@@ -805,7 +805,16 @@
                         //     return content;
                         // }
                         data: 'REQUEST_DATE',
-                        name: 'REQUEST_DATE', 
+                        "render" : function(data){
+                                if(moment(data).isValid()){
+                                    var content =  moment(data).format('D MMM YYYY');
+                                   return content;
+                                } 
+                                else {
+                                    var content = "";
+                                    return content;
+                                }
+                            }
                     },
                     {
                         data: 'REQUESTOR',
@@ -813,7 +822,16 @@
                     },
                     {
                         data: 'PO_DATE',
-                        name: 'PO_DATE'
+                        "render" : function(data){
+                                if(moment(data).isValid()){
+                                    var content =  moment(data).format('D MMM YYYY');
+                                   return content;
+                                } 
+                                else {
+                                    var content = "";
+                                    return content;
+                                }
+                            }
                     },
                     {
                         data: 'VENDOR_CODE',
@@ -870,7 +888,7 @@
                     },
                     {
                         orderable: true,
-                        // type: "date-dd MMM yyyy",
+                        type: "date-dd MMM yyyy",
                         targets: [4]
                     }
                 ],
