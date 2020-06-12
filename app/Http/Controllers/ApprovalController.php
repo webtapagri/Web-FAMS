@@ -565,7 +565,8 @@ class ApprovalController extends Controller
             array("index" => "3", "field" => "status_dokumen", "alias" => "status_dokumen"),
             //array("index" => "4", "field" => "status_approval", "alias" => "status_approval"),
             //array("index" => "5", "field" => "notes", "alias" => "po_notes"),
-            array("index" => "5", "field" => "DATE_FORMAT(date, '%d %b %Y')", "alias" => "po_date"),
+            array("index" => "5", "field" => "date", "alias" => "po_date"),
+            // array("index" => "5", "field" => "DATE_FORMAT(date, '%d %b %Y')", "alias" => "po_date"),
             array("index" => "6", "field" => "po_type", "alias" => "po_type"),
         );
 

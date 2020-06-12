@@ -1000,7 +1000,16 @@
                     },
                     {
                         data: 'po_date',
-                        name: 'po_date'
+                        "render" : function(data){
+                                if(moment(data).isValid()){
+                                    var content =  moment(data).format('D MMM YYYY');
+                                   return content;
+                                } 
+                                else {
+                                    var content = "";
+                                    return content;
+                                }
+                            }
                     }, 
                     {
                         "render": function(data, type, row) 
