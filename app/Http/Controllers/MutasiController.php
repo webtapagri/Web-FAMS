@@ -221,6 +221,7 @@ class MutasiController extends Controller
         $user_id = Session::get('user_id');
         $area_code = Session::get('area_code');
         $code = '';
+        $ba_code = '';
 
         $orderColumn = $request->order[0]["column"];
         $dirColumn = $request->order[0]["dir"];
@@ -252,7 +253,9 @@ class MutasiController extends Controller
             }
         }
         if($area_code <> "All"){
-            $code = " AND LOKASI_BA_CODE = '".$area_code."'";
+            // $ba_code = explode("','",$area_code);
+            $ba_code = str_replace(",","','",$area_code);
+            $code = " AND LOKASI_BA_CODE IN ('".$ba_code."')";
         }
 
         // it@140619 JOIN W v_outstanding
