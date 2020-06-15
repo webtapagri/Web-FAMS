@@ -1887,7 +1887,6 @@
                     item += "<div class='box-body rincian-informasi-aset-box'>";
 
                     <?php if( $user_role == 'AC' || $user_role == 'PGA' ){$readonly = "readonly";}else{ $readonly = ""; }?>
-                    
                     item += "<div class='col-md-6'>";
                     
                     item += "<div class='form-group'><label for='plant' class='col-md-4'>NO PO</label><div class='col-md-8'><input type='text' class='form-control input-sm' name='' value='"+val.no_po+"' id='' autocomplete='off' readonly></div></div>";

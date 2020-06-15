@@ -1557,7 +1557,9 @@ Array
                     {
                         "render": function(data, type, row) 
                         {
-                            return '<a href="javascript:;" style="font-weight:bold" OnClick="get_asset_mutasi(\''+row.KODE_ASSET_AMS+'\',\''+row.NAMA_ASSET+'\',\''+row.ASSET_CONTROLLER+'\',\''+row.BA_PEMILIK_ASSET+'\',\''+row.LOKASI_BA_DESCRIPTION+'\',\''+row.LOKASI_BA_CODE+'\')"><i class="fa fa-plus"></i></a>';
+                            var str = row.NAMA_ASSET;
+                            var nama_aset = str.replace(/\"/g,"");
+                            return '<a href="javascript:;" style="font-weight:bold" OnClick="get_asset_mutasi(\''+row.KODE_ASSET_AMS+'\',\''+nama_aset+'\',\''+row.ASSET_CONTROLLER+'\',\''+row.BA_PEMILIK_ASSET+'\',\''+row.LOKASI_BA_DESCRIPTION+'\',\''+row.LOKASI_BA_CODE+'\')"><i class="fa fa-plus"></i></a>';
                         }
                     }
                 ],
