@@ -580,21 +580,17 @@ class ApprovalController extends Controller
     
     function update_costcenter(Request $request, $kode)
     {
-        
+        $kode_ams = str_replace(",", "','", $kode);
+        $no_registrasi = str_replace("-", "/", $request->no_reg);
         DB::beginTransaction();
 
         try 
         {   
             $updated_at = date("Y-m-d, H:i:s");
-            $sql1 = " INSERT INTO TR_LOG_MUTASI VALUES (
-                    '',
-                    '{$request->no_reg}',
-                    '{$request->tgl_pengajuan}',
-                    '{$request->ba_pemilik_asset}',
-                    '{$request->requestor}',
-                    '{$request->cost_center_old}',
-                    '{$updated_at}',
-                    '{$request->updated_by}') ";
+            $sql1 = " INSERT INTO TR_LOG_MUTASI                   
+                        SELECT NULL AS ID,b.NO_REG,b.CREATED_AT,a.BA_PEMILIK_ASSET, b.CREATED_BY, a.COST_CENTER, CURDATE() AS UPDATED_AT, b.CREATED_BY 
+                        FROM TM_MSTR_ASSET a LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS
+                        where b.KODE_ASSET_AMS IN ('{$kode_ams}');";
 
             DB::INSERT($sql1);
 
@@ -603,9 +599,16 @@ class ApprovalController extends Controller
                             a.cost_center = '{$request->cost_center}',
                             a.updated_at = '{$updated_at}',
                             a.updated_by = '{$request->updated_by}'
-                    WHERE a.kode_asset_ams = '{$kode}' ";
-            DB::UPDATE($sql2);    
-
+                    WHERE a.kode_asset_ams IN ('{$kode_ams}'); ";
+            DB::UPDATE($sql2);  
+            
+            $sql3 = " UPDATE TR_MUTASI_ASSET a
+                        SET 
+                            a.cost_center = '{$request->cost_center}',
+                            a.updated_at = '{$updated_at}',
+                            a.updated_by = '{$request->updated_by}'
+                    WHERE a.no_reg = '{$no_registrasi}' ";
+            DB::UPDATE($sql3);  
             DB::commit();
             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($kode ? 'updated' : 'update')]);
         } catch (\Exception $e) {
@@ -2977,14 +2980,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         $records = array();
 
-        $sql = " SELECT a.*,d.COST_CENTER,b.KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
+        $sql = " SELECT a.*,d.COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
        SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
                            FROM TR_MUTASI_ASSET a   
                                          LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
                                          LEFT JOIN TM_MSTR_ASSET d ON d.KODE_ASSET_AMS = b.KODE_ASSET_AMS  
                                LEFT JOIN TBM_USER c ON a.created_by = c.id 
-                           WHERE a.no_reg = '$noreg' "; 
+                           WHERE a.no_reg = '$noreg' group by a.NO_REG "; 
 //         $sql = " SELECT a.*, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
 //  (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
 // SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 

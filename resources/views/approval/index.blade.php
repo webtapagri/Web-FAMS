@@ -555,6 +555,32 @@
                             </div>
                             
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">COST CENTER</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4"></label>
+                                    <div class="col-md-6">
+                                        <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <!-- <label for="plant" class="col-md-4"></label> -->
+                                    <div class="col-md-6">
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>  
+                        
                         <div class="row">
                         
                             <br>
@@ -576,7 +602,11 @@
                             <!-- LOG HISTORY -->
                             <div id="log-history-box-mutasi" class="table-scroll"></div>
                         
-                        </div><!-- ROW -->                        
+                        </div><!-- ROW -->       
+
+                             
+
+
                         
                 </div>
             </div>
@@ -638,9 +668,19 @@
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">COST CENTER</label>
                                     <div class="col-md-6">
-                                    <?php if( $user_role <> 'AMS'){$readonly = "readonly";}else{ $readonly = ""; }?>
-                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" <?php echo $readonly; ?> required>
-                                        <input type="hidden" class="form-control input-sm" value="" id="cost-center-old" name="cost-center-old" >
+                                    <?php 
+                                    if( $user_role == 'AMS'){ 
+                                        if($data['outstanding']!= 0) { 
+                                            $readonly = "";
+                                        }
+                                        else{
+                                            $readonly = "readonly"; 
+                                        }
+                                    }else{
+                                        $readonly = "readonly";
+                                    }
+                                    ?>
+                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" <?php echo $readonly; ?> >
                                         <input type="hidden" class="form-control input-sm" value="" id="kode-asset-ams" name="kode-asset-ams" >
                                     </div>
                                 </div>
@@ -657,7 +697,13 @@
                                     <!-- <label for="plant" class="col-md-4"></label> -->
                                     <div class="col-md-6">
                                         <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
+                                        <?php 
+                                        if( $user_role == 'AMS'){ 
+                                            if($data['outstanding']!= 0) { ?>
                                         <div class='btn btn-warning btn-sm' value='Save' OnClick='update_costcenter()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div>
+                                            <?php }
+                                        }
+                                        ?>
                                     </div>
                                 </div> 
                             </div>
@@ -1286,24 +1332,23 @@
     {
         var getnoreg = $("#getnoreg").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
-
-        var cost_center = $("#cost-center").val();
+        var cost_center = $("#request-form #cost-center").val();
         var tgl_pengajuan = $("#tanggal-reg").val();
         var ba_pemilik_asset = $("#ba-pemilik-asset").val();
         var requestor = $("#requestor").val();
-        var cost_center = $("#cost-center").val();
         var cost_center_old = $("#cost-center-old").val();
         var kode_asset_ams = $("#kode-asset-ams").val();
-        var updated_by = <?php echo $user_id ?>
+        var updated_by = <?php echo $user_id ?>;
+        var cc = $("#request-form #cost-center").val().length;
 
         //alert(id+"_"+no_po+"_"+no_reg_item+"_"+no_registrasi);
 
         var param = '';//$("#request-form-detail-asset-sap").serialize();
         //alert(capitalized_on);
-
-      
+        
+        
         // VALIDASI COST CENTER HARUS 10 CHAR
-        if( $.trim(cost_center).length < 10 )
+        if( cc < 10 )
         {
             notify({
                 type: 'warning',
@@ -3618,6 +3663,13 @@
             success: function(data) 
             { 
                 //alert(data.no_reg);
+                <?php if( $user_role == 'AMS' && $data['outstanding'] != 0 ) { ?>
+                     var costcenter = '';
+                <?php } if( $user_role == 'AMS' && $data['outstanding'] != 1 ) { ?>
+                     var costcenter = data.cost_center;
+                <?php } else { ?>
+                    var costcenter = data.cost_center;
+                <?php }?>
                 $("#request-form-history #no-reg").val(data.no_reg);
                 $("#request-form-history #type-transaksi").val(data.type_transaksi);
                 $("#request-form-history #po-type").val(data.po_type);
@@ -3626,6 +3678,7 @@
                 $("#request-form-history #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form-history #kode-vendor").val(data.kode_vendor);
                 $("#request-form-history #nama-vendor").val(data.nama_vendor);
+                $("#request-form-history #cost-center").val(costcenter);
 
                 var item = '<table class="table xtable-condensed table-responsive table-striped" id="request-item-table" style="font-size:13px">';
                 item += '<th>NO.</th>';
@@ -3695,7 +3748,7 @@
         var kata = id;
         var noreg= kata.replace(/\//g, '-');
         //alert(noreg); //return false;
-
+        
         $("#box-detail-item-mutasi").hide();
 
         $.ajax({
@@ -3707,6 +3760,12 @@
             success: function(data) 
             { 
                 //alert(data.cek_reject);
+                <?php if( $user_role == 'AMS' && $data['outstanding'] != 0 ) { ?>
+                     var costcenter = '';
+                <?php } else { ?>
+                    var costcenter = data.cost_center;
+                <?php }?>
+
                 $("#request-form #no-reg").val(data.no_reg);
                 $("#request-form #type-transaksi").val(data.type_transaksi);
                 $("#request-form #po-type").val(data.po_type);
@@ -3715,7 +3774,7 @@
                 $("#request-form #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form #kode-vendor").val(data.kode_vendor);
                 $("#request-form #nama-vendor").val(data.nama_vendor);
-                $("#request-form #cost-center").val(data.cost_center);
+                $("#request-form #cost-center").val(costcenter);
                 $("#request-form #cost-center-old").val(data.cost_center);
                 $("#request-form #kode-asset-ams").val(data.kode_asset_ams);
                 console.log(data);
@@ -3826,6 +3885,16 @@
     function changeStatusMutasi(status)
     {
         //alert(status); return false;
+
+        var cost_center = $("#request-form #cost-center").val();;
+        if (cost_center == "") {
+            notify({
+                            type: 'warning',
+                            message: 'COST CENTER HARUS DIISI.',
+                        });
+            return false;
+        }
+
         var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var specification = $("#specification-mutasi-approval").val();
