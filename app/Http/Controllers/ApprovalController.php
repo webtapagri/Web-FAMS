@@ -28,6 +28,7 @@ class ApprovalController extends Controller
             $noreg = base64_decode($_GET['noreg']);
             $noreg = str_replace("-", "/", $noreg);
             $data['outstanding'] = $this->validasi_outstanding($noreg,$role_id);
+    
         }
         else
         {
@@ -38,8 +39,36 @@ class ApprovalController extends Controller
         $data['page_title'] = "Approval";
         $data['ctree_mod'] = 'Approval';
         $data['ctree'] = 'approval';
-
         return view('approval.index')->with(compact('data'));
+    }
+
+    function get_master_asset_by_id($id)
+    {
+        //echo $id; die();
+
+        $result = array();
+
+        //$sql = " SELECT * FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = $id ";
+        
+        $sql = " SELECT a.*, b.DESCRIPTION AS BA_PEMILIK_ASSET_DESCRIPTION, c.DESCRIPTION AS LOKASI_BA_DESCRIPTION 
+                    FROM TM_MSTR_ASSET a 
+                        LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
+                        LEFT JOIN TM_GENERAL_DATA c ON a.LOKASI_BA_CODE = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'plant' 
+                    WHERE a.KODE_ASSET_AMS = ".$id." ";
+
+        $data = DB::SELECT($sql);
+
+        if(!empty($data))
+        {
+            foreach($data as $k => $v)
+            {
+                //echo "1<pre>"; print_r($v);
+                $result = $v;
+            }
+        }
+
+        return $result;
+
     }
 
     public function dataGrid(Request $request)
@@ -546,6 +575,45 @@ class ApprovalController extends Controller
             return response()->json(['status' => false, "message" => $e->getMessage()]);
         }
     }
+
+
+    
+    function update_costcenter(Request $request, $kode)
+    {
+        
+        DB::beginTransaction();
+
+        try 
+        {   
+            $updated_at = date("Y-m-d, H:i:s");
+            $sql1 = " INSERT INTO TR_LOG_MUTASI VALUES (
+                    '',
+                    '{$request->no_reg}',
+                    '{$request->tgl_pengajuan}',
+                    '{$request->ba_pemilik_asset}',
+                    '{$request->requestor}',
+                    '{$request->cost_center_old}',
+                    '{$updated_at}',
+                    '{$request->updated_by}') ";
+
+            DB::INSERT($sql1);
+
+            $sql2 = " UPDATE TM_MSTR_ASSET a
+                        SET 
+                            a.cost_center = '{$request->cost_center}',
+                            a.updated_at = '{$updated_at}',
+                            a.updated_by = '{$request->updated_by}'
+                    WHERE a.kode_asset_ams = '{$kode}' ";
+            DB::UPDATE($sql2);    
+
+            DB::commit();
+            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($kode ? 'updated' : 'update')]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => false, "message" => $e->getMessage()]);
+        }
+    }
+
 
     public function dataGridHistory(Request $request)
     {
@@ -2909,13 +2977,23 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         $records = array();
 
-        $sql = " SELECT a.*, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
- (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
-SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
-                    FROM TR_MUTASI_ASSET a        
-                        LEFT JOIN TBM_USER c ON a.created_by = c.id 
-                    WHERE a.no_reg = '$noreg' "; 
+        $sql = " SELECT a.*,d.COST_CENTER,b.KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
+        (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
+       SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
+                           FROM TR_MUTASI_ASSET a   
+                                         LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
+                                         LEFT JOIN TM_MSTR_ASSET d ON d.KODE_ASSET_AMS = b.KODE_ASSET_AMS  
+                               LEFT JOIN TBM_USER c ON a.created_by = c.id 
+                           WHERE a.no_reg = '$noreg' "; 
+//         $sql = " SELECT a.*, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
+//  (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
+// SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
+//                     FROM TR_MUTASI_ASSET a        
+//                         LEFT JOIN TBM_USER c ON a.created_by = c.id 
+//                     WHERE a.no_reg = '$noreg' "; 
         $data = DB::SELECT($sql);
+        
+        // $data_sap = $this->get_master_asset_by_id($noreg);
         
         if($data)
         {
@@ -2947,6 +3025,8 @@ SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMI
                     'vendor' => '', //trim($v->KODE_VENDOR).' - '.trim($v->NAMA_VENDOR),
                     'kode_vendor' => '', //trim($v->KODE_VENDOR),
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
+                    'cost_center' => $v->COST_CENTER, 
+                    'kode_asset_ams' => $v->KODE_ASSET_AMS, 
                 );
 
             }

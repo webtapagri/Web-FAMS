@@ -1,5 +1,6 @@
 <?php 
     $user_role = Session::get('role');
+    $user_id = Session::get('user_id');
     if( !empty($_GET) )
     {
         $email_noreg = base64_decode($_GET['noreg']);
@@ -552,6 +553,7 @@
                                     </div>
                                 </div> 
                             </div>
+                            
                         </div>
                         <div class="row">
                         
@@ -627,10 +629,39 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div>
-                                
-                                
                             </div>
-                        </div>                        
+                            
+                        </div>  
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">COST CENTER</label>
+                                    <div class="col-md-6">
+                                    <?php if( $user_role <> 'AMS'){$readonly = "readonly";}else{ $readonly = ""; }?>
+                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" <?php echo $readonly; ?> required>
+                                        <input type="hidden" class="form-control input-sm" value="" id="cost-center-old" name="cost-center-old" >
+                                        <input type="hidden" class="form-control input-sm" value="" id="kode-asset-ams" name="kode-asset-ams" >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4"></label>
+                                    <div class="col-md-6">
+                                        <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
+                                    </div>
+                                </div> 
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <!-- <label for="plant" class="col-md-4"></label> -->
+                                    <div class="col-md-6">
+                                        <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
+                                        <div class='btn btn-warning btn-sm' value='Save' OnClick='update_costcenter()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>                      
                         
                         <br>
                         <span class="label bg-blue"><i class="fa fa-bars"></i> ITEM DETAIL</span> <br/><br/>
@@ -1248,6 +1279,82 @@
                 alert("Error: "+ "\r\n\r\n" + x.responseText);
             }
         }); 
+    }
+
+
+    function update_costcenter()
+    {
+        var getnoreg = $("#getnoreg").val();
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+
+        var cost_center = $("#cost-center").val();
+        var tgl_pengajuan = $("#tanggal-reg").val();
+        var ba_pemilik_asset = $("#ba-pemilik-asset").val();
+        var requestor = $("#requestor").val();
+        var cost_center = $("#cost-center").val();
+        var cost_center_old = $("#cost-center-old").val();
+        var kode_asset_ams = $("#kode-asset-ams").val();
+        var updated_by = <?php echo $user_id ?>
+
+        //alert(id+"_"+no_po+"_"+no_reg_item+"_"+no_registrasi);
+
+        var param = '';//$("#request-form-detail-asset-sap").serialize();
+        //alert(capitalized_on);
+
+      
+        // VALIDASI COST CENTER HARUS 10 CHAR
+        if( $.trim(cost_center).length < 10 )
+        {
+            notify({
+                type: 'warning',
+                message: " Cost Center < 10 char "
+            });
+            return false;
+        } 
+       
+        if(confirm('Confirm Update Cost Center ?'))
+        {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                    'Access-Control-Allow-Methods': 'GET, POST',
+                }
+            });
+            $.ajax({
+                // url: "{{ url('approval/save_asset_sap') }}/"+id,
+                url: "{{ url('approval/update_costcenter') }}/"+kode_asset_ams,
+                method: "POST",
+                data: param+"&no_reg="+no_registrasi+"&tgl_pengajuan="+tgl_pengajuan+"&ba_pemilik_asset="+ba_pemilik_asset+"&requestor="+requestor+"&cost_center="+cost_center+"&cost_center_old="+cost_center_old+"&updated_by="+updated_by,
+                // beforeSend: function() {
+                //     $('.loading-event').fadeIn();
+                // },
+                success: function(result) 
+                {
+                    if (result.status) 
+                    {
+                        //$("#approve-modal").modal("hide");
+                        //$("#data-table").DataTable().ajax.reload();
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+                        //setTimeout(reload_page, 1000); 
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }
+                    
+                },
+                complete: function() {
+                    jQuery('.loading-event').fadeOut();
+                }
+            }); 
+        }
     }
 
     function approval_disposal(id)
@@ -3608,6 +3715,10 @@
                 $("#request-form #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form #kode-vendor").val(data.kode_vendor);
                 $("#request-form #nama-vendor").val(data.nama_vendor);
+                $("#request-form #cost-center").val(data.cost_center);
+                $("#request-form #cost-center-old").val(data.cost_center);
+                $("#request-form #kode-asset-ams").val(data.kode_asset_ams);
+                console.log(data);
 
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
@@ -3677,6 +3788,10 @@
                         {
                             item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";
                         }
+
+                        <?php if( $user_role == 'AMS' ){ ?>
+                            
+                        <?php } ?>
                                         
                         
 
