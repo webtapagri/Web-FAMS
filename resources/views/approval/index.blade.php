@@ -680,7 +680,7 @@
                                         $readonly = "readonly";
                                     }
                                     ?>
-                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" <?php echo $readonly; ?> >
+                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" <?php echo $readonly; ?> readonly >
                                         <input type="hidden" class="form-control input-sm" value="" id="kode-asset-ams" name="kode-asset-ams" >
                                     </div>
                                 </div>
@@ -700,7 +700,7 @@
                                         <?php 
                                         if( $user_role == 'AMS'){ 
                                             if($data['outstanding']!= 0) { ?>
-                                        <div class='btn btn-warning btn-sm' value='Save' OnClick='update_costcenter()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div>
+                                        <!-- <div class='btn btn-warning btn-sm' value='Save' OnClick='update_costcenter()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div> -->
                                             <?php }
                                         }
                                         ?>
@@ -3663,13 +3663,14 @@
             success: function(data) 
             { 
                 //alert(data.no_reg);
-                <?php if( $user_role == 'AMS' && $data['outstanding'] != 0 ) { ?>
-                     var costcenter = '';
-                <?php } if( $user_role == 'AMS' && $data['outstanding'] != 1 ) { ?>
-                     var costcenter = data.cost_center;
-                <?php } else { ?>
-                    var costcenter = data.cost_center;
-                <?php }?>
+                <?php // if( $user_role == 'AMS' && $data['outstanding'] != 0 ) { ?>
+                    //  var costcenter = '';
+                <?php // } if( $user_role == 'AMS' && $data['outstanding'] != 1 ) { ?>
+                     // var costcenter = data.cost_center;
+                <?php // } else { ?>
+                    //var costcenter = data.cost_center;
+                <?php  //}?>
+                var costcenter = data.cost_center;
                 $("#request-form-history #no-reg").val(data.no_reg);
                 $("#request-form-history #type-transaksi").val(data.type_transaksi);
                 $("#request-form-history #po-type").val(data.po_type);
@@ -3760,12 +3761,12 @@
             success: function(data) 
             { 
                 //alert(data.cek_reject);
-                <?php if( $user_role == 'AMS' && $data['outstanding'] != 0 ) { ?>
-                     var costcenter = '';
-                <?php } else { ?>
-                    var costcenter = data.cost_center;
-                <?php }?>
-
+                <?php //if( $user_role == 'AMS' && $data['outstanding'] != 0 ) { ?>
+                    // var costcenter = '';
+                <?php //} else { ?>
+                    //var costcenter = data.cost_center;
+                <?php // }?>
+                var costcenter = data.cost_center;
                 $("#request-form #no-reg").val(data.no_reg);
                 $("#request-form #type-transaksi").val(data.type_transaksi);
                 $("#request-form #po-type").val(data.po_type);
@@ -4031,6 +4032,7 @@
         {
             var getnoreg = $("#getnoreg").val();
             var no_registrasi= getnoreg.replace(/\//g, '-');
+            var kode_asset_ams = $("#kode-asset-ams").val();
 
             var param = '';
             $.ajaxSetup({
@@ -4041,7 +4043,8 @@
             $.ajax({
                 url: "{{ url('approval/synchronize_sap_mutasi') }}",
                 method: "POST",
-                data: param+"&noreg="+getnoreg,
+                // data: param+"&noreg="+getnoreg,
+                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams,
                 beforeSend: function() 
                 {
                     $('.loading-event').fadeIn();

@@ -578,10 +578,10 @@ class ApprovalController extends Controller
 
 
     
-    function update_costcenter(Request $request, $kode)
+    function update_costcenter($noreg, $kode)
     {
         $kode_ams = str_replace(",", "','", $kode);
-        $no_registrasi = str_replace("-", "/", $request->no_reg);
+        $no_registrasi = str_replace("-", "/", $noreg);
         DB::beginTransaction();
 
         try 
@@ -594,15 +594,15 @@ class ApprovalController extends Controller
 
             DB::INSERT($sql1);
 
-            $sql2 = " UPDATE TM_MSTR_ASSET a
-                        SET 
-                            a.cost_center = '{$request->cost_center}',
-                            a.updated_at = '{$updated_at}',
-                            a.updated_by = '{$request->updated_by}'
-                    WHERE a.kode_asset_ams IN ('{$kode_ams}'); ";
-            DB::UPDATE($sql2);  
+            // $sql2 = " UPDATE TM_MSTR_ASSET a
+            //             SET 
+            //                 a.cost_center = '{$request->cost_center}',
+            //                 a.updated_at = '{$updated_at}',
+            //                 a.updated_by = '{$request->updated_by}'
+            //         WHERE a.kode_asset_ams IN ('{$kode_ams}'); ";
+            // DB::UPDATE($sql2);  
             
-            $sql3 = " UPDATE TR_MUTASI_ASSET a
+            $sql3 = " UPDATE TR_MUTASI_ASSET_DETAIL a
                         SET 
                             a.cost_center = '{$request->cost_center}',
                             a.updated_at = '{$updated_at}',
@@ -2979,15 +2979,23 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $noreg = str_replace("-", "/", $id);
 
         $records = array();
-
-        $sql = " SELECT a.*,d.COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
+        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
        SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
                            FROM TR_MUTASI_ASSET a   
                                          LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
-                                         LEFT JOIN TM_MSTR_ASSET d ON d.KODE_ASSET_AMS = b.KODE_ASSET_AMS  
+                                         LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = b.TUJUAN  and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' 
                                LEFT JOIN TBM_USER c ON a.created_by = c.id 
-                           WHERE a.no_reg = '$noreg' group by a.NO_REG "; 
+                           WHERE a.no_reg = '$noreg' group by a.NO_REG";
+
+    //     $sql = " SELECT a.*,d.COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
+    //     (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
+    //    SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
+    //                         FROM TR_MUTASI_ASSET a   
+    //                                         LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
+    //                                         LEFT JOIN TM_MSTR_ASSET d ON d.KODE_ASSET_AMS = b.KODE_ASSET_AMS  
+    //                             LEFT JOIN TBM_USER c ON a.created_by = c.id 
+    //                         WHERE a.no_reg = '$noreg' group by a.NO_REG "; 
 //         $sql = " SELECT a.*, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
 //  (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
 // SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
@@ -3258,6 +3266,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     function synchronize_sap_mutasi(Request $request)
     {
         $no_reg = @$request->noreg;
+        $kode_ams = @$request->kode_asset_ams;
 
         $sql = " SELECT a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_MUTASI FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS WHERE a.NO_REG = '{$no_reg}' AND (a.KODE_SAP_TUJUAN = '' OR a.KODE_SAP_TUJUAN is null) AND (a.DELETED is null OR a.DELETED = '') "; //echo $sql; die();
 
@@ -3269,6 +3278,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         {
             foreach( $data as $k => $v )
             {   
+                $this->update_costcenter($no_reg,$kode_ams);
                 $proses = $this->synchronize_sap_process_mutasi($v);             
                 
                 if($proses['status']=='error')
