@@ -289,12 +289,12 @@ Array
 
     $(document).ready(function() 
     {
-        $(window).keydown(function(event) {
-            if (event.keyCode == 13) {
-                event.preventDefault();
-                return false;
-            }
-        });
+        // $(window).keydown(function(event) {
+        //     if (event.keyCode == 13) {
+        //         event.preventDefault();
+        //         return false;
+        //     }
+        // });
 
 
         $('#request-detail-page').addClass('sub-loader');
@@ -695,6 +695,14 @@ Array
         {
             $('#data-table-asset').dataTable().fnDestroy();
         });
+
+        $('#data-asset-modal').on('keydown', function (e) 
+        {
+            if (e.keyCode == 13)
+            $('#data-table-asset').dataTable().fnFilter(this.value);
+        });
+
+
         $('#request-item-table').on('click', 'a', function (e) 
         {
             var idcontent = $( this ).attr("idcontent"); //alert(idcontent);return false;
@@ -1589,6 +1597,8 @@ Array
         $("#data-asset-modal .modal-title").html("<i class='fa fa-document'></i> Data Asset ");
         $('#data-asset-modal').modal('show');
     }
+
+    
 
     function get_asset_mutasi(kode_asset_ams,nama_asset,asset_controller,ba_pemilik_asset,lokasi_ba_description, lokasi_ba_code)
     {
