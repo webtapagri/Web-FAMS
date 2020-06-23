@@ -1,6 +1,7 @@
 <?php 
     $user_role = Session::get('role');
     $user_id = Session::get('user_id');
+    $user_area_code = Session::get('area_code');
     if( !empty($_GET) )
     {
         $email_noreg = base64_decode($_GET['noreg']);
@@ -1385,6 +1386,83 @@
                             message: result.message
                         });
                         //setTimeout(reload_page, 1000); 
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }
+                    
+                },
+                complete: function() {
+                    jQuery('.loading-event').fadeOut();
+                }
+            }); 
+        }
+    }
+    function update_pic()
+    {
+        var getnoreg = $("#getnoreg").val();
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+        var penanggung_jawab = [];
+        $("input[name='penanggung_jawab[]']").each(function() {
+            penanggung_jawab.push($(this).val());
+        });
+        var jabatan = [];
+        $("input[name='jabatan[]']").each(function() {
+            jabatan.push($(this).val());
+        });
+        
+        var kode_asset_ams = [];
+        $("input[name='kode_asset_ams[]']").each(function() {
+            kode_asset_ams.push($(this).val());
+        });
+
+        var param = '';        
+        
+        // VALIDASI
+        if( jabatan.includes("") )
+        {
+            notify({
+                type: 'warning',
+                message: " Jabatan Harus Diisi "
+            });
+            return false;
+        } 
+        if( penanggung_jawab.includes("") )
+        {
+            notify({
+                type: 'warning',
+                message: " Penanggung Jawab Harus Diisi "
+            });
+            return false;
+        } 
+       
+       
+        if(confirm('Confirm Penanggung Jawab ?'))
+        {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                    'Access-Control-Allow-Methods': 'GET, POST',
+                }
+            });
+            $.ajax({
+                url: "{{ url('approval/update_pic') }}",
+                method: "POST",
+                data: param+"&no_reg="+no_registrasi+"&penanggung_jawab="+penanggung_jawab+"&jabatan="+jabatan+"&kode_asset_ams="+kode_asset_ams,
+                
+                success: function(result) 
+                {
+                    if (result.status) 
+                    {
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
                     } 
                     else 
                     {
@@ -3748,6 +3826,7 @@
         //alert(id); return false;
         var kata = id;
         var noreg= kata.replace(/\//g, '-');
+        var area_code = "<?php echo $user_area_code ?>";
         //alert(noreg); //return false;
         
         $("#box-detail-item-mutasi").hide();
@@ -3778,7 +3857,6 @@
                 $("#request-form #cost-center").val(costcenter);
                 $("#request-form #cost-center-old").val(data.cost_center);
                 $("#request-form #kode-asset-ams").val(data.kode_asset_ams);
-                console.log(data);
 
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
@@ -3813,6 +3891,13 @@
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>TUJUAN</th>';
+                $.each(data.item_detail, function(key, val) 
+                    {
+                        if(area_code.includes(val.tujuan)){
+                            item += '<th>PENANGGUNG JAWAB</th>';
+                            item += '<th>JABATAN</th>';
+                        }
+                    });
                 item += '<th>VIEW DETAIL</th>';
 
                 if (data.item_detail.length > 0) 
@@ -3839,7 +3924,11 @@
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
-
+                        if(area_code.includes(val.tujuan)){
+                            item += "<td><input type='text' class='form-control input-sm' name='penanggung_jawab[]' id='penanggung_jawab[]' value='"+ val.penanggung_jawab +"' required></td>";
+                            item += "<td><input type='text' class='form-control input-sm' name='jabatan[]' id='jabatan[]' value='"+ val.jabatan +"' required></td>";
+                            item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"' required>";
+                        }
                         if(data.item_detail.length != 1)
                         {
                             item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a> &nbsp;&nbsp;&nbsp; <i class='fa fa-trash' style='color:red' OnClick='delMutasi(\""+data.no_reg+"\","+val.kode_asset_ams+")'></i> </td>";
@@ -3857,6 +3946,12 @@
 
                         item += "</tr>";
                         no++;
+                    });
+                    $.each(data.item_detail, function(key, val) 
+                    {
+                        if(area_code.includes(val.tujuan)){
+                            item += "<tr><td colspan='9' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
+                        }
                     });
                 }
                 else

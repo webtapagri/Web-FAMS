@@ -206,7 +206,7 @@ class ApprovalController extends Controller
         
     }
 
-    public function show()
+    public function show(Request $req)
     {
         $param = $_REQUEST;
         $service = API::exec(array(
@@ -214,6 +214,8 @@ class ApprovalController extends Controller
             'method' => "tr_user/" . $param["id"]
         ));
         $data = $service;
+        
+        dd($data);
         return response()->json(array('data' => $data->data));
     }
 
@@ -579,7 +581,7 @@ class ApprovalController extends Controller
 
 
     
-    function update_costcenter($noreg, $kode)
+    function update_costcenter($costcenter,$noreg, $kode)
     {
         $kode_ams = str_replace(",", "','", $kode);
         $no_registrasi = str_replace("-", "/", $noreg);
@@ -588,30 +590,52 @@ class ApprovalController extends Controller
         try 
         {   
             $updated_at = date("Y-m-d H:i:s");
+            $updated_by = Session::get('user_id');
             $sql1 = " INSERT INTO TR_LOG_MUTASI                   
                         SELECT NULL AS ID,b.NO_REG,b.CREATED_AT,a.BA_PEMILIK_ASSET, b.CREATED_BY, a.COST_CENTER, CURDATE() AS UPDATED_AT, b.CREATED_BY 
                         FROM TM_MSTR_ASSET a LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS
                         where b.KODE_ASSET_AMS IN ('{$kode_ams}');";
 
             DB::INSERT($sql1);
-
-            // $sql2 = " UPDATE TM_MSTR_ASSET a
-            //             SET 
-            //                 a.cost_center = '{$request->cost_center}',
-            //                 a.updated_at = '{$updated_at}',
-            //                 a.updated_by = '{$request->updated_by}'
-            //         WHERE a.kode_asset_ams IN ('{$kode_ams}'); ";
-            // DB::UPDATE($sql2);  
             
             $sql3 = " UPDATE TR_MUTASI_ASSET_DETAIL a
                         SET 
-                            a.cost_center = '{$request->cost_center}',
+                            a.cost_center = '{$costcenter}',
                             a.updated_at = '{$updated_at}',
-                            a.updated_by = '{$request->updated_by}'
+                            a.updated_by = '{$updated_by}'
                     WHERE a.no_reg = '{$no_registrasi}' ";
             DB::UPDATE($sql3);  
             DB::commit();
             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($kode ? 'updated' : 'update')]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => false, "message" => $e->getMessage()]);
+        }
+    }
+    
+    function update_pic(Request $req)
+    {
+        $kode_asset_ams = explode(',', $req->kode_asset_ams); 
+        $no_registrasi = str_replace("-", "/", $req->no_reg);   
+        $penanggung_jawab = explode(',', $req->penanggung_jawab);
+        $jabatan = explode(',', $req->jabatan);
+       
+        DB::beginTransaction();
+
+        try 
+        {   
+            // $updated_at = date("Y-m-d H:i:s");   
+            $sql = "";        
+            for($i=1;$i<count($kode_asset_ams);$i++){
+            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL a
+                        SET 
+                            a.penanggung_jawab = '$penanggung_jawab[$i]',
+                            a.jabatan = '$jabatan[$i]'
+                    WHERE a.no_reg = '$no_registrasi' and a.kode_asset_ams = '$kode_asset_ams[$i]'; ";
+            }            
+            DB::UPDATE($sql);
+            DB::commit();
+            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($penanggung_jawab ? 'updated' : 'update')]);
         } catch (\Exception $e) {
             DB::rollback();
             return response()->json(['status' => false, "message" => $e->getMessage()]);
@@ -3084,7 +3108,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'jenis_pengajuan' => trim($v->JENIS_PENGAJUAN),
                     'tujuan' => trim($v->TUJUAN),
                     'created_by' => trim($v->CREATED_BY),
-                    'created_at' => trim($v->CREATED_AT)
+                    'created_at' => trim($v->CREATED_AT),
+                    'penanggung_jawab' => trim($v->PENANGGUNG_JAWAB),
+                    'jabatan' => trim($v->JABATAN)
                 );
             }
         }
@@ -3273,6 +3299,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $no_reg = @$request->noreg;
         $kode_ams = @$request->kode_asset_ams;
+        // dd($no_reg);
 
         $sql = " SELECT d.DESCRIPTION AS COST_CENTER_BARU,a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_MUTASI FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = a.TUJUAN and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' LEFT JOIN TM_MSTR_ASSET b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS WHERE a.NO_REG = '{$no_reg}' AND (a.KODE_SAP_TUJUAN = '' OR a.KODE_SAP_TUJUAN is null) AND (a.DELETED is null OR a.DELETED = '') "; //echo $sql; die();
 
@@ -3284,7 +3311,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         {
             foreach( $data as $k => $v )
             {   
-                $this->update_costcenter($no_reg,$kode_ams);
+                $costcenter = $v->COST_CENTER_BARU;
+                $this->update_costcenter($costcenter,$no_reg,$kode_ams);
                 $proses = $this->synchronize_sap_process_mutasi($v);   
                 
                 if($proses['status']=='error')
@@ -3306,7 +3334,6 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
     public function synchronize_sap_process_mutasi($dt) 
     {
-        //echo "1<pre>"; print_r($dt); die();
 
         $ANLA_BUKRS = substr($dt->TUJUAN,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
@@ -3318,7 +3345,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         ));
         
         $data = $service;
-        
+        // dd($data);
+        // $data['dt'] = $dt;
+        // $data['service'] = $service;
+        // $result = array('status'=>'error','message'=> ''.$data);
+        // return $data;      
+        // die;
         //echo "1<pre>"; print_r($data); die();
         
         if( !empty($data->item->TYPE) )
@@ -3327,20 +3359,19 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             if( $data->item->TYPE == 'S' )
             {
                 $user_id = Session::get('user_id');
-                //$asset_controller = $this->get_asset_controller($user_id,$dt->LOKASI_BA_CODE);
 
                 DB::beginTransaction();
                 try 
                 {   
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
-
                     //2. INSERT LOG
-                    $create_date = new \DateTime();
-                    $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_MUTASI}','','{$dt->NO_REG_ITEM}','".$data->item->TYPE."','".$data->item->ID."','".$data->item->NUMBER."','".$data->item->MESSAGE."','".$data->item->MESSAGE_V1."','".$data->item->MESSAGE_V2."','".$data->item->MESSAGE_V3."','".$data->item->MESSAGE_V4."','".$create_date."') ";
+                    $create_date = date("Y-m-d H:i:s");
+                    $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_MUTASI}',0,'{$dt->NO_REG_ITEM}','".$data->item->TYPE."','".$data->item->ID."','".$data->item->NUMBER."','".$data->item->MESSAGE."','".$data->item->MESSAGE_V1."','".$data->item->MESSAGE_V2."','".$data->item->MESSAGE_V3."','".$data->item->MESSAGE_V4."','".$create_date."') ";
                     DB::INSERT($sql_2);
 
+                    DB::commit();
                     //3. CREATE CODE ASSET AMS MUTASI
                     if( $dt->JENIS_PENGAJUAN == 1 )
                     {
@@ -3353,15 +3384,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     
                     DB::STATEMENT($sql_3);
 
-                    DB::commit();
-
                     return true;
                 }
                 catch (\Exception $e) 
                 {
                     DB::rollback();
                     return false;
-                    //die();
                 }
             }
             else 
