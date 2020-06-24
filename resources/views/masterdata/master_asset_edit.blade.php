@@ -120,9 +120,15 @@
 	<ol class="breadcrumb">
     <?php
           if( $data['content']->DISPOSAL_FLAG != '' ){ 
+            if (strpos($data['content']->DISPOSAL_FLAG, 'MTSA') !== false) {
+              ?>
+              <li><span class="disposal callout callout-danger">SUDAH DIMUTASI : {{ $data['content']->DISPOSAL_FLAG }}</span></li>
+            <?php
+          }else{
         ?>
           <li><span class="disposal callout callout-danger">SUDAH DIDISPOSAL : {{ $data['content']->DISPOSAL_FLAG }}</span></li>
-        <?php } ?>
+        <?php } 
+        }?>
 		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
 		<li><a href="#">Master Data</a></li>
 		<li class="active">Master Asset</li>
