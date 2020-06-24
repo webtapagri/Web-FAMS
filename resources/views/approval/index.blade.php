@@ -3769,6 +3769,8 @@
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>TUJUAN</th>';
+                item += '<th>KODE ASSET AMS TUJUAN</th>';
+                item += '<th>KODE SAP TUJUAN</th>';
                 item += '<th>VIEW DETAIL</th>';
                 if (data.item_detail.length > 0) 
                 {
@@ -3794,6 +3796,8 @@
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
+                        item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
+                        item += "<td>" + val.kode_sap_tujuan + "</td>";
 
                         item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";
                         item += "</tr>";
