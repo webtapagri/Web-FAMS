@@ -625,7 +625,7 @@ class ApprovalController extends Controller
         {   
             // $updated_at = date("Y-m-d H:i:s");   
             $sql = "";        
-            for($i=1;$i<count($kode_asset_ams);$i++){
+            for($i=0;$i<count($kode_asset_ams);$i++){
             $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL a
                         SET 
                             a.penanggung_jawab = '$penanggung_jawab[$i]',
@@ -3109,7 +3109,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'created_by' => trim($v->CREATED_BY),
                     'created_at' => trim($v->CREATED_AT),
                     'penanggung_jawab' => trim($v->PENANGGUNG_JAWAB),
-                    'jabatan' => trim($v->JABATAN)
+                    'jabatan' => trim($v->JABATAN),
+                    'kode_asset_ams_tujuan' => trim($v->KODE_ASSET_AMS_TUJUAN),
+                    'kode_sap_tujuan' => trim($v->KODE_SAP_TUJUAN)
                 );
             }
         }

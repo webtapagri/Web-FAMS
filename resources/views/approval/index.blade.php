@@ -1410,18 +1410,21 @@
         $("input[name='penanggung_jawab[]']").each(function() {
             penanggung_jawab.push($(this).val());
         });
+        penanggung_jawab.shift();
+
         var jabatan = [];
         $("input[name='jabatan[]']").each(function() {
             jabatan.push($(this).val());
         });
+        jabatan.shift();
         
         var kode_asset_ams = [];
         $("input[name='kode_asset_ams[]']").each(function() {
             kode_asset_ams.push($(this).val());
         });
+        kode_asset_ams.shift();
 
         var param = '';        
-        
         // VALIDASI
         if( jabatan.includes("") )
         {
@@ -3891,6 +3894,8 @@
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>TUJUAN</th>';
+                item += '<th>KODE ASSET AMS TUJUAN</th>';
+                item += '<th>KODE SAP TUJUAN</th>';
                 $.each(data.item_detail, function(key, val) 
                     {
                         if(area_code.includes(val.tujuan)){
@@ -3924,6 +3929,8 @@
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
+                        item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
+                        item += "<td>" + val.kode_sap_tujuan + "</td>";
                         if(area_code.includes(val.tujuan)){
                             item += "<td><input type='text' class='form-control input-sm' name='penanggung_jawab[]' id='penanggung_jawab[]' value='"+ val.penanggung_jawab +"' required></td>";
                             item += "<td><input type='text' class='form-control input-sm' name='jabatan[]' id='jabatan[]' value='"+ val.jabatan +"' required></td>";
@@ -3950,7 +3957,7 @@
                     $.each(data.item_detail, function(key, val) 
                     {
                         if(area_code.includes(val.tujuan)){
-                            item += "<tr><td colspan='9' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
+                            item += "<tr><td colspan='11' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
                         }
                     });
                 }
@@ -4163,13 +4170,15 @@
                             type: 'warning',
                             message: result.message
                         });
-                    }
+                    }   
                     
                 },
                 complete: function() {
                     $('.loading-event').fadeOut();
                 }
+                
             }); 
+
         }
     }
 
