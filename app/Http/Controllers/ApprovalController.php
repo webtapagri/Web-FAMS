@@ -2052,7 +2052,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
                 try 
                 {   
-                    $create_date = new \DateTime();
+                    $create_date = date("Y-m-d H:i:s");
                     $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG}','{$dt->ASSET_PO_ID}','{$dt->NO_REG_ITEM}','".$data->item->TYPE."','".$data->item->ID."','".$data->item->NUMBER."','".$data->item->MESSAGE."','".$data->item->MESSAGE_V1."','".$data->item->MESSAGE_V2."','".$data->item->MESSAGE_V3."','".$data->item->MESSAGE_V4."','".$create_date."') ";
                     
                     DB::INSERT($sql); 
@@ -2132,7 +2132,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     DB::UPDATE($sql_1);
 
                     //2. INSERT LOG
-                    $create_date = new \DateTime();
+                    $create_date = date("Y-m-d H:i:s");
                     $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG}','{$dt->ASSET_PO_ID}','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
                     DB::INSERT($sql_2);
 
@@ -2158,7 +2158,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
                 try 
                 {    
-                    $create_date = new \DateTime();
+                    $create_date = date("Y-m-d H:i:s");
                     $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG}','{$dt->ASSET_PO_ID}','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
                     
                     DB::INSERT($sql); 
@@ -3510,7 +3510,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 try 
                 {    
-                    $create_date = new \DateTime();
+                    $create_date = date("Y-m-d H:i:s");
                     $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_MUTASI}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
                     Debugbar::info($create_date);
                     DB::INSERT($sql); 
