@@ -206,7 +206,7 @@ class ApprovalController extends Controller
         
     }
 
-    public function show(Request $req)
+    public function show()
     {
         $param = $_REQUEST;
         $service = API::exec(array(
@@ -215,7 +215,6 @@ class ApprovalController extends Controller
         ));
         $data = $service;
         
-        dd($data);
         return response()->json(array('data' => $data->data));
     }
 
