@@ -1426,19 +1426,20 @@
 
         var param = '';        
         // VALIDASI
-        if( jabatan.includes("") )
-        {
-            notify({
-                type: 'warning',
-                message: " Jabatan Harus Diisi "
-            });
-            return false;
-        } 
+       
         if( penanggung_jawab.includes("") )
         {
             notify({
                 type: 'warning',
                 message: " Penanggung Jawab Harus Diisi "
+            });
+            return false;
+        } 
+        if( jabatan.includes("") )
+        {
+            notify({
+                type: 'warning',
+                message: " Jabatan Harus Diisi "
             });
             return false;
         } 
