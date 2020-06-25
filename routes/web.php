@@ -284,6 +284,7 @@ Route::match(['get', 'post'], 'grid-master-asset', [
 ]);
 //Route::get('/master-asset/edit/', 'MasterAssetController@show');
 Route::get('/master-asset/show-data/{id}', 'MasterAssetController@show_edit');
+Route::get('/master-asset/show/{id}', 'MasterAssetController@show_asset');
 Route::get('/master-asset/show_qrcode/{ams}', 'MasterAssetController@show_qrcode')->name('ams');
 Route::get('/test_qrcode', 'MasterAssetController@test_qrcode');
 Route::get('/master-asset/print-qrcode/{noreg}', 'MasterAssetController@print_qrcode')->name('noreg');

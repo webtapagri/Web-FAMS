@@ -3780,6 +3780,7 @@
                     $.each(data.item_detail, function(key, val) 
                     {
                         var kode_fams = btoa(val.kode_asset_ams);
+                        var kode_tujuan = btoa(val.kode_asset_ams_tujuan);
                         var jenis_pengajuan = val.jenis_pengajuan;
                         
                         if( jenis_pengajuan == 1 )
@@ -3800,7 +3801,10 @@
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
 
-                        item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";
+                        item += "<td width='150px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i> Awal</a>";
+                        <?php if($data['outstanding'] != 0 ) { ?>
+                        item += "&emsp;<a href='<?php {{ echo url("/master-asset/show"); }} ?>/"+kode_tujuan+"' target='_blank'><i class='fa fa-eye'></i> Tujuan</a></td>";
+                        <?php } ?>
                         item += "</tr>";
                         no++;
                         

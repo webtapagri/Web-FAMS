@@ -233,6 +233,23 @@ class MasterAssetController extends Controller
         return view('masterdata.master_asset_edit')->with(compact('data'));
     }
 
+    public function show_asset($id)
+    {
+        $id = base64_decode($id);
+        //echo $id; die();
+        if (empty(Session::get('authenticated')))
+            return redirect('/login');
+
+        $data['page_title'] = 'View - Master Asset';
+        $data['ctree_mod'] = 'Master Data';
+        $data['ctree'] = 'master-asset';
+        $data['id'] = $id;
+        $data['content'] = $this->get_master_asset_by_id($id);
+        $data['file'] = $this->get_master_asset_file_by_id($id);
+
+        return view('masterdata.master_asset_edit')->with(compact('data'));
+    }
+
     function get_master_asset_file_by_id($id)
     {
         $result = array();
