@@ -3905,12 +3905,19 @@
                 item += '<th>TUJUAN</th>';
                 item += '<th>KODE ASSET AMS TUJUAN</th>';
                 item += '<th>KODE SAP TUJUAN</th>';
+                
+                var no = 1;
                 $.each(data.item_detail, function(key, val) 
                     {
                         if(area_code.includes(val.tujuan)){
+                            if(no > 1){
+                                return false;
+                            }
                             item += '<th>PENANGGUNG JAWAB</th>';
                             item += '<th>JABATAN</th>';
+                            
                         }
+                        no++;
                     });
                 item += '<th>VIEW DETAIL</th>';
 
@@ -3963,11 +3970,17 @@
                         item += "</tr>";
                         no++;
                     });
+                    var i = 1;
                     $.each(data.item_detail, function(key, val) 
                     {
                         if(area_code.includes(val.tujuan)){
+                            if(i > 1){
+                                return false;
+                            }
                             item += "<tr><td colspan='11' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
+                            
                         }
+                        i++;
                     });
                 }
                 else
