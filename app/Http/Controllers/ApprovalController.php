@@ -11,6 +11,7 @@ use API;
 use AccessRight;
 use Spipu\Html2Pdf\Html2Pdf;
 use DateTime;
+use Debugbar;
 /* use NahidulHasan\Html2pdf\Facades\Pdf; */
 
 class ApprovalController extends Controller
@@ -35,7 +36,6 @@ class ApprovalController extends Controller
         {
             $data['outstanding'] = 1;   
         }
-        // dd($data['outstanding']);
         $access = AccessRight::access();
         $data['page_title'] = "Approval";
         $data['ctree_mod'] = 'Approval';
@@ -615,6 +615,7 @@ class ApprovalController extends Controller
     function update_pic(Request $req)
     {
         $kode_asset_ams = explode(',', $req->kode_asset_ams); 
+        $kode_ams = str_replace(",", "','", $req->kode_asset_ams);
         $no_registrasi = str_replace("-", "/", $req->no_reg);   
         $penanggung_jawab = explode(',', $req->penanggung_jawab);
         $jabatan = explode(',', $req->jabatan);
@@ -623,15 +624,18 @@ class ApprovalController extends Controller
 
         try 
         {   
-            // $updated_at = date("Y-m-d H:i:s");   
-            $sql = "";        
+            $updated_at = date("Y-m-d H:i:s");  
+            
+        $case_penanggung_jawab = "";        
+        $case_jabatan = "";   
+        $sql ="";      
             for($i=0;$i<count($kode_asset_ams);$i++){
-            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL a
-                        SET 
-                            a.penanggung_jawab = '$penanggung_jawab[$i]',
-                            a.jabatan = '$jabatan[$i]'
-                    WHERE a.no_reg = '$no_registrasi' and a.kode_asset_ams = '$kode_asset_ams[$i]'; ";
-            }            
+                $case_penanggung_jawab .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$penanggung_jawab[$i]' ";
+                $case_jabatan .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$jabatan[$i]' ";
+            }
+            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL SET penanggung_jawab = (case $case_penanggung_jawab end),
+                        jabatan = (case $case_jabatan end) WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
+
             DB::UPDATE($sql);
             DB::commit();
             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($penanggung_jawab ? 'updated' : 'update')]);
@@ -2259,6 +2263,13 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         return $data[0]->JML;
     }
 
+    function get_new_asset($noreg)
+    {
+        $sql = "  SELECT COUNT(*) AS JML FROM TM_MSTR_ASSET a left join TR_MUTASI_ASSET_DETAIL b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS_TUJUAN WHERE b.NO_REG = '{$noreg}' ";
+        $data = DB::SELECT($sql); 
+        return $data[0]->JML;
+    }
+
     function berkas_amp($noreg)
     {
         $noreg = base64_decode($noreg);
@@ -3066,6 +3077,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'cost_center' => $v->COST_CENTER, 
                     'kode_asset_ams' => $v->KODE_ASSET_AMS, 
+                    'new_asset' => $this->get_new_asset($noreg),
                 );
 
             }

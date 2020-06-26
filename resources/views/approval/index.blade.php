@@ -52,7 +52,6 @@
                 <div class="table-actions-wrapper">
                     <button class="btn btn-flat btn-sm btn-flat label-danger btn-refresh refresh-outstanding"><i class="glyphicon glyphicon-refresh" title="Refresh"></i></button><?php /* <div OnClick="approval('19.06/AMS/PDFA/00027')">test</div>*/ ?>
                 </div>
-
                 <table id="data-table" class="table table-bordered table-condensed">
                         <thead>
                             <tr role="row" class="heading">
@@ -527,6 +526,7 @@
                                 
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">NO REGISTRASI</label>
+                                    
                                     <div class="col-md-6">
                                         <input type="text" class="form-control xinput-sm" value="" id="no-reg" name="no-reg" readonly>
                                     </div>
@@ -1404,27 +1404,32 @@
     }
     function update_pic()
     {
+        
+        var param = '';     
         var getnoreg = $("#getnoreg").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
-        var penanggung_jawab = [];
-        $("input[name='penanggung_jawab[]']").each(function() {
-            penanggung_jawab.push($(this).val());
-        });
-        penanggung_jawab.shift();
-
-        var jabatan = [];
-        $("input[name='jabatan[]']").each(function() {
-            jabatan.push($(this).val());
-        });
-        jabatan.shift();
         
-        var kode_asset_ams = [];
-        $("input[name='kode_asset_ams[]']").each(function() {
-            kode_asset_ams.push($(this).val());
-        });
-        kode_asset_ams.shift();
+        var input = document.getElementsByName('penanggung_jawab[]'); 
+        var penanggung_jawab = [];
+    
+        for (var i = 0; i < input.length/2; i++) { 
+            penanggung_jawab.push(input[i+input.length/2].value); 
+        } 
 
-        var param = '';        
+        var input2 = document.getElementsByName('jabatan[]'); 
+        var jabatan = [];
+    
+        for (var i = 0; i < input2.length/2; i++) { 
+            jabatan.push(input2[i+input2.length/2].value); 
+        } 
+
+        var input3 = document.getElementsByName('kode_asset_ams[]'); 
+        var kode_asset_ams = [];
+    
+        for (var i = 0; i < input3.length/2; i++) { 
+            kode_asset_ams.push(input3[i+input3.length/2].value); 
+        } 
+          
         // VALIDASI
        
         if( penanggung_jawab.includes("") )
@@ -3753,6 +3758,12 @@
                     //var costcenter = data.cost_center;
                 <?php  //}?>
                 var costcenter = data.cost_center;
+                
+                var asset = data.new_asset;
+                <?php
+                    $asset =  "<script>document.writeln(asset);</script>";
+                ?>
+
                 $("#request-form-history #no-reg").val(data.no_reg);
                 $("#request-form-history #type-transaksi").val(data.type_transaksi);
                 $("#request-form-history #po-type").val(data.po_type);
@@ -3801,9 +3812,13 @@
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
 
+
+                        <?php if($data['outstanding'] != 0 && $asset != 0) { ?>
                         item += "<td width='150px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i> Awal</a>";
-                        <?php if($data['outstanding'] != 0 ) { ?>
                         item += "&emsp;<a href='<?php {{ echo url("/master-asset/show"); }} ?>/"+kode_tujuan+"' target='_blank'><i class='fa fa-eye'></i> Tujuan</a></td>";
+                        <?php } 
+                        else {?>
+                        item += "<td width='70px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a>";
                         <?php } ?>
                         item += "</tr>";
                         no++;
@@ -4020,82 +4035,85 @@
             return false;
         }
 
-        var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
-        var no_registrasi= getnoreg.replace(/\//g, '-');
-        var specification = $("#specification-mutasi-approval").val();
+        if(update_pic() !==  false ){
+        
+            var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
+            var no_registrasi= getnoreg.replace(/\//g, '-');
+            var specification = $("#specification-mutasi-approval").val();
 
-        if( status == 'A' ){ status_desc = 'approve'; }else
-        if( status == 'R' )
-        { 
-            status_desc = 'reject';
-            note_reject = $("#specification-mutasi-approval").val();
+            if( status == 'A' ){ status_desc = 'approve'; }else
+            if( status == 'R' )
+            { 
+                status_desc = 'reject';
+                note_reject = $("#specification-mutasi-approval").val();
 
-            if( $.trim(note_reject) < 2 )
-            {
-                notify({
-                    type: 'warning',
-                    message: " Note Reject is required (min 2 char)"
-                });
-                return false;
-            } 
-
-        }else{ status_desc = 'cancel'; }
-
-        if(confirm('confirm '+status_desc+' data ?'))
-        {
-            //console.log(request_check_gi); return false;
-
-            //e.preventDefault();
-            var param = $("#request-form").serialize();
-            var request_ka = JSON.stringify(request_kode_aset_data);
-            var request_gi = JSON.stringify(request_check_gi);
-            //alert(param); //return false;
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            
-            $.ajax({
-                url: "{{ url('approval/update_status_mutasi') }}/"+status+"/"+no_registrasi,
-                method: "POST",
-                data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi,
-                beforeSend: function() {
-                    jQuery('.loading-event').fadeIn();
-                },
-                success: function(result) 
+                if( $.trim(note_reject) < 2 )
                 {
-                    //alert(result.status);
-                    if (result.status) 
-                    {
-                        //SEND EMAIL 
-                        send_email_create_po(result.new_noreg);
+                    notify({
+                        type: 'warning',
+                        message: " Note Reject is required (min 2 char)"
+                    });
+                    return false;
+                } 
 
-                        $("#approve-mutasi-modal").modal("hide");
-                        $("#data-table").DataTable().ajax.reload();
-                        $("#data-table-history").DataTable().ajax.reload();
-                        notify({
-                            type: 'success',
-                            message: result.message
-                        });
-                    } 
-                    else 
-                    {
-                        request_check_gi = [];
-                        request_kode_aset_data = [];
-                        //$(".md_year").val("");
-                        notify({
-                            type: 'warning',
-                            message: result.message
-                        });
+            }else{ status_desc = 'cancel'; }
+
+            if(confirm('confirm '+status_desc+' data ?'))
+            {
+                //console.log(request_check_gi); return false;
+
+                //e.preventDefault();
+                var param = $("#request-form").serialize();
+                var request_ka = JSON.stringify(request_kode_aset_data);
+                var request_gi = JSON.stringify(request_check_gi);
+                //alert(param); //return false;
+
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                    
-                },
-                complete: function() {
-                    jQuery('.loading-event').fadeOut();
-                }
-            });
+                });
+                
+                $.ajax({
+                    url: "{{ url('approval/update_status_mutasi') }}/"+status+"/"+no_registrasi,
+                    method: "POST",
+                    data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi,
+                    beforeSend: function() {
+                        jQuery('.loading-event').fadeIn();
+                    },
+                    success: function(result) 
+                    {
+                        //alert(result.status);
+                        if (result.status) 
+                        {
+                            //SEND EMAIL 
+                            send_email_create_po(result.new_noreg);
+
+                            $("#approve-mutasi-modal").modal("hide");
+                            $("#data-table").DataTable().ajax.reload();
+                            $("#data-table-history").DataTable().ajax.reload();
+                            // notify({
+                            //     type: 'success',
+                            //     message: result.message
+                            // });
+                        } 
+                        else 
+                        {
+                            request_check_gi = [];
+                            request_kode_aset_data = [];
+                            //$(".md_year").val("");
+                            notify({
+                                type: 'warning',
+                                message: result.message
+                            });
+                        }
+                        
+                    },
+                    complete: function() {
+                        jQuery('.loading-event').fadeOut();
+                    }
+                });
+            }
         }
     }
 
