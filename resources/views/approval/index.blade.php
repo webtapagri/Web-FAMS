@@ -3759,11 +3759,6 @@
                 <?php  //}?>
                 var costcenter = data.cost_center;
                 
-                var asset = data.new_asset;
-                <?php
-                    $asset =  "<script>document.writeln(asset);</script>";
-                ?>
-
                 $("#request-form-history #no-reg").val(data.no_reg);
                 $("#request-form-history #type-transaksi").val(data.type_transaksi);
                 $("#request-form-history #po-type").val(data.po_type);
@@ -3812,14 +3807,13 @@
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
 
-
-                        <?php if($data['outstanding'] != 0 && $asset != 0) { ?>
-                        item += "<td width='150px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i> Awal</a>";
-                        item += "&emsp;<a href='<?php {{ echo url("/master-asset/show"); }} ?>/"+kode_tujuan+"' target='_blank'><i class='fa fa-eye'></i> Tujuan</a></td>";
-                        <?php } 
-                        else {?>
-                        item += "<td width='70px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a>";
-                        <?php } ?>
+                        if(data.new_asset > 0) { 
+                            item += "<td width='150px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i> Awal</a>";
+                            item += "&emsp;<a href='<?php {{ echo url("/master-asset/show"); }} ?>/"+kode_tujuan+"' target='_blank'><i class='fa fa-eye'></i> Tujuan</a></td>";
+                        } 
+                        else {
+                            item += "<td width='70px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a>";
+                        }
                         item += "</tr>";
                         no++;
                         
