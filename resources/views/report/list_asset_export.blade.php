@@ -52,7 +52,7 @@
                 <th rowspan='2'>UOM</th>
                 <th rowspan='2'>MRP</th>
                 <th colspan='6'>ASSET</th>
-                <th colspan='3'>STATUS</th>
+                <th colspan='4'>STATUS</th>
             </tr>
             <tr>
                 <th>NAMA</th>
@@ -69,12 +69,14 @@
                 <th>ASET</th>
                 <th>SEWA</th>
                 <th>DISPOSAL</th>
+                <th>MUTASI</th>
             </tr>";
 
             $b = "";
             $bp = "";
             $rltp = "";
-            $status_document = "";
+            $dspa = "";
+            $mtsa = "";
             $milik = "";
             $sewa = "";
             $i = 0;
@@ -99,7 +101,14 @@
 
                 if($v->STATUS_DOCUMENT != '')
                 {
-                    $status_document = "&#x2714;";
+                    if(strpos( $v->STATUS_DOCUMENT, 'DSPA' )){
+                        $dspa = "&#x2714;";
+                        $mtsa = "";
+                    }
+                    else{
+                        $mtsa = "&#x2714;";
+                        $dspa = "";
+                    }
                 }
                 else{
                     if(substr($v->BA_PEMILIK_ASSET,0,2)<>12){
@@ -155,7 +164,8 @@
                     <td>".$v->SUB_GROUP_NAME."</td>
                     <td>".$milik."</td>
                     <td>".$sewa."</td>
-                    <td>".$status_document."</td>
+                    <td>".$dspa."</td>
+                    <td>".$mtsa."</td>
                 </tr>
                 ";
 

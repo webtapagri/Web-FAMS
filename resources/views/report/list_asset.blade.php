@@ -59,7 +59,7 @@ html, body {
                 <th rowspan='2'>UOM</th>
                 <th rowspan='2'>MRP</th>
                 <th colspan='3'>ASSET</th>
-                <th colspan='3'>STATUS</th>
+                <th colspan='4'>STATUS</th>
             </tr>
             <tr>
                 <th>NAMA</th>
@@ -73,12 +73,14 @@ html, body {
                 <th>ASET</th>
                 <th>SEWA</th>
                 <th>DISPOSAL</th>
+                <th>MUTASI</th>
             </tr>";
 
             $b = "";
             $bp = "";
             $rltp = "";
-            $status_document = "";
+            $dspa = "";
+            $mtsa = "";
             $milik = "";
             $sewa = "";
             $foto_aset = "";
@@ -105,7 +107,14 @@ html, body {
 
                 if($v['STATUS_DOCUMENT'] != '')
                 {
-                    $status_document = "<i class='fa fa-check'></i>";
+                    if(strpos( $v['STATUS_DOCUMENT'], 'DSPA' )){
+                        $dspa = "<i class='fa fa-check'></i>";
+                        $mtsa = "";
+                    }
+                    else{
+                        $mtsa = "<i class='fa fa-check'></i>";
+                        $dspa = "";
+                    }
                     
                 }
 
@@ -167,7 +176,8 @@ html, body {
                     <td>".$v['SUB_GROUP']."</td>
                     <td>".$milik."</td>
                     <td>".$sewa."</td>
-                    <td>".$status_document."</td>
+                    <td>".$dspa."</td>
+                    <td>".$mtsa."</td>
                 </tr>
                 ";
 
