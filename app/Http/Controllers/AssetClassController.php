@@ -678,6 +678,17 @@ class AssetClassController extends Controller
         return response()->json(array("data"=>$data));
     }
 
+    public function select_status_doc()
+    {
+        $data = DB::table('TM_GENERAL_DATA')
+        //->select('jenis_asset_code as id', 'jenis_asset_description as text')
+        ->select('ID as id', 'DESCRIPTION as text')
+        ->where('GENERAL_CODE', 'status_document')
+        ->orderby('ID', 'asc')
+        ->get();
+        return response()->json(array("data"=>$data));
+    }
+
     public function select_jenis_asset_code_text_only()
     {
         $data = DB::table('TM_JENIS_ASSET')

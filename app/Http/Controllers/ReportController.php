@@ -19,6 +19,7 @@ use App\TM_MSTR_ASSET;
 use App\TR_REG_ASSET_DETAIL;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ReportExport;
+use App\Exports\ApprovalExport;
 
 class ReportController extends Controller
 {
@@ -59,6 +60,26 @@ class ReportController extends Controller
         $data['ctree'] = 'report/list-asset';
         $data["access"] = (object)$access;
         return view('report.list_asset_filter')->with(compact('data'));
+
+    }
+
+    public function list_history_approval()
+    {
+        //echo "Module Report List Asset"; die();
+        if (empty(Session::get('authenticated')))
+            return redirect('/login');
+
+        if (AccessRight::granted() === false) {
+            $data['page_title'] = 'Oops! Unauthorized.';
+            return response(view('errors.403')->with(compact('data')), 403);
+        }
+
+        $access = AccessRight::access();    
+        $data['page_title'] = 'Report Historical Approval';
+        $data['ctree_mod'] = 'Report';
+        $data['ctree'] = 'report/list-history-approval';
+        $data["access"] = (object)$access;
+        return view('report.list_history_approval')->with(compact('data'));
 
     }
 
@@ -435,6 +456,119 @@ class ReportController extends Controller
                 WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
         
         return Excel::download(new ReportExport($sql,$HARGA_PEROLEHAN), 'REPORT.xlsx');
+    }
+
+
+    function list_history_approval_submit(Request $request)
+    {
+        if (empty(Session::get('authenticated')))
+            return redirect('/login');
+
+
+        $where = "";
+        $result = array();
+        
+        $req = $request->all();
+       
+
+        if( !empty($req['document-code']) )
+        {
+            $where .= " AND UPPER(a.DOCUMENT_CODE) LIKE UPPER('%{$req['document-code']}%') ";
+        }
+
+        if( !empty($req['status-doc']) )
+        {
+            $where .= " AND UPPER(a.STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
+        }
+
+        if( !empty($req['po-date']) )
+        {
+            $where .= " AND UPPER(a.DATE) LIKE UPPER('%{$req['po-date']}%') ";
+        }
+
+        if( !empty($req['lokasi-aset']) )
+        {
+            $where .= " AND UPPER(a.AREA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
+        }
+
+        $sql = " SELECT b.PO_TYPE, a.USER_ID AS USER_ID, a.DOCUMENT_CODE AS DOCUMENT_CODE, a.AREA_CODE AS AREA_CODE, 
+                        a.NAME as ROLE_NAME, a.STATUS_DOKUMEN AS STATUS_DOKUMEN, a.DATE AS PO_DATE,c.DOCUMENT_CODE as NO_REG,c.USER_ID as USERID,c.NAME AS NAME,c.AREA_CODE AS BA,c.STATUS_APPROVAL AS STATUS_APPROVAL,c.NOTES AS NOTES,c.DATE AS DATE
+                        FROM v_history a LEFT JOIN TR_REG_ASSET b ON a.DOCUMENT_CODE = b.NO_REG
+                        LEFT JOIN v_history_approval c ON c.DOCUMENT_CODE = a.DOCUMENT_CODE
+                        where 1=1 $where ORDER BY -a.DATE ASC, -c.DATE ASC LIMIT ".$req['no-of-list']." ";
+                    
+        $dt = DB::SELECT($sql);
+
+        if(!empty($dt))
+        {
+            foreach( $dt as $k => $v )
+            {
+
+                $result[] = array(
+                    'DOCUMENT_CODE' => $v->DOCUMENT_CODE,
+                    'AREA_CODE' => $v->AREA_CODE,
+                    'ROLE_NAME' => $v->ROLE_NAME,
+                    'STATUS_DOCUMENT' => $v->STATUS_DOKUMEN,
+                    'PO_DATE' => $v->PO_DATE,
+                    'BA' => $v->BA,
+                    'USER_ID' => $v->USERID,
+                    'NAME' => $v->NAME,
+                    'STATUS_APPROVAL' => $v->STATUS_APPROVAL,
+                    'NOTES' => $v->NOTES,
+                    'APPROVE_DATE' => $v->DATE
+                ); 
+            }
+        }
+		// dd($result);
+        $access = AccessRight::access();    
+        $data['page_title'] = 'Report Historical Approval';
+        $data['ctree_mod'] = 'Report';
+        $data['ctree'] = 'report/list-history-approval';
+        $data['access'] = (object)$access;
+        $data['report'] = $result;
+        return view('report.list_approval')->with(compact('data'));
+    }
+
+    function list_history_approval_download(Request $request)
+    {
+        if (empty(Session::get('authenticated')))
+            return redirect('/login');
+
+
+        $where = "";
+        $result = array();
+        
+        $req = $request->all();
+       
+
+        if( !empty($req['document-code']) )
+        {
+            $where .= " AND UPPER(a.DOCUMENT_CODE) LIKE UPPER('%{$req['document-code']}%') ";
+        }
+
+        if( !empty($req['status-doc']) )
+        {
+            $where .= " AND UPPER(a.STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
+        }
+
+        if( !empty($req['po-date']) )
+        {
+            $where .= " AND UPPER(a.DATE) LIKE UPPER('%{$req['po-date']}%') ";
+        }
+
+        if( !empty($req['lokasi-aset']) )
+        {
+            $where .= " AND UPPER(a.AREA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
+        }
+
+        $sql = " SELECT b.PO_TYPE, a.USER_ID AS USER_ID, a.DOCUMENT_CODE AS DOCUMENT_CODE, a.AREA_CODE AS AREA_CODE, 
+                        REPLACE(a.NAME, '&', 'and') as ROLE_NAME, a.STATUS_DOKUMEN AS STATUS_DOCUMENT, a.DATE AS PO_DATE,c.DOCUMENT_CODE as NO_REG,c.USER_ID as USERID,REPLACE(c.NAME, '&', 'and') AS NAME,c.AREA_CODE AS BA,c.STATUS_APPROVAL AS STATUS_APPROVAL,c.NOTES AS NOTES,c.DATE AS APPROVE_DATE
+                        FROM v_history a LEFT JOIN TR_REG_ASSET b ON a.DOCUMENT_CODE = b.NO_REG
+                        LEFT JOIN v_history_approval c ON c.DOCUMENT_CODE = a.DOCUMENT_CODE
+                        where 1=1 $where ORDER BY -a.DATE ASC, -c.DATE ASC LIMIT ".$req['no-of-list']." ";
+                    
+        
+        return Excel::download(new ApprovalExport($sql), 'REPORT_APPROVAL.xlsx');
     }
 
     public function dataGrid(Request $request)

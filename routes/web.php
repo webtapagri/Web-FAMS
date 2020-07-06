@@ -204,6 +204,7 @@ Route::get('get-select_workflow_detail_code', ['as' => 'get.select_workflow_deta
 Route::get('get-select_workflow_detail_role', ['as' => 'get.select_workflow_detail_role', 'uses' => 'WorkflowController@workflowcoderole']);
 Route::get('get-select_workflow_detail_code', ['as' => 'get.select_workflow_detail_code', 'uses' => 'WorkflowController@workflowcodedetail']);
 Route::get('get-select_jenis_asset_code', ['as' => 'get.select_jenis_asset_code', 'uses' => 'AssetClassController@select_jenis_asset_code']);
+Route::get('get-select_status_doc', ['as' => 'get.select_status_doc', 'uses' => 'AssetClassController@select_status_doc']);
 Route::get('get-select_jenis_asset_code_text_only', ['as' => 'get.select_jenis_asset_code_text_only', 'uses' => 'AssetClassController@select_jenis_asset_code_text_only']);
 Route::get('get-select_group_code', ['as' => 'get.select_group_code', 'uses' => 'AssetClassController@select_group_code']);
 Route::get('get-select_subgroup_code', ['as' => 'get.select_subgroup_code', 'uses' => 'AssetClassController@select_subgroup_code']);
@@ -309,6 +310,9 @@ Route::post('/resume/user-submit','ResumeController@user_submit');
 Route::get('/report/list-asset', 'ReportController@list_asset');
 Route::post('/report/list-asset/submit', 'ReportController@list_asset_submit');
 Route::post('/report/list-asset/download', 'ReportController@list_asset_download');
+Route::get('/report/list-history-approval', 'ReportController@list_history_approval');
+Route::post('/report/list-history-approval/submit', 'ReportController@list_history_approval_submit');
+Route::post('/report/list-history-approval/download', 'ReportController@list_history_approval_download');
 
 /* DISPOSAL */
 Route::resource('/disposal-penjualan', 'DisposalController');
