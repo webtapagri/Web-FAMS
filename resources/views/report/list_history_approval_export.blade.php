@@ -14,7 +14,9 @@
     <?php 
         $l = "";
         $no = 1;
-        $i = 1;
+        $i = 0;
+        $doc = array();
+        $rowspan = array();
 
         if(!empty($report))
         {
@@ -33,29 +35,48 @@
                     <th>DATE</th>
                 </tr>";
 
+                foreach( $report as $v )
+            {
+                $doc[] =  $v->DOCUMENT_CODE.$v->PO_DATE;
+            }
+            $rowspan = array_count_values($doc);
 
+            $a = 1;
             foreach( $report as $v )
             {
+                $l .="<tr>";
                 $role_name = str_replace('and','&amp;',$v->ROLE_NAME);
                 $name = str_replace('and','&amp;',$v->NAME);
-                $l .= "<tr> 
-                            <td>".$v->DOCUMENT_CODE."</td>
-                            <td>".$v->AREA_CODE."</td>
-                            <td>".$role_name."</td>
-                            <td>".$v->STATUS_DOCUMENT."</td>
-                            <td>".$v->PO_DATE."</td>
-                            <td>".$v->BA."</td>
-                            <td>".$v->USER_ID."</td>
-                            <td>".$name."</td>
-                            <td>".$v->STATUS_APPROVAL."</td>
-                            <td>".$v->NOTES."</td>
-                            <td>".$v->APPROVE_DATE."</td>
-                    </tr>
-                    ";
+                        if($a == 1){
+                            $l .= " <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->DOCUMENT_CODE."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->AREA_CODE."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$role_name."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->STATUS_DOCUMENT."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->PO_DATE."</td>";
+                        }
 
-                $i++;
+                        if($a < $rowspan[$v->DOCUMENT_CODE.$v->PO_DATE]){ 
+                                $a++;
+                        }else{
+                            $l .="";
+                            $a = 1;
+                        }
+
+                    $l .= "
+                    <td>".$v->BA."</td>
+                    <td>".$v->USER_ID."</td>
+                    <td>".$name."</td>
+                    <td>".$v->STATUS_APPROVAL."</td>
+                    <td>".$v->NOTES."</td>
+                    <td>".$v->APPROVE_DATE."</td>";
+
+                    
+                $l .="</tr>";
+
                 $no++;
+                $i++;
             }
+
             
             $l .= "</table>";
         }
@@ -71,18 +92,5 @@
     </div>
 </div>
 
-<script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
-<script src="{{ asset('js/jquery.rowspanizer.js') }}"></script>
-
-<script>
-$(document).ready(function()
-{
-    $('table').rowspanizer({
-        columns: [0,1,2,3,4]
-    });
-
-
-});
-</script>   
 </body>
 </html>

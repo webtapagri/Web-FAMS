@@ -21,6 +21,9 @@ html, body {
     <?php 
         $l = "";
         $no = 1;
+        $i = 0;
+        $doc = array();
+        $rowspan = array();
 
         if(!empty($data))
         {
@@ -41,13 +44,31 @@ html, body {
             
             foreach( $data['report'] as $k => $v )
             {
+                $doc[] =  $v['DOCUMENT_CODE'].$v['PO_DATE'];
+            }
+            $rowspan = array_count_values($doc);
+            
+            
+            $a = 1;
+            foreach( $data['report'] as $k => $v )
+            {
+                        if($a == 1){
+                            $l .= "<tr>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['DOCUMENT_CODE']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['AREA_CODE']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['ROLE_NAME']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['STATUS_DOCUMENT']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['PO_DATE']."</td>";
+                        }
 
-                $l .= "<tr> 
-                    <td>".$v['DOCUMENT_CODE']."</td>
-                    <td>".$v['AREA_CODE']."</td>
-                    <td>".$v['ROLE_NAME']."</td>
-                    <td>".$v['STATUS_DOCUMENT']."</td>
-                    <td>".$v['PO_DATE']."</td>
+                        if($a < $rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']]){ 
+                                $a++;
+                        }else{
+                            $l .="";
+                            $a = 1;
+                        }
+
+                    $l .= "
                     <td>".$v['BA']."</td>
                     <td>".$v['USER_ID']."</td>
                     <td>".$v['NAME']."</td>
@@ -58,6 +79,7 @@ html, body {
                 ";
 
                 $no++;
+                $i++;
             }
             
             $l .= "</table>";
@@ -78,12 +100,12 @@ html, body {
 <script src="{{ asset('js/jquery.rowspanizer.js') }}"></script>
 
 <script>
-$(document).ready(function()
-{
-    $('table').rowspanizer({
-        columns: [0,1,2,3,4]
-    });
+// $(document).ready(function()
+// {
+//     $('table').rowspanizer({
+//         columns: [0,1,2,3,4]
+//     });
 
 
-});
+// });
 </script>
