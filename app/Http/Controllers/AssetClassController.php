@@ -682,9 +682,9 @@ class AssetClassController extends Controller
     {
         $data = DB::table('TM_GENERAL_DATA')
         //->select('jenis_asset_code as id', 'jenis_asset_description as text')
-        ->select('ID as id', 'DESCRIPTION as text')
+        ->select('DESCRIPTION as id', 'DESCRIPTION as text')
         ->where('GENERAL_CODE', 'status_document')
-        ->orderby('ID', 'asc')
+        ->orderby('DESCRIPTION', 'asc')
         ->get();
         return response()->json(array("data"=>$data));
     }

@@ -469,7 +469,6 @@ class ReportController extends Controller
         $result = array();
         
         $req = $request->all();
-       
 
         if( !empty($req['document-code']) )
         {
@@ -495,7 +494,7 @@ class ReportController extends Controller
                         a.NAME as ROLE_NAME, a.STATUS_DOKUMEN AS STATUS_DOKUMEN, a.DATE AS PO_DATE,c.DOCUMENT_CODE as NO_REG,c.USER_ID as USERID,c.NAME AS NAME,c.AREA_CODE AS BA,c.STATUS_APPROVAL AS STATUS_APPROVAL,c.NOTES AS NOTES,c.DATE AS DATE
                         FROM v_history a LEFT JOIN TR_REG_ASSET b ON a.DOCUMENT_CODE = b.NO_REG
                         LEFT JOIN v_history_approval c ON c.DOCUMENT_CODE = a.DOCUMENT_CODE
-                        where 1=1 $where ORDER BY -a.DATE ASC, -c.DATE ASC LIMIT ".$req['no-of-list']." ";
+                        where 1=1 $where ORDER BY a.DATE ASC,-c.DATE ASC, c.DATE ASC LIMIT ".$req['no-of-list']." ";
                     
         $dt = DB::SELECT($sql);
 
@@ -565,7 +564,7 @@ class ReportController extends Controller
                         REPLACE(a.NAME, '&', 'and') as ROLE_NAME, a.STATUS_DOKUMEN AS STATUS_DOCUMENT, a.DATE AS PO_DATE,c.DOCUMENT_CODE as NO_REG,c.USER_ID as USERID,REPLACE(c.NAME, '&', 'and') AS NAME,c.AREA_CODE AS BA,c.STATUS_APPROVAL AS STATUS_APPROVAL,c.NOTES AS NOTES,c.DATE AS APPROVE_DATE
                         FROM v_history a LEFT JOIN TR_REG_ASSET b ON a.DOCUMENT_CODE = b.NO_REG
                         LEFT JOIN v_history_approval c ON c.DOCUMENT_CODE = a.DOCUMENT_CODE
-                        where 1=1 $where ORDER BY -a.DATE ASC, -c.DATE ASC LIMIT ".$req['no-of-list']." ";
+                        where 1=1 $where ORDER BY a.DATE ASC,-c.DATE ASC, c.DATE ASC LIMIT ".$req['no-of-list']." ";
                     
         
         return Excel::download(new ApprovalExport($sql), 'REPORT_APPROVAL.xlsx');

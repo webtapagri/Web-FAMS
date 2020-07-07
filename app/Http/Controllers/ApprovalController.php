@@ -659,7 +659,7 @@ class ApprovalController extends Controller
         $field = array
         (
             array("index" => "0", "field" => "document_code ", "alias" => "document_code"),
-            array("index" => "1", "field" => "area_code ", "alias" => "area_code"),
+            array("index" => "1", "field" => "   ", "alias" => "area_code"),
             array("index" => "2", "field" => "name", "alias" => "name"),
             array("index" => "3", "field" => "status_dokumen", "alias" => "status_dokumen"),
             //array("index" => "4", "field" => "status_approval", "alias" => "status_approval"),
