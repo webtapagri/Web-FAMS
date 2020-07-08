@@ -33,9 +33,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="" class="col-sm-4 control-label">PO Date</label>
+                            <label for="" class="col-sm-4 control-label">Create Date</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control datepicker" id="po-date" name="po-date" placeholder="isi po date" value="">
+                                <input type="text" class="form-control datepicker" id="create-date" name="create-date" placeholder="isi create date" value="">
                             </div>
                         </div>
                     </div>
@@ -120,7 +120,7 @@ $('#status-doc').select2({
     allowClear: true,
 });
 
-$("#po-date").datepicker(
+$("#create-date").datepicker(
 {
     format: "mm/dd/yyyy",
     autoclose: true,

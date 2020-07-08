@@ -37,7 +37,7 @@
 
                 foreach( $report as $v )
             {
-                $doc[] =  $v->DOCUMENT_CODE.$v->PO_DATE;
+                $doc[] =  $v->DOCUMENT_CODE.$v->CREATE_DATE;
             }
             $rowspan = array_count_values($doc);
 
@@ -48,14 +48,14 @@
                 $role_name = str_replace('and','&amp;',$v->ROLE_NAME);
                 $name = str_replace('and','&amp;',$v->NAME);
                         if($a == 1){
-                            $l .= " <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->DOCUMENT_CODE."</td>
-                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->AREA_CODE."</td>
-                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$role_name."</td>
-                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->STATUS_DOCUMENT."</td>
-                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->PO_DATE].">".$v->PO_DATE."</td>";
+                            $l .= " <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->CREATE_DATE].">".$v->DOCUMENT_CODE."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->CREATE_DATE].">".$v->AREA_CODE."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->CREATE_DATE].">".$role_name."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->CREATE_DATE].">".$v->STATUS_DOKUMEN."</td>
+                                    <td rowspan = ".$rowspan[$v->DOCUMENT_CODE.$v->CREATE_DATE].">".$v->CREATE_DATE."</td>";
                         }
 
-                        if($a < $rowspan[$v->DOCUMENT_CODE.$v->PO_DATE]){ 
+                        if($a < $rowspan[$v->DOCUMENT_CODE.$v->CREATE_DATE]){ 
                                 $a++;
                         }else{
                             $l .="";
@@ -68,7 +68,7 @@
                     <td>".$name."</td>
                     <td>".$v->STATUS_APPROVAL."</td>
                     <td>".$v->NOTES."</td>
-                    <td>".$v->APPROVE_DATE."</td>";
+                    <td>".$v->DATE."</td>";
 
                     
                 $l .="</tr>";

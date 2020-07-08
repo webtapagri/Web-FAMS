@@ -466,6 +466,7 @@ class ReportController extends Controller
 
 
         $where = "";
+        $where2 = "";
         $result = array();
         
         $req = $request->all();
@@ -473,28 +474,51 @@ class ReportController extends Controller
         if( !empty($req['document-code']) )
         {
             $where .= " AND UPPER(a.DOCUMENT_CODE) LIKE UPPER('%{$req['document-code']}%') ";
+            $where2 .= " AND UPPER(DOCUMENT_CODE) LIKE UPPER('%{$req['document-code']}%') ";
         }
 
         if( !empty($req['status-doc']) )
         {
             $where .= " AND UPPER(a.STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
+            $where2 .= " AND UPPER(STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
         }
 
-        if( !empty($req['po-date']) )
+        if( !empty($req['create-date']) )
         {
-            $where .= " AND UPPER(a.DATE) LIKE UPPER('%{$req['po-date']}%') ";
+            $create_date = date_format(date_create($req['create-date']),"Y-m-d");
+            $where .= " AND UPPER(a.CREATE_DATE) LIKE UPPER('%{$create_date}%') ";
         }
 
         if( !empty($req['lokasi-aset']) )
         {
             $where .= " AND UPPER(a.AREA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
+            $where2 .= " AND UPPER(AREA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
 
-        $sql = " SELECT b.PO_TYPE, a.USER_ID AS USER_ID, a.DOCUMENT_CODE AS DOCUMENT_CODE, a.AREA_CODE AS AREA_CODE, 
-                        a.NAME as ROLE_NAME, a.STATUS_DOKUMEN AS STATUS_DOKUMEN, a.DATE AS PO_DATE,c.DOCUMENT_CODE as NO_REG,c.USER_ID as USERID,c.NAME AS NAME,c.AREA_CODE AS BA,c.STATUS_APPROVAL AS STATUS_APPROVAL,c.NOTES AS NOTES,c.DATE AS DATE
-                        FROM v_history a LEFT JOIN TR_REG_ASSET b ON a.DOCUMENT_CODE = b.NO_REG
-                        LEFT JOIN v_history_approval c ON c.DOCUMENT_CODE = a.DOCUMENT_CODE
-                        where 1=1 $where ORDER BY a.DATE ASC,-c.DATE ASC, c.DATE ASC LIMIT ".$req['no-of-list']." ";
+        $sql = " SELECT DISTINCT a.*,e.DESCRIPTION as ROLE_NAME from(
+                                    SELECT b.DOCUMENT_CODE,a.AREA_CODE AS AREA_CODE,
+                                    CASE WHEN LOCATE('MTSA',a.DOCUMENT_CODE) = '11' THEN tma.CREATED_BY
+                                    WHEN LOCATE('DPSA',a.DOCUMENT_CODE) = '11' THEN tda.CREATED_BY
+                                    ELSE c.CREATED_BY END AS CREATED_BY,
+                                    a.STATUS_DOKUMEN AS STATUS_DOKUMEN,
+                                    CASE WHEN LOCATE('MTSA',a.DOCUMENT_CODE) = '11' THEN tma.CREATED_AT
+                                    WHEN LOCATE('DPSA',a.DOCUMENT_CODE) = '11' THEN tda.CREATED_AT
+                                    ELSE c.CREATED_AT END AS CREATE_DATE,
+                                    b.AREA_CODE as BA, b.USER_ID, b.NAME, b.STATUS_APPROVAL,b.NOTES,b.DATE
+                                    FROM v_history a 
+                                    LEFT JOIN TR_REG_ASSET c ON a.DOCUMENT_CODE = c.NO_REG
+                                    LEFT JOIN v_history_approval b ON a.DOCUMENT_CODE = b.DOCUMENT_CODE 
+                                    -- AND a.USER_ID = b.USER_ID 
+                                    AND a.AREA_CODE = b.AREA_CODE
+                                    LEFT JOIN TR_DISPOSAL_ASSET tda ON tda.NO_REG = a.DOCUMENT_CODE
+                                    LEFT JOIN TR_MUTASI_ASSET tma ON tma.NO_REG = a.DOCUMENT_CODE) a
+                                    LEFT JOIN TBM_USER d ON d.id = a.CREATED_BY
+                                    LEFT JOIN TBM_ROLE e ON e.id = d.role_id
+                                    INNER join (SELECT DISTINCT DOCUMENT_CODE FROM  v_history WHERE 1=1 
+                                    $where2
+                                    ORDER BY DOCUMENT_CODE ASC LIMIT ".$req['no-of-list'].") b ON a.DOCUMENT_CODE = b.DOCUMENT_CODE
+                                    WHERE 1=1 $where
+                                    ORDER BY a.CREATE_DATE ASC,-a.DATE ASC, a.DATE ASC";
                     
         $dt = DB::SELECT($sql);
 
@@ -507,10 +531,10 @@ class ReportController extends Controller
                     'DOCUMENT_CODE' => $v->DOCUMENT_CODE,
                     'AREA_CODE' => $v->AREA_CODE,
                     'ROLE_NAME' => $v->ROLE_NAME,
-                    'STATUS_DOCUMENT' => $v->STATUS_DOKUMEN,
-                    'PO_DATE' => $v->PO_DATE,
+                    'STATUS_DOKUMEN' => $v->STATUS_DOKUMEN,
+                    'CREATE_DATE' => $v->CREATE_DATE,
                     'BA' => $v->BA,
-                    'USER_ID' => $v->USERID,
+                    'USER_ID' => $v->USER_ID,
                     'NAME' => $v->NAME,
                     'STATUS_APPROVAL' => $v->STATUS_APPROVAL,
                     'NOTES' => $v->NOTES,
@@ -535,6 +559,7 @@ class ReportController extends Controller
 
 
         $where = "";
+        $where2 = "";
         $result = array();
         
         $req = $request->all();
@@ -543,29 +568,51 @@ class ReportController extends Controller
         if( !empty($req['document-code']) )
         {
             $where .= " AND UPPER(a.DOCUMENT_CODE) LIKE UPPER('%{$req['document-code']}%') ";
+            $where2 .= " AND UPPER(DOCUMENT_CODE) LIKE UPPER('%{$req['document-code']}%') ";
         }
 
         if( !empty($req['status-doc']) )
         {
             $where .= " AND UPPER(a.STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
+            $where2 .= " AND UPPER(STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
         }
 
-        if( !empty($req['po-date']) )
+        if( !empty($req['create-date']) )
         {
-            $where .= " AND UPPER(a.DATE) LIKE UPPER('%{$req['po-date']}%') ";
+            $create_date = date_format(date_create($req['create-date']),"Y-m-d");
+            $where .= " AND UPPER(a.CREATE_DATE) LIKE UPPER('%{$create_date}%') ";
         }
 
         if( !empty($req['lokasi-aset']) )
         {
             $where .= " AND UPPER(a.AREA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
+            $where2 .= " AND UPPER(AREA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
 
-        $sql = " SELECT b.PO_TYPE, a.USER_ID AS USER_ID, a.DOCUMENT_CODE AS DOCUMENT_CODE, a.AREA_CODE AS AREA_CODE, 
-                        REPLACE(a.NAME, '&', 'and') as ROLE_NAME, a.STATUS_DOKUMEN AS STATUS_DOCUMENT, a.DATE AS PO_DATE,c.DOCUMENT_CODE as NO_REG,c.USER_ID as USERID,REPLACE(c.NAME, '&', 'and') AS NAME,c.AREA_CODE AS BA,c.STATUS_APPROVAL AS STATUS_APPROVAL,c.NOTES AS NOTES,c.DATE AS APPROVE_DATE
-                        FROM v_history a LEFT JOIN TR_REG_ASSET b ON a.DOCUMENT_CODE = b.NO_REG
-                        LEFT JOIN v_history_approval c ON c.DOCUMENT_CODE = a.DOCUMENT_CODE
-                        where 1=1 $where ORDER BY a.DATE ASC,-c.DATE ASC, c.DATE ASC LIMIT ".$req['no-of-list']." ";
-                    
+        $sql = " SELECT DISTINCT a.*,REPLACE(e.DESCRIPTION, '&', 'and') as ROLE_NAME from(
+                                SELECT b.DOCUMENT_CODE,a.AREA_CODE AS AREA_CODE,
+                                CASE WHEN LOCATE('MTSA',a.DOCUMENT_CODE) = '11' THEN tma.CREATED_BY
+                                WHEN LOCATE('DPSA',a.DOCUMENT_CODE) = '11' THEN tda.CREATED_BY
+                                ELSE c.CREATED_BY END AS CREATED_BY,
+                                a.STATUS_DOKUMEN AS STATUS_DOKUMEN,
+                                CASE WHEN LOCATE('MTSA',a.DOCUMENT_CODE) = '11' THEN tma.CREATED_AT
+                                WHEN LOCATE('DPSA',a.DOCUMENT_CODE) = '11' THEN tda.CREATED_AT
+                                ELSE c.CREATED_AT END AS CREATE_DATE,
+                                b.AREA_CODE as BA, b.USER_ID, REPLACE(b.NAME, '&', 'and') as NAME, b.STATUS_APPROVAL,b.NOTES,b.DATE
+                                FROM v_history a 
+                                LEFT JOIN TR_REG_ASSET c ON a.DOCUMENT_CODE = c.NO_REG
+                                LEFT JOIN v_history_approval b ON a.DOCUMENT_CODE = b.DOCUMENT_CODE 
+                                -- AND a.USER_ID = b.USER_ID 
+                                AND a.AREA_CODE = b.AREA_CODE 
+                                LEFT JOIN TR_DISPOSAL_ASSET tda ON tda.NO_REG = a.DOCUMENT_CODE
+                                LEFT JOIN TR_MUTASI_ASSET tma ON tma.NO_REG = a.DOCUMENT_CODE) a
+                                LEFT JOIN TBM_USER d ON d.id = a.CREATED_BY
+                                LEFT JOIN TBM_ROLE e ON e.id = d.role_id
+                                INNER join (SELECT DISTINCT DOCUMENT_CODE FROM  v_history WHERE 1=1 
+                                $where2
+                                ORDER BY DOCUMENT_CODE ASC LIMIT ".$req['no-of-list'].") b ON a.DOCUMENT_CODE = b.DOCUMENT_CODE
+                                WHERE 1=1 $where
+                                ORDER BY a.CREATE_DATE ASC,-a.DATE ASC, a.DATE ASC";
         
         return Excel::download(new ApprovalExport($sql), 'REPORT_APPROVAL.xlsx');
     }

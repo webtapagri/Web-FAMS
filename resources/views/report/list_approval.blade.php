@@ -44,7 +44,7 @@ html, body {
             
             foreach( $data['report'] as $k => $v )
             {
-                $doc[] =  $v['DOCUMENT_CODE'].$v['PO_DATE'];
+                $doc[] =  $v['DOCUMENT_CODE'].$v['CREATE_DATE'];
             }
             $rowspan = array_count_values($doc);
             
@@ -54,14 +54,14 @@ html, body {
             {
                         if($a == 1){
                             $l .= "<tr>
-                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['DOCUMENT_CODE']."</td>
-                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['AREA_CODE']."</td>
-                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['ROLE_NAME']."</td>
-                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['STATUS_DOCUMENT']."</td>
-                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']].">".$v['PO_DATE']."</td>";
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['CREATE_DATE']].">".$v['DOCUMENT_CODE']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['CREATE_DATE']].">".$v['AREA_CODE']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['CREATE_DATE']].">".$v['ROLE_NAME']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['CREATE_DATE']].">".$v['STATUS_DOKUMEN']."</td>
+                            <td rowspan = ".$rowspan[$v['DOCUMENT_CODE'].$v['CREATE_DATE']].">".$v['CREATE_DATE']."</td>";
                         }
 
-                        if($a < $rowspan[$v['DOCUMENT_CODE'].$v['PO_DATE']]){ 
+                        if($a < $rowspan[$v['DOCUMENT_CODE'].$v['CREATE_DATE']]){ 
                                 $a++;
                         }else{
                             $l .="";
