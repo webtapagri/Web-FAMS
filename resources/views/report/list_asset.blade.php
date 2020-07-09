@@ -165,7 +165,7 @@ html, body {
                     <td>".$v['ASSET_CLASS']."</td>
                     <td>".$v['TAHUN_ASSET']."</td>
                     <td>".number_format($v['HARGA_PEROLEHAN'],0,',','.')."</td>
-                    <td></td>
+                    <td>".number_format($v['NILAI_BUKU'],0,',','.')."</td>
                     <td>".$v['BOOK_DEPREC_01']."</td>
                     <td>".$v['COST_CENTER']."</td>
                     <td>".$v['QUANTITY_ASSET_SAP']."</td>

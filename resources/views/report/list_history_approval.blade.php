@@ -33,11 +33,16 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="" class="col-sm-4 control-label">Create Date</label>
+                            <label for="" class="col-sm-4 control-label">Bisnis Area</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control datepicker" id="create-date" name="create-date" placeholder="isi create date" value="">
+                                <select class="form-control" id="lokasi-aset" name="lokasi-aset">
+                                    <option value=""></option>
+                                </select>
+                                <?php /* <input type="text" class="form-control" id="lokasi-aset" name="lokasi-aset" placeholder="isi bisnis area lokasi aset" value=""> */ ?>
                             </div>
                         </div>
+                        
+
                     </div>
                         
                     <div class="col-md-6">
@@ -50,13 +55,16 @@
                             </div>
                         </div> -->
                         <div class="form-group">
-                            <label for="" class="col-sm-4 control-label">Bisnis Area</label>
-                            <div class="col-sm-8">
-                                <select class="form-control" id="lokasi-aset" name="lokasi-aset">
-                                    <option value=""></option>
-                                </select>
-                                <?php /* <input type="text" class="form-control" id="lokasi-aset" name="lokasi-aset" placeholder="isi bisnis area lokasi aset" value=""> */ ?>
-                            </div>
+                            <label for="" class="col-sm-4 control-label">Create Date From</label>
+                                <div class="col-sm-8">
+                                    <input id="date-from" placeholder="masukkan tanggal Awal" type="text" class="form-control datepicker" name="date-from">
+                                </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="" class="col-sm-4 control-label">Create Date To</label>
+                                <div class="col-sm-8">
+                                    <input id="date-to" placeholder="masukkan tanggal Akhir" type="text" class="form-control datepicker" name="date-to">
+                                </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-sm-4 control-label">No. of List</label>
@@ -120,14 +128,19 @@ $('#status-doc').select2({
     allowClear: true,
 });
 
-$("#create-date").datepicker(
-{
-    format: "mm/dd/yyyy",
-    autoclose: true,
-    endDate: "today",
-    maxDate: 'today'
-});
 
+$(".datepicker").datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true,
+        todayHighlight: true,
+});
+$("#date-from").on('changeDate', function(selected) {
+    var startDate = new Date(selected.date.valueOf());
+    $("#date-to").datepicker('setStartDate', startDate);
+    if($("#date-from").val() > $("#date-to").val()){
+        $("#date-to").val($("#date-from").val());
+    }
+});
 
 /*var user_role = $.parseJSON(JSON.stringify(dataJson('{!! route("get.select_role_resume") !!}')));
 $("#user-role-old").select2({

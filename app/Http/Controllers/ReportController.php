@@ -108,7 +108,7 @@ class ReportController extends Controller
             $service = API::exec(array(
                 'request' => 'GET',
                 'host' => 'ldap',
-                'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=15&GJAHR={$YEAR}", 
+                'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
                 //'method' => "assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019", 
                 //http://tap-ldapdev.tap-agri.com/data-sap/assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019
             ));
@@ -128,6 +128,51 @@ class ReportController extends Controller
         }
 
         // dd($nilai);
+        return $nilai;
+
+    	
+    }
+
+    function get_nilai_buku($row)
+    {
+        $nilai = array();
+
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
+            
+            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+            {
+                $ANLN2 = '0000';
+            }
+            else
+            {
+                $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+            }
+            
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_bookvalue?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+        }
+
         return $nilai;
 
     	
@@ -165,11 +210,18 @@ class ReportController extends Controller
 
         
         $kode_asset_ams = $req['kode-aset-fams'];
+        $kode_asset_sap = $req['kode-aset-sap'];
         // $dt = '4160101682,4160101665';
-        $row = TM_MSTR_ASSET::where('KODE_ASSET_AMS','LIKE','%'.$kode_asset_ams.'%')->get()->all();
+        $row = TM_MSTR_ASSET::where('KODE_ASSET_AMS','LIKE','%'.$kode_asset_ams.'%')->Where('KODE_ASSET_SAP','LIKE','%'.$kode_asset_sap.'%')
+        ->orderBy('NO_REG', 'DESC')
+        ->orderBy('KODE_ASSET_AMS', 'ASC')
+        ->orderBy('KODE_ASSET_SAP', 'ASC')
+        ->limit($req['no-of-list'])->get()->all();
+        
         // dd($row);
                 // $row = TM_MSTR_ASSET::find($filter);
         $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+        $NILAI_BUKU = $this->get_nilai_buku($row);
         // dd($HARGA_PEROLEHAN);
 
 
@@ -246,56 +298,15 @@ class ReportController extends Controller
                         h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
                         a.DISPOSAL_FLAG AS STATUS_DOCUMENT
                         FROM TM_MSTR_ASSET a
-                       /* LEFT JOIN (select 
-                                    GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'asset' then FILE_UPLOAD end)) as FOTO_ASET,
-                                    GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'no seri' then FILE_UPLOAD end)) as FOTO_SERI,
-                                    GROUP_CONCAT( COALESCE(case when FILE_CATEGORY = 'imei' then FILE_UPLOAD end)) as FOTO_MESIN,
-                                    NO_REG, NO_REG_ITEM_FILE
-                                    from TR_REG_ASSET_DETAIL_FILE group by NO_REG) c 
-                                    ON c.NO_REG = a.NO_REG */
                         LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
                         LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
                         LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
                         LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
                                     AND h.SUBGROUP_CODE = a.SUB_GROUP
                         LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
-                        WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' )  $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
-                    // SELECT * FROM TR_REG_ASSET_DETAIL_FILE
-                    // SELECT a.*, b.DESCRIPTION AS NAMA_PT_PEMILIK,e.NAMA_VENDOR,
-                    // CASE WHEN FILE_CATEGORY = 'asset' THEN
-                    //         c.FILE_UPLOAD
-                    // END AS FOTO_ASET,
-                    // CASE WHEN FILE_CATEGORY = 'no seri' THEN
-                    //         c.FILE_UPLOAD
-                    // END AS FOTO_SERI,
-                    // CASE WHEN FILE_CATEGORY = 'imei' THEN
-                    //     c.FILE_UPLOAD
-                    // END AS FOTO_MESIN,
-                    //     f.JENIS_ASSET_DESCRIPTION as JENIS_ASSET_NAME,
-                    //     g.GROUP_DESCRIPTION as GROUP_NAME, 
-                    //     h.SUBGROUP_DESCRIPTION as SUB_GROUP_NAME, 
-                    //     a.DISPOSAL_FLAG AS STATUS_DOCUMENT
-                    // FROM TM_MSTR_ASSET a LEFT JOIN TR_REG_ASSET_DETAIL_FILE c ON c.NO_REG_ITEM_FILE = a.NO_REG_ITEM
-                    // and c.NO_REG = a.NO_REG
-                    // LEFT JOIN TR_REG_ASSET e ON e.NO_REG = a.NO_REG
-                    // LEFT JOIN TM_JENIS_ASSET f ON f.JENIS_ASSET_CODE = a.JENIS_ASSET 
-                    // LEFT JOIN TM_GROUP_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET AND g.GROUP_CODE = a.GROUP
-                    // LEFT JOIN TM_SUBGROUP_ASSET h ON h.JENIS_ASSET_CODE = a.JENIS_ASSET AND h.GROUP_CODE = a.GROUP 
-                    //     AND h.SUBGROUP_CODE = a.SUB_GROUP
-                    // LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
-                    // WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) 
-                    // $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
-
-        /*$sql1 = " SELECT a.*,b.DESCRIPTION AS NAMA_PT_PEMILIK,(SELECT NAMA_VENDOR FROM TR_REG_ASSET WHERE NO_REG = a.NO_REG) AS NAMA_VENDOR,(SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID AND FILE_CATEGORY = 'asset' ) AS FOTO_ASET, (SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID AND FILE_CATEGORY = 'no seri' ) AS FOTO_SERI, (SELECT FILE_UPLOAD FROM TR_REG_ASSET_DETAIL_FILE  WHERE NO_REG = a.NO_REG AND FILE_CATEGORY = 'imei' AND ASSET_PO_DETAIL_ID = a.ASSET_PO_ID ) AS FOTO_MESIN, 
-(SELECT JENIS_ASSET_DESCRIPTION FROM TM_JENIS_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET) AS JENIS_ASSET_NAME,
-(SELECT GROUP_DESCRIPTION FROM TM_GROUP_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET AND GROUP_CODE = a.GROUP) AS GROUP_NAME,
-(SELECT SUBGROUP_DESCRIPTION FROM TM_SUBGROUP_ASSET WHERE JENIS_ASSET_CODE = a.JENIS_ASSET AND GROUP_CODE = a.GROUP AND SUBGROUP_CODE = a.SUB_GROUP) AS SUB_GROUP_NAME, c.DISPOSAL_FLAG AS STATUS_DOCUMENT 
-                    FROM TR_REG_ASSET_DETAIL a 
-                        LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant'
-                        LEFT JOIN TM_MSTR_ASSET c ON a.KODE_ASSET_AMS = c.KODE_ASSET_AMS
-                    WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";*/
-        
-		DB::unprepared("SET SESSION group_concat_max_len = 1000000;");
+                        WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' )  $where ORDER BY a.NO_REG DESC, a.KODE_ASSET_AMS ASC, a.KODE_ASSET_SAP ASC LIMIT ".$req['no-of-list']." ";
+                    
+		DB::unprepared("SET SESSION group_concat_max_len = 4000000;");
         $dt = DB::SELECT($sql);
         Debugbar::info($dt);
         // dd($dt);
@@ -303,24 +314,7 @@ class ReportController extends Controller
         {
             foreach( $dt as $k => $v )
             {
-                // $img_aset = $v->FOTO_ASET;  // your base64 encoded
-                // $img_aset = str_replace('data:image/jpeg;base64,', '', $img_aset);
-                // $img_aset = str_replace(' ', '+', $img_aset);
-                // $foto_aset = str_random(10).'.'.'jpg';
-                // \File::put(storage_path(). '/app/public/' . $foto_aset, base64_decode($img_aset));
-
-                // $img_seri = $v->FOTO_SERI;  // your base64 encoded
-                // $img_seri = str_replace('data:image/jpeg;base64,', '', $img_seri);
-                // $img_seri = str_replace(' ', '+', $img_seri);
-                // $foto_seri = str_random(10).'.'.'jpg';
-                // \File::put(storage_path(). '/app/public/' . $foto_seri, base64_decode($img_seri));
-
-                // $img_mesin = $v->FOTO_MESIN;  // your base64 encoded
-                // $img_mesin = str_replace('data:image/jpeg;base64,', '', $img_mesin);
-                // $img_mesin = str_replace(' ', '+', $img_mesin);
-                // $foto_mesin = str_random(10).'.'.'jpg';
-                // \File::put(storage_path(). '/app/public/' . $foto_mesin, base64_decode($img_mesin));
-                
+                 
                 $result[] = array(
                     'KODE_ASSET_AMS' => $v->KODE_ASSET_AMS,
                     'KODE_ASSET_SAP' => $v->KODE_ASSET_SAP,
@@ -355,7 +349,8 @@ class ReportController extends Controller
                     'SUB_GROUP' => $v->SUB_GROUP_NAME,
                     'KONDISI_ASSET' => $v->KONDISI_ASSET,
                     'STATUS_DOCUMENT' => $v->STATUS_DOCUMENT,
-                    'HARGA_PEROLEHAN' => $HARGA_PEROLEHAN[$k]
+                    'HARGA_PEROLEHAN' => $HARGA_PEROLEHAN[$k],
+                    'NILAI_BUKU' => $NILAI_BUKU[$k]
                 ); 
             }
         }
@@ -379,9 +374,17 @@ class ReportController extends Controller
         $result = array();
         $req = $request->all();
         
+         
         $kode_asset_ams = $req['kode-aset-fams'];
-        $row = TM_MSTR_ASSET::where('KODE_ASSET_AMS','LIKE','%'.$kode_asset_ams.'%')->get()->all();
+        $kode_asset_sap = $req['kode-aset-sap'];
+        $row = TM_MSTR_ASSET::where('KODE_ASSET_AMS','LIKE','%'.$kode_asset_ams.'%')->Where('KODE_ASSET_SAP','LIKE','%'.$kode_asset_sap.'%')
+        ->orderBy('NO_REG', 'DESC')
+        ->orderBy('KODE_ASSET_AMS', 'ASC')
+        ->orderBy('KODE_ASSET_SAP', 'ASC')
+        ->limit($req['no-of-list'])->get()->all();
+        
         $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+        $NILAI_BUKU = $this->get_nilai_buku($row);
 
         
         if( !empty($req['kode-aset-fams']) )
@@ -455,7 +458,7 @@ class ReportController extends Controller
                 LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
                 WHERE (a.KODE_ASSET_AMS IS NOT NULL OR a.KODE_ASSET_AMS != '' ) $where ORDER BY a.NO_REG DESC LIMIT ".$req['no-of-list']." ";
         
-        return Excel::download(new ReportExport($sql,$HARGA_PEROLEHAN), 'REPORT.xlsx');
+        return Excel::download(new ReportExport($sql,$HARGA_PEROLEHAN,$NILAI_BUKU), 'REPORT.xlsx');
     }
 
 
@@ -483,10 +486,18 @@ class ReportController extends Controller
             $where2 .= " AND UPPER(STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
         }
 
-        if( !empty($req['create-date']) )
+        if( !empty($req['date-from']) )
         {
-            $create_date = date_format(date_create($req['create-date']),"Y-m-d");
-            $where .= " AND UPPER(a.CREATE_DATE) LIKE UPPER('%{$create_date}%') ";
+            $start_date = date_format(date_create($req['date-from']),"Y-m-d H:m:s");
+            $end_date = date_format(date_create($req['date-to']),"Y-m-d H:m:s");
+            $where .= " AND a.CREATE_DATE >= '{$start_date}' AND a.CREATE_DATE <= '{$end_date}' ";
+            $where2 .= " AND DATE >= '{$start_date}'";
+        }
+
+        if( !empty($req['date-to']) && empty($req['date-from']))
+        {
+            $end_date = date_format(date_create($req['date-to']),"Y-m-d H:m:s");
+            $where .= " AND a.CREATE_DATE <= '{$end_date}' ";
         }
 
         if( !empty($req['lokasi-aset']) )
@@ -577,10 +588,18 @@ class ReportController extends Controller
             $where2 .= " AND UPPER(STATUS_DOKUMEN) LIKE UPPER('%{$req['status-doc']}%') ";
         }
 
-        if( !empty($req['create-date']) )
+         if( !empty($req['date-from']) )
         {
-            $create_date = date_format(date_create($req['create-date']),"Y-m-d");
-            $where .= " AND UPPER(a.CREATE_DATE) LIKE UPPER('%{$create_date}%') ";
+            $start_date = date_format(date_create($req['date-from']),"Y-m-d H:m:s");
+            $end_date = date_format(date_create($req['date-to']),"Y-m-d H:m:s");
+            $where .= " AND a.CREATE_DATE >= '{$start_date}' AND a.CREATE_DATE <= '{$end_date}' ";
+            $where2 .= " AND DATE >= '{$start_date}'";
+        }
+
+        if( !empty($req['date-to']) && empty($req['date-from']))
+        {
+            $end_date = date_format(date_create($req['date-to']),"Y-m-d H:m:s");
+            $where .= " AND a.CREATE_DATE <= '{$end_date}' ";
         }
 
         if( !empty($req['lokasi-aset']) )

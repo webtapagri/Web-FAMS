@@ -150,7 +150,7 @@
                     <td>".$v->ASSET_CLASS."</td>
                     <td>".$v->TAHUN_ASSET."</td>
                     <td>".$harga[$i]."</td>
-                    <td></td>
+                    <td>".$nilai_buku[$i]."</td>
                     <td>".$v->BOOK_DEPREC_01."</td>
                     <td>".$v->COST_CENTER."</td>
                     <td>".$v->QUANTITY_ASSET_SAP."</td>
