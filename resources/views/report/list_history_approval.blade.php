@@ -57,13 +57,13 @@
                         <div class="form-group">
                             <label for="" class="col-sm-4 control-label">Create Date From</label>
                                 <div class="col-sm-8">
-                                    <input id="date-from" placeholder="masukkan tanggal Awal" type="text" class="form-control datepicker" name="date-from">
+                                    <input id="date-from" placeholder="isi create date from" type="text" class="form-control datepicker" name="date-from">
                                 </div>
                         </div>
                         <div class="form-group">
                             <label for="" class="col-sm-4 control-label">Create Date To</label>
                                 <div class="col-sm-8">
-                                    <input id="date-to" placeholder="masukkan tanggal Akhir" type="text" class="form-control datepicker" name="date-to">
+                                    <input id="date-to" placeholder="isi create date to" type="text" class="form-control datepicker" name="date-to">
                                 </div>
                         </div>
                         <div class="form-group">
