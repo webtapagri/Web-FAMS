@@ -1528,6 +1528,7 @@
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>HARGA PEROLEHAN (RP)</th>';
+                item += '<th>NILAI BUKU (RP)</th>';
                 item += '<th>VIEW DETAIL</th>';
                 if (data.item_detail.length > 0) 
                 {
@@ -1557,6 +1558,7 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.harga_perolehan + "</td>";
+                        item += "<td>" + val.nilai_buku + "</td>";
 
                         if( data.item_detail.length != 1 )
                         {
@@ -3032,6 +3034,7 @@
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>HARGA PEROLEHAN (RP)</th>';
+                item += '<th>NILAI BUKU (RP)</th>';
                 item += '<th>VIEW DETAIL</th>';
                 if (data.item_detail.length > 0) 
                 {
@@ -3061,6 +3064,7 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.harga_perolehan + "</td>";
+                        item += "<td>" + val.nilai_buku + "</td>";
 
                         item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";
                         //item += "<td><i class='fa fa-eye' OnClick='getDetailItem(\""+noreg+"\","+val.id+",2,"+no+")'></i></td>";

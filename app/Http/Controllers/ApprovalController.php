@@ -12,6 +12,7 @@ use AccessRight;
 use Spipu\Html2Pdf\Html2Pdf;
 use DateTime;
 use Debugbar;
+use App\TM_MSTR_ASSET;
 /* use NahidulHasan\Html2pdf\Facades\Pdf; */
 
 class ApprovalController extends Controller
@@ -2860,9 +2861,74 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         echo json_encode($records[0]);
     }
 
+    function get_nilai_buku($row)
+    {
+        $nilai = array();
+
+        // for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[0]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[0]->KODE_ASSET_SAP);
+            
+            $ANLN2 = '0000';
+           
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_bookvalue?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+        // }
+
+        return $nilai;
+
+    	
+    }
+
+    function get_anln1($kode)
+    {
+    	$total = strlen($kode); //12 DIGIT
+
+    	if( $total == 8 )
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	elseif( $total == 7 )
+    	{
+    		$ksap = '00000'.$kode.'';
+    	}
+    	else
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	return $ksap;
+    }
+
     function get_item_detail_disposal($noreg)
     {
         $request = array();
+
+        // $row = TM_MSTR_ASSET::where('NO_REG','LIKE','%'.$noreg.'%')->get()->all();
+        $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                     ->where('NO_REG','LIKE','%'.$noreg.'%')
+                     ->get();
+        $NILAI_BUKU = $this->get_nilai_buku($row);
+        Debugbar::info($row);
+        Debugbar::info($NILAI_BUKU);
         
         $sql = " SELECT b.ASSET_PO_ID as ASSET_PO_ID,b.NO_REG as DOCUMENT_CODE, a.* FROM TR_DISPOSAL_ASSET_DETAIL a LEFT JOIN TR_REG_ASSET_DETAIL b ON a.kode_asset_ams = b.KODE_ASSET_AMS WHERE a.no_reg = '{$noreg}' ";
 
@@ -2888,6 +2954,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'lokasi_ba_description' => trim($v->LOKASI_BA_DESCRIPTION),
                     'nama_asset_1' => trim($v->NAMA_ASSET_1),
                     'harga_perolehan' => number_format(trim($v->HARGA_PEROLEHAN),0,',','.'),
+                    'nilai_buku' => number_format(trim($NILAI_BUKU[$k]),0,',','.'),
                     'jenis_pengajuan' => trim($v->JENIS_PENGAJUAN),
                     'created_by' => trim($v->CREATED_BY),
                     'created_at' => trim($v->CREATED_AT)
