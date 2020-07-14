@@ -318,6 +318,7 @@
 								<th nowrap="nowrap">LOKASI ASSET</th>
 								<th nowrap="nowrap">NAMA ASSET</th>
 								<th>HARGA PEROLEHAN</th>
+								<th>NILAI BUKU</th>
 								<th nowrap="nowrap">BERKAS</th>
 								<th>ACTION</th>
 							  </tr>
@@ -327,6 +328,7 @@
 					if(!empty($data['data']))
 					{
 						$list_skip_harga_perolehan = $data['list_skip_harga_perolehan'];
+						$nilai_buku = $data['nilai_buku'];
 
 						foreach($data['data'] as $k => $v)
 						{
@@ -351,6 +353,7 @@
 									<td>{$v->LOKASI_BA_DESCRIPTION}</td>
 									<td>{$v->NAMA_ASSET_1}</td>
 									<td>{$hp}</td>
+									<td>".number_format($nilai_buku[$k],0,',','.')."</td>
 									<td nowrap='nowrap'>
 										<a href='".url('/disposal/view-berkas/'.$v->KODE_ASSET_AMS.'')."' target='_blank'>
 											<i class='fa fa-file-text'></i></a>

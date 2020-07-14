@@ -96,6 +96,7 @@ Route::post('/approval/update_status_mutasi/{status}/{no_reg}','ApprovalControll
 Route::post('/approval/delete_asset_mutasi', 'ApprovalController@delete_asset_mutasi');
 
 Route::get('get-select_jenis_kendaraan', ['as' => 'get.select_jenis_kendaraan', 'uses' => 'Select2Controller@select_jenis_kendaraan']);
+Route::get('get-select_jenis_asset', ['as' => 'get.select_jenis_asset', 'uses' => 'Select2Controller@select_jenis_asset']);
 
 Route::resource('/mutasi', 'MutasiController');
 Route::get('/mutasi/create/{type}', 'MutasiController@create')->name('type');

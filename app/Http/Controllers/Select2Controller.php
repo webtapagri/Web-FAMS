@@ -242,6 +242,17 @@ class Select2Controller extends Controller
         return response()->json(array("data"=>$data));
     }
 
+    public function select_jenis_asset(Request $request)
+    {
+        $data = DB::table('TM_MSTR_ASSET')
+        ->select(DB::raw('JENIS_ASSET as id'), DB::raw('JENIS_ASSET as text'))
+        ->where('JENIS_ASSET','<>','NULL')
+        ->orderby('JENIS_ASSET', 'asc')
+        ->groupby('JENIS_ASSET')
+        ->get();
+        return response()->json(array("data"=>$data));
+    }
+
     public function tujuan_business_area(Request $request) 
     {
         $data = DB::table('TM_GENERAL_DATA')

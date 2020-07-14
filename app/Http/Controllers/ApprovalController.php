@@ -646,6 +646,36 @@ class ApprovalController extends Controller
         }
     }
 
+    function update_jenis_asset(Request $req)
+    {
+        $kode_asset_ams = explode(',', $req->kode_asset_ams); 
+        $kode_ams = str_replace(",", "','", $req->kode_asset_ams);
+        $no_registrasi = str_replace("-", "/", $req->no_reg);   
+        $jenis_asset = explode(',', $req->jenis_asset);
+       
+        DB::beginTransaction();
+
+        try 
+        {   
+            $updated_at = date("Y-m-d H:i:s");  
+            
+        $case_jenis_asset = "";  
+        $sql ="";      
+            for($i=0;$i<count($kode_asset_ams);$i++){
+                $case_jenis_asset .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$jenis_asset[$i]' ";
+            }
+            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL SET jenis_asset_tujuan = (case $case_jenis_asset end)
+                         WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
+
+            DB::UPDATE($sql);
+            DB::commit();
+            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($jenis_asset ? 'updated' : 'update')]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['status' => false, "message" => $e->getMessage()]);
+        }
+    }
+
 
     public function dataGridHistory(Request $request)
     {
@@ -3085,7 +3115,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $noreg = str_replace("-", "/", $id);
 
         $records = array();
-        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
+        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
        SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
                            FROM TR_MUTASI_ASSET a   
@@ -3144,6 +3174,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'cost_center' => $v->COST_CENTER, 
                     'kode_asset_ams' => $v->KODE_ASSET_AMS, 
+                    'ba_tujuan' => $v->BA_TUJUAN, 
                     'new_asset' => $this->get_new_asset($noreg),
                 );
 
@@ -3161,7 +3192,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $request = array();
         
-        $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS WHERE a.no_reg = '{$noreg}' ";
+        $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) WHERE a.no_reg = '{$noreg}' ";
 
         $data = DB::SELECT($sql);
 
@@ -3190,7 +3221,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'penanggung_jawab' => trim($v->PENANGGUNG_JAWAB),
                     'jabatan' => trim($v->JABATAN),
                     'kode_asset_ams_tujuan' => trim($v->KODE_ASSET_AMS_TUJUAN),
-                    'kode_sap_tujuan' => trim($v->KODE_SAP_TUJUAN)
+                    'kode_sap_tujuan' => trim($v->KODE_SAP_TUJUAN),
+                    'jenis_asset' => trim($v->JENIS_ASSET),
+                    'kode_asset_class' => trim($v->KODE_ASSET_CLASS),
                 );
             }
         }

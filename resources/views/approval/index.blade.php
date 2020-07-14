@@ -553,35 +553,22 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div> 
-                            </div>
-                            
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">BA TUJUAN</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control input-sm" value="" id="ba-tujuan" name="ba-tujuan" readonly >
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">COST CENTER</label>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="plant" class="col-md-4"></label>
-                                    <div class="col-md-6">
-                                        <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
-                                    </div>
-                                </div> 
                             </div>
+                            
+                        </div>
 
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <!-- <label for="plant" class="col-md-4"></label> -->
-                                    <div class="col-md-6">
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>  
-                        
                         <div class="row">
                         
                             <br>
@@ -660,12 +647,12 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div>
-                            </div>
-                            
-                        </div>  
-                        
-                        <div class="row">
-                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">BA TUJUAN</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control input-sm" value="" id="ba-tujuan" name="ba-tujuan" readonly >
+                                    </div>
+                                </div>
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">COST CENTER</label>
                                     <div class="col-md-6">
@@ -685,30 +672,9 @@
                                         <input type="hidden" class="form-control input-sm" value="" id="kode-asset-ams" name="kode-asset-ams" >
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="plant" class="col-md-4"></label>
-                                    <div class="col-md-6">
-                                        <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
-                                    </div>
-                                </div> 
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <!-- <label for="plant" class="col-md-4"></label> -->
-                                    <div class="col-md-6">
-                                        <!-- <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly> -->
-                                        <?php 
-                                        if( $user_role == 'AMS'){ 
-                                            if($data['outstanding']!= 0) { ?>
-                                        <!-- <div class='btn btn-warning btn-sm' value='Save' OnClick='update_costcenter()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div> -->
-                                            <?php }
-                                        }
-                                        ?>
-                                    </div>
-                                </div> 
-                            </div>
-                        </div>                      
+                            
+                        </div>  
                         
                         <br>
                         <span class="label bg-blue"><i class="fa fa-bars"></i> ITEM DETAIL</span> <br/><br/>
@@ -1488,6 +1454,89 @@
             }); 
         }
     }
+
+
+    function update_jenis_asset()
+    {
+        
+        var param = '';     
+        var getnoreg = $("#getnoreg").val();
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+        
+        var input = document.getElementsByName('jenis_asset[]'); 
+        var jenis_asset = [];
+        var ja = [];
+        
+        for (var i = 0; i < input.length/2; i++) { 
+            jenis_asset.push(input[i+input.length/2].value);             
+            ja.push(jenis_asset.substr(0, 1));
+        } 
+
+        var input2 = document.getElementsByName('asset_class[]'); 
+        var asset_class = [];
+        for (var i = 0; i < input2.length/2; i++) { 
+            asset_class.push(input2[i+input2.length/2].value); 
+        } 
+
+        var input3 = document.getElementsByName('kode_asset_ams[]'); 
+        var kode_asset_ams = [];
+    
+        for (var i = 0; i < input3.length/2; i++) { 
+            kode_asset_ams.push(input3[i+input3.length/2].value); 
+        } 
+               
+
+        // VALIDASI 
+        for (var i = 0; i < input2.length/2; i++) {       
+            if( ja[i] != asset_class[i] )
+            {
+                notify({
+                    type: 'warning',
+                    message: " Jenis Asset tidak sesuai "
+                });
+                return false;
+            } 
+        }
+       
+        if(confirm('Confirm Jenis Asset ?'))
+        {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    // 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+                    'Access-Control-Allow-Methods': 'GET, POST',
+                }
+            });
+            $.ajax({
+                url: "{{ url('approval/update_jenis_asset') }}",
+                method: "POST",
+                data: param+"&no_reg="+no_registrasi+"&jenis_asset="+jenis_asset+"&kode_asset_ams="+kode_asset_ams,
+                
+                success: function(result) 
+                {
+                    if (result.status) 
+                    {
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }
+                    
+                },
+                complete: function() {
+                    jQuery('.loading-event').fadeOut();
+                }
+            }); 
+        }
+    }
+
 
     function approval_disposal(id)
     {
@@ -3771,6 +3820,7 @@
                 $("#request-form-history #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form-history #kode-vendor").val(data.kode_vendor);
                 $("#request-form-history #nama-vendor").val(data.nama_vendor);
+                $("#request-form-history #ba-tujuan").val(data.ba_tujuan);
                 $("#request-form-history #cost-center").val(costcenter);
 
                 var item = '<table class="table xtable-condensed table-responsive table-striped" id="request-item-table" style="font-size:13px">';
@@ -3881,6 +3931,7 @@
                 $("#request-form #nama-vendor").val(data.nama_vendor);
                 $("#request-form #cost-center").val(costcenter);
                 $("#request-form #cost-center-old").val(data.cost_center);
+                $("#request-form #ba-tujuan").val(data.ba_tujuan);
                 $("#request-form #kode-asset-ams").val(data.kode_asset_ams);
 
                 //VALIDASI SYNC VIEW SAP
@@ -3909,6 +3960,8 @@
                 $(".button-reject").show(); 
                 */  
 
+              
+
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
                 item += '<th>NO.</th>';
                 item += '<th>KODE ASSET AMS</th>';
@@ -3916,6 +3969,7 @@
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>TUJUAN</th>';
+                item += '<th width="120px">JENIS ASSET TUJUAN</th>';
                 item += '<th>KODE ASSET AMS TUJUAN</th>';
                 item += '<th>KODE SAP TUJUAN</th>';
                 
@@ -3937,6 +3991,7 @@
                 if (data.item_detail.length > 0) 
                 {
                     var no = 1;
+                    
                     $.each(data.item_detail, function(key, val) 
                     {
                         var doc_no = val.document_code.replace(/\//g, '-');
@@ -3951,6 +4006,22 @@
                             pengajuan = 'NON AMP';
                         }
 
+                              
+                        var jenis_asset = $.parseJSON(JSON.stringify(dataJson('{!! route("get.select_jenis_asset") !!}')));
+                        var length = jenis_asset.length;
+                        var dataoption = "";
+                        var selected = "";
+                        for(var j = 0; j < length; j++)
+                        {                            
+                            if(val.jenis_asset == jenis_asset[j].text){
+                                selected = "selected";
+                            }else{
+                                selected = "";
+                            }
+                            dataoption += "<option value='"+jenis_asset[j].id+"'"+ selected +">"+jenis_asset[j].text+"</option>";
+                        }
+
+
                         item += "<tr style='height: 30px !important;font-size:11px !important;'>";
                         item += "<td>" + no + "</td>";
                         item += "<td>" + val.kode_asset_ams + "</td>";
@@ -3958,12 +4029,13 @@
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
+                        item += "<td><select class='form-control input-xs jenis_asset' name='jenis-asset[]' id='jenis-asset[]'>"+ dataoption +"</select><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
                         if(area_code.includes(val.tujuan)){
                             item += "<td><input type='text' class='form-control input-sm' name='penanggung_jawab[]' id='penanggung_jawab[]' value='"+ val.penanggung_jawab +"' required></td>";
                             item += "<td><input type='text' class='form-control input-sm' name='jabatan[]' id='jabatan[]' value='"+ val.jabatan +"' required></td>";
-                            item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"' required>";
+                            // item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"'>";
                         }
                         if(data.item_detail.length != 1)
                         {
@@ -3974,15 +4046,16 @@
                         {
                             item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";
                         }
+                        
+                        item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"'>";
 
                         <?php if( $user_role == 'AMS' ){ ?>
                             
                         <?php } ?>
-                                        
-                        
 
                         item += "</tr>";
                         no++;
+                   
                     });
                     var i = 1;
                     $.each(data.item_detail, function(key, val) 
@@ -4004,7 +4077,7 @@
                     item += '</tr>';
                 }
                 item += '</table>';
-
+                console.log(data);
                 $("#box-item-detail-mutasi").html(item);
 
                 log_history(id,6);
@@ -4025,7 +4098,9 @@
     {
         //alert(status); return false;
 
-        var cost_center = $("#request-form #cost-center").val();;
+        var cost_center = $("#request-form #cost-center").val();
+        var tujuan = $("#request-form #ba-tujuan").val();
+        var area_code = "<?php echo $user_area_code ?>";
         if (cost_center == "") {
             notify({
                             type: 'warning',
@@ -4034,8 +4109,16 @@
             return false;
         }
 
-        if(update_pic() !==  false ){
-        
+            if(update_jenis_asset() ==  false ){
+                return false
+            }
+            
+            if(area_code.includes(tujuan)){
+                if(update_pic() ==  false ){
+                    return false;
+                }
+            }
+            
             var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
             var no_registrasi= getnoreg.replace(/\//g, '-');
             var specification = $("#specification-mutasi-approval").val();
@@ -4056,6 +4139,7 @@
                 } 
 
             }else{ status_desc = 'cancel'; }
+
 
             if(confirm('confirm '+status_desc+' data ?'))
             {
@@ -4113,7 +4197,7 @@
                     }
                 });
             }
-        }
+        
     }
 
     function delMutasi(noreg,kode_asset_ams)

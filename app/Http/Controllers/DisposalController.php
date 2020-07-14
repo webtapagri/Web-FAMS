@@ -29,11 +29,53 @@ class DisposalController extends Controller
 
         $data['autocomplete'] = $this->get_autocomplete();
         $data['data'] = $this->get_data_cart(1);
-        $data['list_kategori_upload'] = $this->list_kategori_upload(1);
+		$data['list_kategori_upload'] = $this->list_kategori_upload(1);
+        $row = $this->get_data_cart(1);					 
+		$data['nilai_buku'] = $this->get_nilai_buku($row);
+		
         $data['list_skip_harga_perolehan'] = $this->get_list_skip_harga_perolehan();
 
         return view('disposal.index')->with(compact('data'));
+	}
+	
+	function get_nilai_buku($row)
+    {
+        $nilai = array();
+
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
+            
+            $ANLN2 = '0000';
+           
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_bookvalue?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+        }
+
+        return $nilai;
+
+    	
     }
+    
 	
     function get_data_cart($jenis_pengajuan)
 	{
@@ -197,6 +239,8 @@ class DisposalController extends Controller
 
         $data['autocomplete'] = $this->get_autocomplete();
 		$data['data'] = $this->get_data_cart(2);
+        $row = $this->get_data_cart(2);					 
+		$data['nilai_buku'] = $this->get_nilai_buku($row);
 		// dd( $data);
         $data['list_kategori_upload'] = $this->list_kategori_upload(2);
 		$data['list_skip_harga_perolehan'] = $this->get_list_skip_harga_perolehan(); //$this->get_totalcartnotif();
@@ -337,6 +381,8 @@ class DisposalController extends Controller
 
         $data['autocomplete'] = $this->get_autocomplete();
         $data['data'] = $this->get_data_cart(3);
+        $row = $this->get_data_cart(3);					 
+		$data['nilai_buku'] = $this->get_nilai_buku($row);
         $data['list_kategori_upload'] = $this->list_kategori_upload(3);
 		$data['list_skip_harga_perolehan'] = $this->get_list_skip_harga_perolehan();
 		//$data['list_berkas'] = $this->get_list_berkas(3);
