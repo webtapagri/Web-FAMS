@@ -724,6 +724,7 @@
     var bulan = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
     var request_kode_aset_data = [];
     var request_check_gi = [];
+    var txtasset = [];
 
     $(document).ready(function() 
     {
@@ -1140,10 +1141,12 @@
             //$('#data-table-history').DataTable().fnDestroy();
             $("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load();
         });
+        
+        // $('body').on('change', '.jenis_asset', function() {
+        //     $("option", $(this)).removeAttr("selected");
+        //     $("option:selected", $(this)).attr("selected", true);
+        // })
 
-
-
-     
 
     });
 
@@ -1462,33 +1465,29 @@
         var param = '';     
         var getnoreg = $("#getnoreg").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
-        
-        var input = document.getElementsByName('jenis_asset[]'); 
         var jenis_asset = [];
-        var ja = [];
-        
-        for (var i = 0; i < input.length/2; i++) { 
-            jenis_asset.push(input[i+input.length/2].value);             
-            ja.push(jenis_asset.substr(0, 1));
-        } 
 
         var input2 = document.getElementsByName('asset_class[]'); 
         var asset_class = [];
+        var no = 1;
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value); 
+            jenis_asset = txtasset;  
+
         } 
 
+        // alert(selectValue);
         var input3 = document.getElementsByName('kode_asset_ams[]'); 
         var kode_asset_ams = [];
     
         for (var i = 0; i < input3.length/2; i++) { 
             kode_asset_ams.push(input3[i+input3.length/2].value); 
-        } 
-               
+        }   
 
         // VALIDASI 
-        for (var i = 0; i < input2.length/2; i++) {       
-            if( ja[i] != asset_class[i] )
+        for (var i = 0; i < input2.length/2; i++) {   
+            var x = jenis_asset[i];
+            if(x.substr(0,1) !== asset_class[i])
             {
                 notify({
                     type: 'warning',
@@ -4014,11 +4013,11 @@
                         for(var j = 0; j < length; j++)
                         {                            
                             if(val.jenis_asset == jenis_asset[j].text){
-                                selected = "selected";
+                                selected = "selected='selected'";
                             }else{
                                 selected = "";
                             }
-                            dataoption += "<option value='"+jenis_asset[j].id+"'"+ selected +">"+jenis_asset[j].text+"</option>";
+                            dataoption += "<option value='"+jenis_asset[j].id+"' "+ selected +">"+jenis_asset[j].text+"</option>";
                         }
 
 
@@ -4029,7 +4028,9 @@
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
-                        item += "<td><select class='form-control input-xs jenis_asset' name='jenis-asset[]' id='jenis-asset[]'>"+ dataoption +"</select><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                        <?php if( $user_role == 'AMS' ){ ?>
+                                  item += "<td><select class='form-control input-xs jenis_asset' name='jenis-asset[]' id='jenis-asset-"+no+"'>"+ dataoption +"</select><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                        <?php } ?>
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
                         if(area_code.includes(val.tujuan)){
@@ -4048,12 +4049,15 @@
                         }
                         
                         item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"'>";
-
-                        <?php if( $user_role == 'AMS' ){ ?>
-                            
-                        <?php } ?>
-
+                       
                         item += "</tr>";
+
+                        $('body').on('change', '#jenis-asset-'+no, function() {
+                            $("option", $(this)).removeAttr("selected");
+                            $("option:selected", $(this)).attr("selected", true);
+                            txtasset.push($(this).val());
+                        })
+
                         no++;
                    
                     });
@@ -4077,7 +4081,6 @@
                     item += '</tr>';
                 }
                 item += '</table>';
-                console.log(data);
                 $("#box-item-detail-mutasi").html(item);
 
                 log_history(id,6);
@@ -4108,10 +4111,12 @@
                         });
             return false;
         }
-
-            if(update_jenis_asset() ==  false ){
-                return false
-            }
+        
+        <?php if( $user_role == 'AMS' ){ ?>
+                if(update_jenis_asset() ==  false ){
+                    return false
+                }
+        <?php } ?>
             
             if(area_code.includes(tujuan)){
                 if(update_pic() ==  false ){
