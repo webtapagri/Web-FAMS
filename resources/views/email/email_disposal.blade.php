@@ -25,7 +25,7 @@
 
 ?>
 
-<h3>PERMOHONAN DISPOSAL PENGAJUAN ASET</h3>
+<h3>PERMOHONAN PERSETUJUAN DISPOSAL ASET</h3>
 
 <?php /* <h4>Asset Management PT. Triputra Agro Persada</h4> */ ?>
 <h4>Fixed Asset Management System (FAMS)</h4>
@@ -48,6 +48,8 @@ Dibutuhkan persetujuan atas dokumen berikut :
 
 		//echo "1<pre>"; print_r($data->datax); 
 		$content = "";
+		$harga_perolehan = $data->harga_perolehan;
+		$nilai_buku = $data->nilai_buku;
 
 		if( $data->datax )
 		{
@@ -59,6 +61,9 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<th>KODE FAMS</th>
 						<th>NAMA ASET</th>
 						<th>LOKASI</th>
+						<th>TAHUN PEROLEHAN</th>
+						<th>HARGA PEROLEHAN</th>
+						<th>NBV</th>
 					</tr>
 			";
 			foreach($data->datax as $k => $v)
@@ -69,6 +74,9 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<td>$v->KODE_MATERIAL</td>
 						<td>$v->NAMA_MATERIAL</td>
 						<td>$v->LOKASI_BA_CODE - $v->LOKASI_BA_CODE_DESC</td>
+						<td>$v->TAHUN_PEROLEHAN</td>
+						<td>$harga_perolehan[$k]</td>
+						<td>$nilai_buku[$k]</td>
 					</tr> 
 				";
 				$no++;

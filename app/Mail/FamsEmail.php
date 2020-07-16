@@ -49,7 +49,7 @@ class FamsEmail extends Mailable
         if( $this->data->jenis_pemberitahuan == 'PENDAFTARAN' )
         {
             return $this->from('no-reply@tap-agri.com')
-                   ->subject("Permohonan Pengajuan Persetujuan Aset ( {$this->data->noreg[0]} )")
+                   ->subject("Permohonan Persetujuan Pengajuan Aset ( {$this->data->noreg[0]} )")
                    ->view('email.email_pendaftaran')
                    ->with(
                     [
@@ -60,7 +60,7 @@ class FamsEmail extends Mailable
         else if( $this->data->jenis_pemberitahuan == 'DISPOSAL' )
         {
             return $this->from('no-reply@tap-agri.com')
-                   ->subject("Permohonan Disposal Persetujuan Aset ( {$this->data->noreg[0]} )")
+                   ->subject("Permohonan Persetujuan Disposal Aset ( {$this->data->noreg[0]} )")
                    ->view('email.email_disposal')
                    ->with(
                     [
@@ -71,7 +71,7 @@ class FamsEmail extends Mailable
         else if( $this->data->jenis_pemberitahuan == 'MUTASI' )
         {
             return $this->from('no-reply@tap-agri.com')
-                   ->subject("Permohonan Mutasi Persetujuan Aset ( {$this->data->noreg[0]} )")
+                   ->subject("Permohonan Persetujuan Mutasi Aset ( {$this->data->noreg[0]} )")
                    ->view('email.email_mutasi')
                    ->with(
                     [
