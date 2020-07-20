@@ -79,6 +79,72 @@ b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_appr
 		}
 	}
 
+	public function kirim_email()
+	{
+		$no_registrasi = $_GET['doc_code'];
+		$document_code = str_replace("-", "/", $no_registrasi); 
+		$jenis_document = "";
+		
+		if (strpos($document_code, 'PDFA') !== false) 
+		{
+			$jenis_document = 'PENDAFTARAN';
+		}
+		else if (strpos($document_code, 'DSPA') !== false) 
+		{ 
+			$jenis_document = "DISPOSAL";}
+		else
+		{
+			$jenis_document = "MUTASI";
+		}
+	
+		// 1. DATA ASSET
+		$sql = " SELECT distinct(a.document_code) as document_code, a.KODE_MATERIAL, a.NAMA_MATERIAL, a.LOKASI_BA_CODE, a.PO_TYPE, a.NO_PO, a.BA_PEMILIK_ASSET, b.DESCRIPTION as LOKASI_BA_CODE_DESC, c.DESCRIPTION as BA_PEMILIK_ASSET_DESC, a.TAHUN_ASSET as TAHUN_PEROLEHAN, a.KODE_ASSET_AMS as KODE_ASSET_AMS    
+					FROM v_email_approval a 
+					LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
+					LEFT JOIN TM_GENERAL_DATA c ON a.BA_PEMILIK_ASSET = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'PLANT'
+					WHERE a.document_code = '{$document_code}'
+					order by a.nama_material ";
+		$dt = DB::SELECT($sql);
+
+		// 2. HISTORY APPROVAL 
+		$sql2 = " SELECT a.*, a.date AS date_create FROM v_history a WHERE a.document_code = '{$document_code}' ORDER BY date_create ";
+		$dt_history_approval = DB::SELECT($sql2);
+
+		$row = DB::table('v_email_approval')
+                     ->where('document_code','LIKE','%'.$document_code.'%')
+                     ->get();
+		
+        $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+		$NILAI_BUKU = $this->get_nilai_buku($row);
+		
+
+		// 3. EMAIL TO
+		$data = new \stdClass();
+        $data->noreg = array($document_code,1,2);
+        $data->jenis_pemberitahuan = $jenis_document;
+        $data->sender = 'TAP Agri';
+		$data->datax = $dt;
+		$data->harga_perolehan = $HARGA_PEROLEHAN;
+		$data->nilai_buku = $NILAI_BUKU;
+        $data->history_approval = $dt_history_approval;
+
+		$sql3 = " SELECT b.name, b.email FROM v_history_approval a LEFT JOIN TBM_USER 
+b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
+		$dt_email_to = DB::SELECT($sql3);
+		#1 IT@220719 
+		if(!empty($dt_email_to))
+		{
+			foreach($dt_email_to as $k => $v)
+			{
+				$data->nama_lengkap = $v->name;
+				Mail::to($v->email)
+					->bcc('system.administrator@tap-agri.com')
+					->send(new FamsEmail($data));
+					break;
+			}
+		}
+	}
+
 	public function showToken()
 	{
       echo csrf_token(); 

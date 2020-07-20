@@ -277,6 +277,7 @@ Route::post('/role-map/post', 'RoleMapController@store');
 
 /* SEND EMAIL */
 Route::post('/request/send_email_create_po','FamsEmailController@index');
+Route::get('/outstanding_email','FamsEmailController@kirim_email');
 // Route::post('/request/email_create_po','FamsEmailController@index');
 
 /* MASTER ASSET */
