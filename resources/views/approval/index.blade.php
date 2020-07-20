@@ -3969,7 +3969,9 @@
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>TUJUAN</th>';
                 item += '<th width="120px">JENIS ASSET TUJUAN</th>';
+                <?php if( $user_role == 'AMS' ){ ?>
                 item += '<th>KODE ASSET AMS TUJUAN</th>';
+                <?php } ?>
                 item += '<th>KODE SAP TUJUAN</th>';
                 
                 var no = 1;
