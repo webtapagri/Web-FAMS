@@ -44,8 +44,8 @@ class FamsEmailController extends Controller
 		$sql2 = " SELECT a.*, a.date AS date_create FROM v_history a WHERE a.document_code = '{$document_code}' ORDER BY date_create ";
 		$dt_history_approval = DB::SELECT($sql2);
 
-		$row = DB::table('V_EMAIL_APPROVAL')
-                     ->where('NO_REG','LIKE','%'.$document_code.'%')
+		$row = DB::table('v_email_approval')
+                     ->where('document_code','LIKE','%'.$document_code.'%')
                      ->get();
 		
         $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
@@ -127,9 +127,9 @@ class FamsEmailController extends Controller
 		$data->nilai_buku = $NILAI_BUKU;
         $data->history_approval = $dt_history_approval;
 
-		$sql3 = " SELECT b.name, b.email FROM v_history_approval a LEFT JOIN TBM_USER 
-b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
+		$sql3 = " SELECT b.name, b.email FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
 		$dt_email_to = DB::SELECT($sql3);
+		
 		#1 IT@220719 
 		if(!empty($dt_email_to))
 		{
@@ -139,7 +139,6 @@ b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_appr
 				Mail::to($v->email)
 					->bcc('system.administrator@tap-agri.com')
 					->send(new FamsEmail($data));
-					break;
 			}
 		}
 	}
