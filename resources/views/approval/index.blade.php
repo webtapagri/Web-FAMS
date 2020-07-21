@@ -3432,8 +3432,10 @@
         });
         $.ajax({
             url: "{{ url('request/email_create_po') }}",
-            method: "POST",
-            data: param+"&noreg="+no_registrasi,
+            // method: "POST",
+            type: "POST",
+            // data: param+"&noreg="+no_registrasi,
+            data: "noreg="+no_registrasi,
             beforeSend: function() {
                 $('.loading-event').fadeIn();
             },
