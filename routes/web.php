@@ -297,7 +297,7 @@ Route::get('bulk-download', 'MasterAssetController@view_download_masterasset_qrc
 Route::post('download_masterasset_qrcode', 'MasterAssetController@download_masterasset_qrcode')->name('download_masterasset_qrcode');
 
 /* REQUEST ASET LAINNYA */
-Route::resource('/request', 'RequestAsetLainController');
+Route::resource('/request', 'RequestAsetLainController')->only([ 'index', 'show' ]);
 Route::get('/create/aset-lain', 'RequestAsetLainController@create');
 Route::post('/aset-lain/post', 'RequestAsetLainController@store');
 
