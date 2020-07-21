@@ -41,7 +41,7 @@ Route::get('grid-asset', ['as' => 'get.asset_grid', 'uses' => 'AssetController@d
 Route::get('asset_pdf', ['as' => 'get.asset_pdf', 'uses' => 'AssetController@convertToPdf']);
 Route::get('asset_report', ['as' => 'get.asset_report', 'uses' => 'AssetController@report']);
 
-Route::resource('/request', 'RequestController');
+Route::resource('/request', 'RequestController')->only([ 'index' ]);
 Route::get('/request/create/{type}', 'RequestController@create')->name('type');
 Route::post('/request/post', 'RequestController@store');
 Route::get('/request/edit/', 'RequestController@show');
