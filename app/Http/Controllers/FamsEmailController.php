@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\TR_REG_ASSET_DETAIL;
 use API;
+use App\Jobs\SendEmail;
 
 class FamsEmailController extends Controller
 {
@@ -71,9 +72,12 @@ class FamsEmailController extends Controller
 			foreach($dt_email_to as $k => $v)
 			{
 				$data->nama_lengkap = $v->name;
-				Mail::to($v->email)
-					->bcc('system.administrator@tap-agri.com')
-					->send(new FamsEmail($data));
+				
+				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
+				
+				// Mail::to($v->email)
+					// ->bcc('system.administrator@tap-agri.com')
+					// ->send(new FamsEmail($data));
 			}
 		}
 	}
@@ -136,9 +140,12 @@ class FamsEmailController extends Controller
 			foreach($dt_email_to as $k => $v)
 			{
 				$data->nama_lengkap = $v->name;
-				Mail::to($v->email)
-					->bcc('system.administrator@tap-agri.com')
-					->send(new FamsEmail($data));
+				
+				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
+				
+				// Mail::to($v->email)
+					// ->bcc('system.administrator@tap-agri.com')
+					// ->send(new FamsEmail($data));
 			}
 		}
 	}
