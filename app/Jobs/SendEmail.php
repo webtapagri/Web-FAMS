@@ -40,9 +40,15 @@ class SendEmail implements ShouldQueue
     {
 		\Log::info('Send email to:');
 		\Log::info($this->email);
-		Mail::to($this->email)
-			->bcc('system.administrator@tap-agri.com')
-			->send(new FamsEmail($this->data));
 		
+		try {
+			Mail::to($this->email)
+				->bcc('system.administrator@tap-agri.com')
+				->send(new FamsEmail($this->data));
+		}catch (\Throwable $e) {
+			\Log::error('Error: '.$e->getMessage());
+		}catch (\Exception $e) {
+			\Log::error('Err: '.$e->getMessage());
+		}
     }
 }
