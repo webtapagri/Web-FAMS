@@ -62,9 +62,6 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<th>KODE MATERIAL</th>
 						<th>ASSETS</th>
 						<th>LOKASI</th>
-						<th>TAHUN PEROLEHAN</th>
-						<th>HARGA PEROLEHAN</th>
-						<th>NBV</th>
 					</tr>
 			";
 			foreach($data->datax as $k => $v)
@@ -75,9 +72,6 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<td>$v->KODE_MATERIAL</td>
 						<td>$v->NAMA_MATERIAL</td>
 						<td>$v->LOKASI_BA_CODE - $v->LOKASI_BA_CODE_DESC</td>
-						<td>$v->TAHUN_PEROLEHAN</td>
-						<td>$harga_perolehan[$k]</td>
-						<td>$nilai_buku[$k]</td>
 					</tr> 
 				";
 				$no++;
