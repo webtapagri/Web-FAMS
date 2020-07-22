@@ -3223,6 +3223,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'kode_asset_ams_tujuan' => trim($v->KODE_ASSET_AMS_TUJUAN),
                     'kode_sap_tujuan' => trim($v->KODE_SAP_TUJUAN),
                     'jenis_asset' => trim($v->JENIS_ASSET),
+                    'jenis_asset_tujuan' => trim($v->JENIS_ASSET_TUJUAN),
                     'kode_asset_class' => trim($v->KODE_ASSET_CLASS),
                 );
             }

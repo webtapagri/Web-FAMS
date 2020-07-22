@@ -18,6 +18,8 @@ class FamsEmailController extends Controller
 		$no_registrasi = $req['noreg'];
 		$document_code = str_replace("-", "/", $no_registrasi); 
 		$jenis_document = "";
+		$kolom_mutasi = "";
+		$join_mutasi = "";
 		
 		if (strpos($document_code, 'PDFA') !== false) 
 		{
@@ -29,15 +31,19 @@ class FamsEmailController extends Controller
 		else
 		{
 			$jenis_document = "MUTASI";
+			$kolom_mutasi = ", d.TUJUAN, e.DESCRIPTION as LOKASI_TUJUAN_DESC, d.KODE_ASSET_AMS_TUJUAN ";
+			$join_mutasi = "LEFT JOIN TR_MUTASI_ASSET_DETAIL d ON a.document_code = d.NO_REG LEFT JOIN TM_GENERAL_DATA e ON d.TUJUAN = e.DESCRIPTION_CODE AND e.GENERAL_CODE = 'PLANT'";
 		}
 	
 		// 1. DATA ASSET
-		$sql = " SELECT distinct(a.document_code) as document_code, a.KODE_MATERIAL, a.NAMA_MATERIAL, a.LOKASI_BA_CODE, a.PO_TYPE, a.NO_PO, a.BA_PEMILIK_ASSET, b.DESCRIPTION as LOKASI_BA_CODE_DESC, c.DESCRIPTION as BA_PEMILIK_ASSET_DESC, a.TAHUN_ASSET as TAHUN_PEROLEHAN, a.KODE_ASSET_AMS as KODE_ASSET_AMS    
-					FROM v_email_approval a 
-					LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
-					LEFT JOIN TM_GENERAL_DATA c ON a.BA_PEMILIK_ASSET = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'PLANT'
-					WHERE a.document_code = '{$document_code}'
-					order by a.nama_material ";
+		$sql = " SELECT distinct(a.document_code) as document_code, a.KODE_MATERIAL, a.NAMA_MATERIAL, a.LOKASI_BA_CODE, a.PO_TYPE, a.NO_PO, a.BA_PEMILIK_ASSET, b.DESCRIPTION as LOKASI_BA_CODE_DESC, c.DESCRIPTION as BA_PEMILIK_ASSET_DESC, a.TAHUN_ASSET as TAHUN_PEROLEHAN, a.KODE_ASSET_AMS as KODE_ASSET_AMS "
+				.$kolom_mutasi."  
+				FROM v_email_approval a 
+				LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
+				LEFT JOIN TM_GENERAL_DATA c ON a.BA_PEMILIK_ASSET = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'PLANT'"
+				.$join_mutasi ."
+				WHERE a.document_code = '{$document_code}'
+				order by a.nama_material ";
 		$dt = DB::SELECT($sql);
 
 		// 2. HISTORY APPROVAL 

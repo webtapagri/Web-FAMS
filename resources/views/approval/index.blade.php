@@ -3970,9 +3970,7 @@
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>LOKASI BA CODE</th>';
                 item += '<th>TUJUAN</th>';
-                <?php if( $user_role == 'AMS' ){ ?>
                 item += '<th width="120px">JENIS ASSET TUJUAN</th>';
-                <?php } ?>
                 item += '<th>KODE ASSET AMS TUJUAN</th>';
                 item += '<th>KODE SAP TUJUAN</th>';
                 
@@ -4033,8 +4031,10 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
-                                  item += "<td><select class='form-control input-xs jenis_asset' name='jenis-asset[]' id='jenis-asset-"+no+"'>"+ dataoption +"</select><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
-                        <?php } ?>
+                                    item += "<td><select class='form-control input-xs jenis_asset' name='jenis-asset[]' id='jenis-asset-"+no+"'>"+ dataoption +"</select><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                        <?php } else {?>
+                                    item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                        <?php  } ?>
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
                         if(area_code.includes(val.tujuan)){
