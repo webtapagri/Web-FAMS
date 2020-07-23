@@ -19,7 +19,10 @@
 @section('content')
 
 <style>
-.fa-eye, .fa-trash {cursor:pointer;}
+.fa-eye, .fa-trash {cursor:pointer;}{}
+.mutasi{
+    width:90%;
+}
 </style>
 
 <div class="row" style="margin-top:-3%">
@@ -607,7 +610,7 @@
 </div>
 
 <div id="approve-mutasi-modal" class="modal fade" role="dialog" aria-labelledby="largeModal" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg mutasi">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
@@ -3553,6 +3556,78 @@
         }
     }
 
+    function validasiKodeAssetControllerMutasi(po_type,no_reg_item)
+    {
+        var getnoreg = $("#getnoreg").val(); //alert(getnoreg);
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+        var kode_asset_controller = $("#request-form #kode_aset_controller-"+no_reg_item+"").val();
+        if(po_type == 1 || po_type == 2 )
+        {
+            // AMP & LAIN
+            var kode_asset_nilai = $("#request-form #kode_asset_ams-"+no_reg_item+"").val();
+        }
+        else
+        {
+            // SAP
+            var kode_asset_nilai = $("#request-form #kode_aset_sap-"+no_reg_item+"").val();
+        }
+        
+
+        var param = '';
+
+        // VALIDASI KODE ASSET CONTROLLER 2 CHAR
+        if( $.trim(kode_asset_controller) < 2 )
+        {
+            console.log(kode_asset_controller);
+            notify({
+                type: 'warning',
+                message: " Kode Asset Controller belum diisi (min 2 char)"
+            });
+            return false;
+        } 
+
+        if(confirm('Confirm Update Code Asset Controller '+getnoreg+' ?'))
+        {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ url('approval/update_kode_asset_controller_mutasi') }}",
+                method: "POST",
+                data: param+"&kode_asset_controller="+kode_asset_controller+"&getnoreg="+getnoreg+"&kode_asset_nilai="+kode_asset_nilai+"&no_reg_item="+no_reg_item+"&po_type="+po_type,
+                beforeSend: function() {
+                    $('.loading-event').fadeIn();
+                },
+                success: function(result) 
+                {
+                    //alert(result.status);
+                    if (result.status) 
+                    {
+                        //$("#approve-modal").modal("hide");
+                        //$("#data-table").DataTable().ajax.reload();
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+                        //setTimeout(reload_page, 1000); 
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }
+                    
+                },
+                complete: function() {
+                    jQuery('.loading-event').fadeOut();
+                }
+            }); 
+        }
+    }
     function validasiKodeAssetController(po_type,no_reg_item)
     {
         //alert(po_type); return false(); 
@@ -3706,6 +3781,31 @@
         var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var jenis_kendaraan = $("#jenis-kendaraan-"+no_reg_item+"").val();
+
+        if( jenis_kendaraan == '' )
+        {
+            notify({
+                type: 'warning',
+                message: " Jenis Kendaraan is required ! "
+            });
+            return false;
+        }
+           
+        $('#pdf-modal .modal-title').text('FORM PARAMETER INTERNAL ORDER '+getnoreg+'');
+        $('#pdf-modal .modal-body').html('<iframe id="print" style="width:100%;height:500px;" frameborder="0" src="{{ url("printio") }}/'+no_registrasi+'/'+asset_po_id+'/'+jenis_kendaraan+'/'+no_reg_item+'">');
+        $('#pdf-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+        $('#print-modal').modal('show');
+    }
+
+    function printFormIOMutasi(asset_po_id,no_reg_item)
+    {
+        //alert(asset_po_id);
+        var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+        var jenis_kendaraan = $("#request-form jenis-kendaraan-"+no_reg_item+"").val();
 
         if( jenis_kendaraan == '' )
         {
@@ -3922,6 +4022,7 @@
                     //var costcenter = data.cost_center;
                 <?php // }?>
                 var costcenter = data.cost_center;
+                var po_type = data.po_type;
                 $("#request-form #no-reg").val(data.no_reg);
                 $("#request-form #type-transaksi").val(data.type_transaksi);
                 $("#request-form #po-type").val(data.po_type);
@@ -3973,6 +4074,13 @@
                 item += '<th width="120px">JENIS ASSET TUJUAN</th>';
                 item += '<th>KODE ASSET AMS TUJUAN</th>';
                 item += '<th>KODE SAP TUJUAN</th>';
+                item += '<th>GROUP</th>';
+                item += '<th>SUB GROUP</th>';
+                item += '<th>ASSET CONTROLLER</th>';
+                item += '<th>KODE ASSET CONTROLLER</th>';
+                <?php if( $user_role == 'AC' ){ ?>
+                item += '<th>JENIS KENDARAAN</th>';
+                <?php }?>
                 
                 var no = 1;
                 $.each(data.item_detail, function(key, val) 
@@ -4037,10 +4145,20 @@
                         <?php  } ?>
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
+                        item += "<td>" + val.group + "</td>";
+                        item += "<td>" + val.sub_group + "</td>";
+                        item += "<td>" + val.asset_controller + "</td>";
+                        <?php if( $user_role == 'AC' ){ ?>
+                        
+                                item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams-"+val.no_reg_item+"' id='kode_asset_ams-"+val.no_reg_item+"' value='"+ val.kode_asset_ams +"'>";
+                                item += "<td><input type='text' class='form-control input-sm' name='kode_aset_controller-"+val.no_reg_item+"' value='"+val.kode_asset_controller+"' id='kode_aset_controller-"+val.no_reg_item+"' autocomplete='off' onkeyup='get_kode_aset("+val.no_reg_item+")'><input type='hidden' id='request_kode_aset_input' name='request_kode_aset_input'><div class='btn btn-warning btn-sm' OnClick='validasiKodeAssetControllerMutasi("+po_type+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px;margin-bottom:5px'><i class='fa fa-save'></i> SAVE</div></td>";
+                                item += "<td><input type='text' class='form-control' placeholder='Jenis Kendaraan' id='jenis-kendaraan-"+val.no_reg_item+"' name='jenis-kendaraan-"+val.no_reg_item+"'><div class='btn btn-info btn-sm' OnClick='printFormIOMutasi("+val.asset_po_id+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px' data-toggle='modal' data-dismiss='modal'><i class='fa fa-print'> PRINT FORM IO</i></div></td>";
+                        <?php } else {?>
+                                    item += "<td>" + val.kode_asset_controller + "</td>";
+                        <?php  } ?>
                         if(area_code.includes(val.tujuan)){
                             item += "<td><input type='text' class='form-control input-sm' name='penanggung_jawab[]' id='penanggung_jawab[]' value='"+ val.penanggung_jawab +"' required></td>";
                             item += "<td><input type='text' class='form-control input-sm' name='jabatan[]' id='jabatan[]' value='"+ val.jabatan +"' required></td>";
-                            // item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"'>";
                         }
                         if(data.item_detail.length != 1)
                         {
@@ -4086,13 +4204,25 @@
                 }
                 item += '</table>';
                 $("#box-item-detail-mutasi").html(item);
+  
 
                 log_history(id,6);
                 $("#log-history-box-mutasi").html(item);
 
                 $("#approve-mutasi-modal .modal-title").html("<i class='fa fa-edit'></i> APPROVAL MUTASI "+ pengajuan +" - <span style='color:#dd4b39'>" + data.no_reg + "</span><input type='hidden' id='getnoreg' name='getnoreg' value='"+data.no_reg+"' >");
 
+                $('#approve-mutasi-modal').on('shown.bs.modal', function () {
+                    <?php if( $user_role == 'AC' ){ ?>
+                    $.each(data.item_detail, function(key, val) 
+                    {
+                        opt_tipe_kendaraan(val.no_reg_item);
+                    });
+                    <?php } ?>    
+                });
+
                 $('#approve-mutasi-modal').modal('show');
+
+
             },
             error: function(x) 
             {                           

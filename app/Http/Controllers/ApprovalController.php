@@ -2555,6 +2555,133 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         //#1 END VALIDASI MAPPING INPUT KODE ASSET / IO
     }
 
+    function update_kode_asset_controller_mutasi(Request $request)
+    {
+        $po_type = $request->po_type;
+        $noreg = $request->getnoreg;
+        $ka_con = $request->kode_asset_controller;
+        $ka_sap = $request->kode_asset_nilai;
+        $user_id = Session::get('user_id');
+
+        //#1 VALIDASI MAPPING INPUT KODE ASSET / IO
+        $sql = " SELECT a.KODE_SAP_TUJUAN AS KODE_ASSET_SAP, b.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a 
+        LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE 
+        LEFT JOIN TM_MSTR_ASSET c ON c.KODE_ASSET_AMS = a.KODE_ASSET_AMS AND c.GROUP = b.GROUP_CODE AND c.SUB_GROUP = b.SUBGROUP_CODE
+        WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
+        $data = DB::SELECT($sql); //echo "2<pre>"; print_r($data); die(); 
+        if(!empty($data))
+        {
+            // #2 VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
+            $sql2 = " SELECT a.KODE_SAP_TUJUAN AS KODE_ASSET_SAP, b.MANDATORY_KODE_ASSET_CONTROLLER, b.MANDATORY_CHECK_IO_SAP  FROM TR_MUTASI_ASSET_DETAIL a 
+            LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE 
+                LEFT JOIN TM_MSTR_ASSET c ON c.KODE_ASSET_AMS = a.KODE_ASSET_AMS AND c.GROUP = b.GROUP_CODE AND c.SUB_GROUP = b.SUBGROUP_CODE
+            WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
+            $data2 = DB::SELECT($sql2); //echo "2<pre>"; print_r($data2); die(); 
+
+            if( $po_type == 1 || $po_type == 2 )
+            {   
+                // AMP & LAIN
+                $kode_asset = "KODE_ASSET_AMS";
+                
+                if( $po_type == 1 )
+                {
+                    $kode_asset_label = "KODE ASSET FAMS";
+                }
+                else
+                {
+                    $kode_asset_label = "KODE ASSET FAMS / SAP";    
+                }
+                   
+            }
+            else
+            {
+                // SAP
+                $kode_asset = "KODE_ASSET_SAP";
+                $kode_asset_label = "KODE ASSET SAP"; 
+            }
+
+            if(!empty($data2))
+            {
+                if( $ka_sap == '' )
+                {
+                    $result = array('status'=>false,'message'=> ''.$kode_asset_label.' kosong! ');
+                    return $result;  
+                }
+
+                $service = API::exec(array(
+                    'request' => 'GET',
+                    'host' => 'ldap',
+                    'method' => "check_io?AUFNR=$ka_con&AUFUSER3=$ka_sap", 
+                ));
+                
+                $data = $service;
+                //$data = 1;
+                
+                //echo "<pre>"; print_r($data); die();
+
+                if( $data->TYPE == 'S' )
+                //if($data==1)
+                {
+
+                    DB::beginTransaction();
+                    try 
+                    {   
+                        $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$ka_con}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ka_sap}' ";
+                        //echo $sql; die();
+                        DB::UPDATE($sql);
+                        DB::commit();
+
+                        $result = array('status'=>true,'message'=> "SUKSES UPDATE KODE ASET");
+                    }
+                    catch (\Exception $e) 
+                    {
+                        DB::rollback();
+                        $result = array('status'=>false,'message'=>$e->getMessage());
+                    }
+                }
+                else
+                {
+                    
+                    $result = array('status'=>false,'message'=> $data->MESSAGE.' (Kode Aset Controller:'.$ka_con.')');
+                }
+                return $result;
+            }
+            else
+            {
+                if( $ka_sap == '' )
+                {
+                    $result = array('status'=>false,'message'=> ''.$kode_asset_label.' required! ');
+                    return $result;  
+                }
+
+                // SKIP VALIDASI CHECK IO SAP JIKA ASSET LAINNYA
+                DB::beginTransaction();
+                try 
+                {   
+                    $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$ka_con}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ka_sap}' ";
+                    //echo $sql; die();
+                    DB::UPDATE($sql);
+                    DB::commit();
+
+                    $result = array('status'=>true,'message'=> "Updated Success");
+                }
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    $result = array('status'=>false,'message'=>$e->getMessage());
+                }
+                return $result;   
+            }
+            // #2 END VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
+        }
+        else
+        {
+            $result = array('status'=>false,'message'=> 'Tidak perlu menginput Kode Asset Controller / IO');
+            return $result;   
+        }
+        //#1 END VALIDASI MAPPING INPUT KODE ASSET / IO
+    }
+
     function save_gi_number_year(Request $request)
     {
         $po_type = $request->po_type;
@@ -3115,7 +3242,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $noreg = str_replace("-", "/", $id);
 
         $records = array();
-        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,
+        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
        SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
                            FROM TR_MUTASI_ASSET a   
@@ -3161,6 +3288,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'no_reg' => trim($v->NO_REG),
                     'type_transaksi' => trim($type_transaksi[$v->TYPE_TRANSAKSI]),
                     //'po_type' => '', //trim($po_type[$v->PO_TYPE]),
+                    'po_type' => trim($v->JENIS_PENGAJUAN),
                     'ba_pemilik_asset' => trim($v->BA_PEMILIK_ASSET),
                     'requestor' => trim($v->REQUESTOR),
                     'tanggal_reg' => trim($v->TANGGAL_REG),
@@ -3225,6 +3353,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'jenis_asset' => trim($v->JENIS_ASSET),
                     'jenis_asset_tujuan' => trim($v->JENIS_ASSET_TUJUAN),
                     'kode_asset_class' => trim($v->KODE_ASSET_CLASS),
+                    'group' => trim($v->GROUP),
+                    'sub_group' => trim($v->SUB_GROUP),
+                    'asset_controller' => trim($v->ASSET_CONTROLLER),
+                    'kode_asset_controller' => trim($v->KODE_ASSET_CONTROLLER),
+                    'no_reg_item' => trim($v->NO_REG_ITEM),
                 );
             }
         }
