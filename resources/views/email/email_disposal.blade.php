@@ -116,7 +116,21 @@ Dibutuhkan persetujuan atas dokumen berikut :
 			$content2 = $l;
 		} 
 
+		$list_approve = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
+		$btn_approve = "";
+		$btn_reject = "";
+
+		if (in_array($data->role_name, $list_approve))
+		{
+			$btn_approve = "<a href='".url('/disposal/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'A'.'/'.$data->noreg.'')." 'target='_blank'><button type='button' class='btn btn-flat label-primary'>APPOVE</button></a>";
+			$btn_reject = "<a href='".url('/disposal/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'R'.'/'.$data->noreg.'')."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
+		}
+
 		echo $content2; 
+		echo $btn_approve."  ".$btn_reject; 
+
+
+		
 
 	?>
 </div>
