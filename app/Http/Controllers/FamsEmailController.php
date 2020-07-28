@@ -67,7 +67,8 @@ class FamsEmailController extends Controller
 		$data->datax = $dt;
 		$data->harga_perolehan = $HARGA_PEROLEHAN;
 		$data->nilai_buku = $NILAI_BUKU;
-        $data->history_approval = $dt_history_approval;
+		$data->history_approval = $dt_history_approval;
+		$data->no_reg = $req['noreg'];
 
 		// $sql3 = " SELECT b.name, b.email FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
 		$sql3 = " SELECT b.name, b.email, b.id as user_id, b.role_id, c.name as role_name FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID LEFT JOIN TBM_ROLE c ON b.role_id = c.id WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
