@@ -244,11 +244,9 @@ class Select2Controller extends Controller
 
     public function select_jenis_asset(Request $request)
     {
-        $data = DB::table('TM_MSTR_ASSET')
-        ->select(DB::raw('JENIS_ASSET as id'), DB::raw('JENIS_ASSET as text'))
-        ->where('JENIS_ASSET','<>','NULL')
-        ->orderby('JENIS_ASSET', 'asc')
-        ->groupby('JENIS_ASSET')
+        $data = DB::table('TM_JENIS_ASSET')
+        ->select(DB::raw('JENIS_ASSET_CODE as id'), DB::raw('CONCAT(JENIS_ASSET_CODE," - ",JENIS_ASSET_DESCRIPTION) as text'))
+        ->orderby('JENIS_ASSET_CODE', 'asc')
         ->get();
         return response()->json(array("data"=>$data));
     }
