@@ -541,9 +541,17 @@
             placeholder: ' '
         });
 
-        var plant = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.generaldataplant") !!}')));
-        jQuery("#business_area,  #asset_location").select2({
+        var plant = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.databusinessarea") !!}')));
+        jQuery("#business_area").select2({
             data: plant,
+            width: "100%",
+            allowClear: true,
+            placeholder: ' '
+        });
+
+        var plant_all = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.generaldataplant") !!}')));
+        jQuery("#asset_location").select2({
+            data: plant_all,
             width: "100%",
             allowClear: true,
             placeholder: ' '

@@ -63,6 +63,31 @@ class Select2Controller extends Controller
         return response()->json(array('data' => $arr));
     }
 
+
+    public function businessarea() 
+    {
+        $user_id = Session::get('user_id');
+        $sql = "
+            SELECT DESCRIPTION_CODE as id, DESCRIPTION as text
+            FROM TM_GENERAL_DATA
+            WHERE GENERAL_CODE = 'plant'
+            AND DESCRIPTION_CODE IN (select area_code from v_user where id = {$user_id} AND area_code != 'All' )
+        ";
+
+        $data = DB::select(DB::raw($sql));
+        $arr = array();
+        $arr[] = array("id"=>"","text"=>"");
+        foreach ($data as $row) {
+            $arr[] = array(
+                "id" => $row->id,
+                "text" => $row->id . '-' . $row->text
+            );
+        }
+
+        return response()->json(array('data' => $arr));
+    }
+
+
      public function generaldata_assetcontroller(Request $request) 
      {
         $data = DB::table('TM_GENERAL_DATA')
