@@ -4128,7 +4128,7 @@
                               
                         var jenis_asset = $.parseJSON(JSON.stringify(dataJson('{!! route("get.select_jenis_asset") !!}')));
                         var length = jenis_asset.length;
-                        var dataoption = "";
+                        // var dataoption = "";
                         var selected = "";
                         for(var j = 0; j < length; j++)
                         {                            
@@ -4137,7 +4137,7 @@
                             }else{
                                 selected = "";
                             }
-                            dataoption += "<option value='"+jenis_asset[j].id+"' "+ selected +">"+jenis_asset[j].text+"</option>";
+                        //     dataoption += "<option value='"+jenis_asset[j].id+"' "+ selected +">"+jenis_asset[j].text+"</option>";
                         }
 
 
@@ -4149,7 +4149,8 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
-                                    item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+val.no_reg_item+"' id='jenis-asset-"+val.no_reg_item+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                                    txtasset[val.no_reg_item] = val.jenis_asset;
+                                    item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+val.no_reg_item+"' id='jenis-asset-"+val.no_reg_item+"' value='"+val.jenis_asset+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
                         <?php } else {?>
                                     item += "<td>" + val.jenis_asset_tujuan + "</td>";
                         <?php  } ?>
@@ -4235,7 +4236,8 @@
                     {
                         opt_jenis_asset(val.no_reg_item);
                     });
-                    <?php } ?>    
+                    <?php } ?>  
+                    
 
                 });
 
