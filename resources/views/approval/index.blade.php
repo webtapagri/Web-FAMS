@@ -1489,7 +1489,9 @@
         // VALIDASI 
         for (var i = 0; i < input2.length/2; i++) {   
             var x = jenis_asset[i];
-            if(x.substr(0,1) !== asset_class[i])
+            var jns = x.charAt(0);
+            console.log(jns);
+            if(jns !== asset_class[i])
             {
                 notify({
                     type: 'warning',
@@ -3884,10 +3886,10 @@
         });
     }
 
-    function opt_jenis_asset(no_reg_item)
+    function opt_jenis_asset(no)
     {
         var jenis_asset = $.parseJSON(JSON.stringify(dataJson('{!! route("get.select_jenis_asset") !!}')));
-        $('input[name="jenis-asset-'+no_reg_item+'"]').select2({
+        $('input[name="jenis-asset-'+no+'"]').select2({
             data: jenis_asset,
             width: '100%',
             placeholder: ' ',
@@ -4149,8 +4151,8 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
-                                    txtasset[val.no_reg_item] = val.jenis_asset;
-                                    item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+val.no_reg_item+"' id='jenis-asset-"+val.no_reg_item+"' value='"+val.jenis_asset+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                                    txtasset[no] = val.jenis_asset;
+                                    item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+no+"' id='jenis-asset-"+no+"' value='"+val.jenis_asset+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
                         <?php } else {?>
                                     item += "<td>" + val.jenis_asset_tujuan + "</td>";
                         <?php  } ?>
@@ -4185,11 +4187,11 @@
                        
                         item += "</tr>";
 
-                        $('body').on('change', '#jenis-asset-'+val.no_reg_item, function() {
+                        $('body').on('change', '#jenis-asset-'+no, function() {
                             $("option", $(this)).removeAttr("selected");
                             $("option:selected", $(this)).attr("selected", true);
                             var a = $(this).val();
-                            txtasset[val.no_reg_item] = $(this).val();
+                            txtasset[no] = $(this).val();
                         })
 
                         no++;
@@ -4232,9 +4234,11 @@
                     <?php } ?>    
 
                     <?php if( $user_role == 'AMS' ){ ?>
+                    var i = 1;
                     $.each(data.item_detail, function(key, val) 
                     {
-                        opt_jenis_asset(val.no_reg_item);
+                        opt_jenis_asset(i);
+                        i++;
                     });
                     <?php } ?>  
                     
