@@ -4128,17 +4128,17 @@
                               
                         var jenis_asset = $.parseJSON(JSON.stringify(dataJson('{!! route("get.select_jenis_asset") !!}')));
                         var length = jenis_asset.length;
-                        // var dataoption = "";
-                        var selected = "";
-                        for(var j = 0; j < length; j++)
-                        {                            
-                            if(val.jenis_asset == jenis_asset[j].text){
-                                selected = "selected='selected'";
-                            }else{
-                                selected = "";
-                            }
-                        //     dataoption += "<option value='"+jenis_asset[j].id+"' "+ selected +">"+jenis_asset[j].text+"</option>";
-                        }
+                        // // var dataoption = "";
+                        // var selected = "";
+                        // for(var j = 0; j < length; j++)
+                        // {                            
+                        //     if(val.jenis_asset == jenis_asset[j].text){
+                        //         selected = "selected='selected'";
+                        //     }else{
+                        //         selected = "";
+                        //     }
+                        // //     dataoption += "<option value='"+jenis_asset[j].id+"' "+ selected +">"+jenis_asset[j].text+"</option>";
+                        // }
 
 
                         item += "<tr style='height: 30px !important;font-size:11px !important;'>";

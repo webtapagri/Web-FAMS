@@ -3084,12 +3084,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $nilai = array();
 
-        // for($i=0;$i<count($row);$i++){
-            $BUKRS = substr($row[0]->BA_PEMILIK_ASSET,0,2);
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
 
             $YEAR = date('Y');
 
-            $ANLN1 = $this->get_anln1($row[0]->KODE_ASSET_SAP);
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
             
             $ANLN2 = '0000';
            
@@ -3111,7 +3111,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             {
                 $nilai[] = 0;
             }
-        // }
+        }
 
         return $nilai;
 
@@ -3178,6 +3178,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'created_by' => trim($v->CREATED_BY),
                     'created_at' => trim($v->CREATED_AT)
                 );
+                Debugbar::info($NILAI_BUKU[$k]);
             }
         }
 
