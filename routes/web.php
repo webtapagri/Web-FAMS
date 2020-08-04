@@ -238,10 +238,8 @@ Route::match(['get', 'post'], 'grid-jobs', [
     'as' => 'get.grid_jobs',
     'uses' => 'JobsController@dataGrid'
 ]);
-Route::get('/run-jobs', function () {
-    Artisan::call('queue:retry', ['id' => 'all']);
-	return Redirect::to('/setting/jobs');
-});
+
+Route::get('/run-jobs', 'JobsController@rubjobs');
 /*
 Route::match(['get', 'post'], 'grid-workflow-detail', [
     'as' => 'get.grid_workflow_detail',

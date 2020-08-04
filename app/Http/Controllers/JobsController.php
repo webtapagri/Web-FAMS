@@ -8,10 +8,12 @@ use function GuzzleHttp\json_encode;
 use Session;
 use API;
 use AccessRight;
-use App\Workflow;
 use App\jobs;
 use App\failed_jobs;
 use Debugbar;
+use Artisan;
+use Redirect;
+
 
 class JobsController extends Controller
 {
@@ -33,6 +35,12 @@ class JobsController extends Controller
         $data['ctree'] = 'setting/jobs';
         $data["access"] = (object)$access;
         return view('monitoring.jobs')->with(compact('data'));
+    }
+
+    public function rubjobs()
+    {
+        Artisan::call('queue:retry', ['id' => 'all']);
+        return Redirect::to('/setting/jobs');
     }
 
     public function dataGrid(Request $request)
