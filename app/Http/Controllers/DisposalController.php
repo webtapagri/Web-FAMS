@@ -13,9 +13,15 @@ use Session;
 use API;
 use AccessRight;
 use App\TM_MSTR_ASSET;
+use App\Http\Controllers\FamsEmailController;
 
 class DisposalController extends Controller
 {
+	protected $FamsEmailController;
+    public function __construct(FamsEmailController $FamsEmailController)
+    {
+        $this->FamsEmailController = $FamsEmailController;
+    }
 	
 	public function index()
     {	
@@ -584,6 +590,12 @@ class DisposalController extends Controller
 				DB::commit();
 
 				Session::flash('message', 'Proses sukses (NO REG : '.$reg_no.' ) ');
+
+
+				$request = new \Illuminate\Http\Request();
+				$request->replace(['noreg' => $reg_no]);
+				$this->FamsEmailController->index($request);
+				
 				return Redirect::to('/disposal-'.$jp.'');
 			}
 			catch (\Exception $e) 
