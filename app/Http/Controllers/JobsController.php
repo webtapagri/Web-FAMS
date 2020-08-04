@@ -64,7 +64,7 @@ class JobsController extends Controller
 
         $sql = '
             SELECT ' . implode(", ", $selectedColumn) . '
-                FROM JOBS
+                FROM jobs
                 WHERE 1=1
         ';
         Debugbar::info($sql);
