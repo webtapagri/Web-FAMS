@@ -223,6 +223,7 @@ Route::get('get-tujuan_business_area', ['as' => 'get.tujuan_business_area', 'use
 
 /* WORKFLOW SETTING */
 Route::resource('/setting/workflow', 'WorkflowController');
+Route::resource('/setting/jobs', 'JobsController');
 Route::post('/workflow/post', 'WorkflowController@store');
 Route::post('/workflow/post-detail', 'WorkflowController@store_detail');
 Route::post('/workflow/post-detail-job', 'WorkflowController@store_detail_job');
@@ -233,6 +234,14 @@ Route::match(['get', 'post'], 'grid-workflow', [
     'as' => 'get.grid_workflow',
     'uses' => 'WorkflowController@dataGrid'
 ]);
+Route::match(['get', 'post'], 'grid-jobs', [
+    'as' => 'get.grid_jobs',
+    'uses' => 'JobsController@dataGrid'
+]);
+Route::get('/run-jobs', function () {
+    Artisan::call('queue:retry', ['id' => 'all']);
+	return Redirect::to('/setting/jobs');
+});
 /*
 Route::match(['get', 'post'], 'grid-workflow-detail', [
     'as' => 'get.grid_workflow_detail',
