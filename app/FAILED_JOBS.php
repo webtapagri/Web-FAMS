@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class FAILED_JOBS extends Model
 {
-    protected $table = 'FAILED_JOBS';
+    protected $table = 'failed_jobs';
     public $timestamps = false;
 
     protected $fillable = [
