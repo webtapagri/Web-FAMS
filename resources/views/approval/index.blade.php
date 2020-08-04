@@ -1474,8 +1474,9 @@
         var no = 1;
         
         for (var i = 0; i < input2.length/2; i++) { 
-            asset_class.push(input2[i+input2.length/2].value); 
-            jenis_asset.push(txtasset[no]);  
+            asset_class.push(input2[i+input2.length/2].value);
+            var input4 = document.getElementsByName('jenis-asset-'+no); 
+            jenis_asset.push(input4[i+input4.length/2].value);
             no++;
         } 
         // alert(selectValue);
@@ -1491,6 +1492,16 @@
             var x = jenis_asset[i];
             var jns = x.charAt(0);
             console.log(jns);
+            console.log(asset_class[i]);
+            if( $.trim(x) == "" )
+            {
+                notify({
+                    type: 'warning',
+                    message: " Jenis Asset harus diisi"
+                });
+                return false;
+            } 
+
             if(jns !== asset_class[i])
             {
                 notify({
@@ -4151,7 +4162,6 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.tujuan + "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
-                                    txtasset[no] = val.jenis_asset;
                                     item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+no+"' id='jenis-asset-"+no+"' value='"+val.jenis_asset+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
                         <?php } else {?>
                                     item += "<td>" + val.jenis_asset_tujuan + "</td>";
@@ -4191,7 +4201,12 @@
                             $("option", $(this)).removeAttr("selected");
                             $("option:selected", $(this)).attr("selected", true);
                             var a = $(this).val();
-                            txtasset[no] = $(this).val();
+                            // console.log(txtasset[no]);
+                            // var index = txtasset.indexOf(txtasset[no]);
+                            // if (index !== -1) {
+                                txtasset[no] = $(this).val();
+                            // }
+                            // txtasset[no] = $(this).val();
                         })
 
                         no++;
