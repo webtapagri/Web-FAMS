@@ -10,6 +10,7 @@ use App\TR_REG_ASSET_DETAIL;
 use API;
 use App\Jobs\SendEmail;
 use GuzzleHttp\Client;
+use App\Http\Controllers\ApprovalController;
 
 class FamsEmailController extends Controller
 {
@@ -134,23 +135,22 @@ class FamsEmailController extends Controller
 		$param = unserialize(urldecode($_GET['id']));
 		$param['status'] = 'A';
 
-		// $request->replace(['noreg' => $_GET['noreg']]);
-		// $request->replace(['user_id' => $_GET['user_id']]);
-		// $request->replace(['id' => $_GET['id']]);
-		// $request->replace(['role_name' => $_GET['role_name']]);
-		// $request->replace(['role_id' => $_GET['role_id']]);
+		$id = urlencode(serialize($param));
+		ApprovalController::update_status_disposal_email($id);
 
-		$client = new Client([
-			'base_uri' => url('/'),  // <-- base_uri instead of base_url
-		]);
+
+		// $client = new Client([
+		// 	'base_uri' => url('/'),  // <-- base_uri instead of base_url
+		// ]);
 		
-		$headers =  [
-			'Content-Type: multipart/form-data',
-			'X-CSRF-TOKEN' => csrf_token()
-		];
-		
-		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
-		$response = $request->send();
+		// $headers =  [
+		// 	'Content-Type: multipart/form-data',
+		// 	'X-CSRF-TOKEN' => csrf_token(),
+		// 	'exceptions' => false,
+		// ];
+
+		// $request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
+		// $response = $request->send();
 	}
 
 	public function reject()
@@ -160,16 +160,19 @@ class FamsEmailController extends Controller
 		$request->replace(['id' => $_GET['id']]);
 		$param = unserialize(urldecode($_GET['id']));
 		$param['status'] = 'R';
+		
+		$id = urlencode(serialize($param));
+		ApprovalController::update_status_disposal_email($id);
 
-		$client = new Client([
-			'base_uri' => url('/'),  // <-- base_uri instead of base_url
-		]);
-		$headers =  [
-			'Content-Type: multipart/form-data',
-			'X-CSRF-TOKEN' => csrf_token()
-		];
-		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
-		$response = $request->send();
+		// $client = new Client([
+		// 	'base_uri' => url('/'),  // <-- base_uri instead of base_url
+		// ]);
+		// $headers =  [
+		// 	'Content-Type: multipart/form-data',
+		// 	'X-CSRF-TOKEN' => csrf_token()
+		// ];
+		// $request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
+		// $response = $request->send();
 	}
 
 	public function kirim_email()

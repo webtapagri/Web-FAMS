@@ -2959,11 +2959,15 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
            
         }
     }
-    function update_status_disposal_email(Request $request)
+    function update_status_disposal_email()
     {
-        $req = $request->all();
+        $request = new \Illuminate\Http\Request();
+
+		$request->replace(['id' => $_GET['id']]);
+        $req = unserialize(urldecode($_GET['id']));
+        
         $no_registrasi = str_replace("-", "/", $req->noreg);
-        $status = $req->status;
+        $status = $req['status'];
         $note = '';
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
     
@@ -2983,7 +2987,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
                 }
 
-                DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req->user_id.'","'.$status.'", "'.$note.'", "'.$req->role_name.'", "'.$asset_controller.'")');
+                DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req['user_id'].'","'.$status.'", "'.$note.'", "'.$req['role_name'].'", "'.$asset_controller.'")');
                 
                 DB::commit();
 
@@ -3006,7 +3010,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {
-                    DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req->user_id.'")');
+                    DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req['user_id'].'")');
                     DB::commit();
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 } 
