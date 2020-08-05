@@ -95,8 +95,15 @@ class FamsEmailController extends Controller
 				$data->role_id = $v->role_id;
 				$data->user_id = $v->user_id;
 
-				$data->approve_url = url('/approval/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'A'.'/'.$data->no_reg.'');
-				$data->reject_url = url('/approval/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'R'.'/'.$data->no_reg.'');
+				$request = new \Illuminate\Http\Request();
+				$request->replace(['noreg' => $data->no_reg]);
+				$request->replace(['noreg' => $data->user_id]);
+				$request->replace(['role_name' => $data->role_name]);
+				$request->replace(['role_id' => $data->role_id]);
+				$request->replace(['status' => $data->status]);
+
+				$data->approve_url = url('/approval/update_status_disposal_email/A');
+				$data->reject_url = url('/approval/update_status_disposal_email/R');
 		
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
 				

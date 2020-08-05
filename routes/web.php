@@ -91,7 +91,7 @@ Route::match(['get', 'post'], 'grid-approval-history', [
 Route::get('/approval/berkas-amp/{no_reg}', 'ApprovalController@berkas_amp')->name('no_reg');
 Route::get('/printio/{noreg}/{asset_po_id}/{jenis_kendaraan}/{no_reg_item}', 'ApprovalController@print_io');
 Route::post('/approval/update_status_disposal/{status}/{no_reg}','ApprovalController@update_status_disposal');
-Route::post('/approval/update_status_disposal_email/{$user_id}/{$role_id}/{$role_name}/{$status}/{$noreg}','ApprovalController@update_status_disposal_email');
+Route::post('/approval/update_status_disposal_email/{$status}','ApprovalController@update_status_disposal_email');
 Route::get('/approval/view_disposal/{no_reg}', 'ApprovalController@view_disposal')->name('no_reg');
 Route::post('/approval/delete_asset_disposal', 'ApprovalController@delete_asset_disposal');
 Route::get('/approval/view_mutasi/{no_reg}', 'ApprovalController@view_mutasi')->name('no_reg');
