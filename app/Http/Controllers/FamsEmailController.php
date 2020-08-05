@@ -138,7 +138,8 @@ class FamsEmailController extends Controller
 
 		$request->replace(['id' => $_GET['id']]);
 		$param = unserialize(urldecode($_GET['id']));
-		$param['status'] = 'A';
+		$status =  array ('status'=>'A');
+		$param = array_merge($param, $status);
 
 		$id = urlencode(serialize($param));
 		$this->ApprovalController->update_status_disposal_email($id);
@@ -164,7 +165,8 @@ class FamsEmailController extends Controller
 
 		$request->replace(['id' => $_GET['id']]);
 		$param = unserialize(urldecode($_GET['id']));
-		$param['status'] = 'R';
+		$status =  array ('status'=>'R');
+		$param = array_merge($param, $status);
 		
 		$id = urlencode(serialize($param));
 		$this->ApprovalController->update_status_disposal_email($id);
