@@ -75,8 +75,8 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<td>$v->NAMA_MATERIAL</td>
 						<td>$v->LOKASI_BA_CODE - $v->LOKASI_BA_CODE_DESC</td>
 						<td>$v->TAHUN_PEROLEHAN</td>
-						<td>$harga_perolehan[$k]</td>
-						<td>$nilai_buku[$k]</td>
+						<td>".number_format($harga_perolehan[$k],0,',','.')."</td>
+						<td>".number_format($nilai_buku[$k],0,',','.')."</td>
 					</tr> 
 				";
 				$no++;
@@ -122,12 +122,14 @@ Dibutuhkan persetujuan atas dokumen berikut :
 
 		if (in_array($data->role_name, $list_approve))
 		{
-			$btn_approve = "<a href='".url('/disposal/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'A'.'/'.$data->no_reg.'')." 'target='_blank'><button type='button' class='btn btn-flat label-primary'>APPOVE</button></a>";
-			$btn_reject = "<a href='".url('/disposal/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'R'.'/'.$data->no_reg.'')."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
+			$btn_approve = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-primary'>APPOVE</button></a>";
+			$btn_reject = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
 		}
-
-		echo $content2; 
+		
 		echo $btn_approve."  ".$btn_reject; 
+		echo "<br><br>";
+		echo $content2; 
+		echo "<br>";
 
 
 		

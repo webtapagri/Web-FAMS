@@ -80,7 +80,7 @@ class FamsEmailController extends Controller
 			$dc = "";
 		}
 		$data->detail_url = url('/?noreg='.$dc.'');
-
+		
 		// $sql3 = " SELECT b.name, b.email FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
 		$sql3 = " SELECT b.name, b.email, b.id as user_id, b.role_id, c.name as role_name FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID LEFT JOIN TBM_ROLE c ON b.role_id = c.id WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
 		$dt_email_to = DB::SELECT($sql3);
@@ -94,7 +94,10 @@ class FamsEmailController extends Controller
 				$data->role_name = $v->role_name;
 				$data->role_id = $v->role_id;
 				$data->user_id = $v->user_id;
-				
+
+				$data->approve_url = url('/approval/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'A'.'/'.$data->no_reg.'');
+				$data->reject_url = url('/approval/update_status_disposal_email/'.$data->user_id.'/'.$data->role_id.'/'.$data->role_name.'/'.'R'.'/'.$data->no_reg.'');
+		
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
 				
 				// Mail::to($v->email)
