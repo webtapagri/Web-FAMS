@@ -124,6 +124,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 			$btn_reject = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
 		}
 		
+		echo "<br>";
 		echo $btn_approve."  ".$btn_reject; 
 		echo "<br>";
 	?>
@@ -132,7 +133,6 @@ Dibutuhkan persetujuan atas dokumen berikut :
 	<?php 
 	
 	echo $content2; 
-	echo "<br>";
 
 	?>
 </div>
