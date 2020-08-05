@@ -2959,10 +2959,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
            
         }
     }
-    function update_status_disposal_email(Request $request, $status)
+    function update_status_disposal_email(Request $request)
     {
         $req = $request->all();
         $no_registrasi = str_replace("-", "/", $req->noreg);
+        $status = $req->status;
         $note = '';
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
     
