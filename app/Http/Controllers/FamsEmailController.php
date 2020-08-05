@@ -108,10 +108,10 @@ class FamsEmailController extends Controller
 					'user_id' => $data->user_id,
 					'id' => $data->user_id,
 					'role_name' => $data->role_name,
-					'role_id' => $data->role_id,
-					'status' => ''
+					'role_id' => $data->role_id
 				);
-				$id = base64_encode($param);
+
+				$id = urlencode(serialize($param));
 				$data->approve_url = url('/email_approve/?id='.$id);
 				$data->reject_url = url('/email_reject/?id='.$id);
 				// $data->approve_url = url('/approval/update_status_disposal_email/?status=A');
@@ -131,7 +131,7 @@ class FamsEmailController extends Controller
 		$request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-		$param = base64_decode($_GET['id']);
+		$param = unserialize(urldecode($_GET['id']));
 		$param['status'] = 'A';
 
 		// $request->replace(['noreg' => $_GET['noreg']]);
@@ -150,7 +150,7 @@ class FamsEmailController extends Controller
 		$request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-		$param = base64_decode($_GET['id']);
+		$param = unserialize(urldecode($_GET['id']));
 		$param['status'] = 'R';
 
 		$client = new Client();
