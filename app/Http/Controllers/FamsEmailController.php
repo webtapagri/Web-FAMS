@@ -140,7 +140,9 @@ class FamsEmailController extends Controller
 		// $request->replace(['role_name' => $_GET['role_name']]);
 		// $request->replace(['role_id' => $_GET['role_id']]);
 
-		$client = new Client();
+		$client = new Client([
+			'base_uri' => url('/'),  // <-- base_uri instead of base_url
+		]);
 		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,('Content-Type: multipart/form-data'));
 		$response = $request->send();
 	}
@@ -153,7 +155,9 @@ class FamsEmailController extends Controller
 		$param = unserialize(urldecode($_GET['id']));
 		$param['status'] = 'R';
 
-		$client = new Client();
+		$client = new Client([
+			'base_uri' => url('/'),  // <-- base_uri instead of base_url
+		]);
 		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,('Content-Type: multipart/form-data'));
 		$response = $request->send();
 	}
