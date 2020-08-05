@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\TR_REG_ASSET_DETAIL;
 use API;
 use App\Jobs\SendEmail;
+use Guzzle\Http\Client;
 
 class FamsEmailController extends Controller
 {
@@ -95,15 +96,26 @@ class FamsEmailController extends Controller
 				$data->role_id = $v->role_id;
 				$data->user_id = $v->user_id;
 
-				$request = new \Illuminate\Http\Request();
-				$request->replace(['noreg' => $data->no_reg]);
-				$request->replace(['user_id' => $data->user_id]);
-				$request->replace(['id' => $data->user_id]);
-				$request->replace(['role_name' => $data->role_name]);
-				$request->replace(['role_id' => $data->role_id]);
+				// $request = new \Illuminate\Http\Request();
+				// $request->replace(['noreg' => $data->no_reg]);
+				// $request->replace(['user_id' => $data->user_id]);
+				// $request->replace(['id' => $data->user_id]);
+				// $request->replace(['role_name' => $data->role_name]);
+				// $request->replace(['role_id' => $data->role_id]);
 
-				$data->approve_url = url('/approval/update_status_disposal_email/?status=A');
-				$data->reject_url = url('/approval/update_status_disposal_email/?status=R');
+				$param = array(
+					'noreg' => $data->no_reg,
+					'user_id' => $data->user_id,
+					'id' => $data->user_id,
+					'role_name' => $data->role_name,
+					'role_id' => $data->role_id,
+					'status' => ''
+				);
+				$id = base64_encode($param);
+				$data->approve_url = url('/email_approve/?id='.$id);
+				$data->reject_url = url('/email_reject/?id='.$id);
+				// $data->approve_url = url('/approval/update_status_disposal_email/?status=A');
+				// $data->reject_url = url('/approval/update_status_disposal_email/?status=R');
 		
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
 				
@@ -112,6 +124,38 @@ class FamsEmailController extends Controller
 					// ->send(new FamsEmail($data));
 			}
 		}
+	}
+
+	public function approve()
+	{		
+		$request = new \Illuminate\Http\Request();
+
+		$request->replace(['id' => $_GET['id']]);
+		$param = base64_decode($_GET['id']);
+		$param['status'] = 'A';
+
+		// $request->replace(['noreg' => $_GET['noreg']]);
+		// $request->replace(['user_id' => $_GET['user_id']]);
+		// $request->replace(['id' => $_GET['id']]);
+		// $request->replace(['role_name' => $_GET['role_name']]);
+		// $request->replace(['role_id' => $_GET['role_id']]);
+
+		$client = new Client();
+		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,('Content-Type: multipart/form-data'));
+		$response = $request->send();
+	}
+
+	public function reject()
+	{		
+		$request = new \Illuminate\Http\Request();
+
+		$request->replace(['id' => $_GET['id']]);
+		$param = base64_decode($_GET['id']);
+		$param['status'] = 'R';
+
+		$client = new Client();
+		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,('Content-Type: multipart/form-data'));
+		$response = $request->send();
 	}
 
 	public function kirim_email()
