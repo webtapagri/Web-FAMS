@@ -2966,7 +2966,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 		$request->replace(['id' => $_GET['id']]);
         $req = unserialize(urldecode($_GET['id']));
         
-        $no_registrasi = str_replace("-", "/", $req->noreg);
+        $no_registrasi = str_replace("-", "/", $req['noreg']);
         $status = $req['status'];
         $note = '';
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
