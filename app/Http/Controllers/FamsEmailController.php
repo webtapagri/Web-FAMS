@@ -102,13 +102,6 @@ class FamsEmailController extends Controller
 				$data->role_id = $v->role_id;
 				$data->user_id = $v->user_id;
 
-				// $request = new \Illuminate\Http\Request();
-				// $request->replace(['noreg' => $data->no_reg]);
-				// $request->replace(['user_id' => $data->user_id]);
-				// $request->replace(['id' => $data->user_id]);
-				// $request->replace(['role_name' => $data->role_name]);
-				// $request->replace(['role_id' => $data->role_id]);
-
 				$param_approve = array(
 					'noreg' => $data->no_reg,
 					'status' => 'A',
@@ -131,8 +124,6 @@ class FamsEmailController extends Controller
 				$idr = urlencode(serialize($param_reject));
 				$data->approve_url = url('/email_approve/?id='.$ida);
 				$data->reject_url = url('/email_reject/?id='.$idr);
-				// $data->approve_url = url('/approval/update_status_disposal_email/?status=A');
-				// $data->reject_url = url('/approval/update_status_disposal_email/?status=R');
 		
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
 				
@@ -148,24 +139,10 @@ class FamsEmailController extends Controller
 		$request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-		// $param = unserialize(urldecode($_GET['id']));
 
 		$id =  $_GET['id'];
 		$this->ApprovalController->update_status_disposal_email($id);
 
-
-		// $client = new Client([
-		// 	'base_uri' => url('/'),  // <-- base_uri instead of base_url
-		// ]);
-		
-		// $headers =  [
-		// 	'Content-Type: multipart/form-data',
-		// 	'X-CSRF-TOKEN' => csrf_token(),
-		// 	'exceptions' => false,
-		// ];
-
-		// $request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
-		// $response = $request->send();
 	}
 
 	public function reject()
@@ -173,20 +150,9 @@ class FamsEmailController extends Controller
 		$request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-		// $param = unserialize(urldecode($_GET['id']));
 
 		$id =  $_GET['id'];
 		$this->ApprovalController->update_status_disposal_email($id);
-
-		// $client = new Client([
-		// 	'base_uri' => url('/'),  // <-- base_uri instead of base_url
-		// ]);
-		// $headers =  [
-		// 	'Content-Type: multipart/form-data',
-		// 	'X-CSRF-TOKEN' => csrf_token()
-		// ];
-		// $request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
-		// $response = $request->send();
 	}
 
 	public function kirim_email()
