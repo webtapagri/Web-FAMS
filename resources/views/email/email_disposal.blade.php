@@ -94,6 +94,21 @@ Dibutuhkan persetujuan atas dokumen berikut :
 
 		$content2 = "";
 		
+		$list_approve = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
+		$btn_approve = "";
+		$btn_reject = "";
+
+		if (in_array($data->role_name, $list_approve))
+		{
+			$btn_approve = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-primary'>APPROVE</button></a>";
+			$btn_reject = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
+		}
+		
+		echo $btn_approve."  ".$btn_reject; 
+		echo "<br><br>";
+		echo $content2; 
+
+
 		//echo "1<pre>"; print_r($data->history_approval);
 		
 		if( $data->history_approval )
@@ -116,23 +131,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 			$content2 = $l;
 		} 
 
-		$list_approve = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
-		$btn_approve = "";
-		$btn_reject = "";
-
-		if (in_array($data->role_name, $list_approve))
-		{
-			$btn_approve = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-primary'>APPROVE</button></a>";
-			$btn_reject = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
-		}
-		
-		echo $btn_approve."  ".$btn_reject; 
-		echo "<br><br>";
-		echo $content2; 
 		echo "<br>";
-
-
-		
 
 	?>
 </div>

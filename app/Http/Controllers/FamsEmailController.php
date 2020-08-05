@@ -109,17 +109,28 @@ class FamsEmailController extends Controller
 				// $request->replace(['role_name' => $data->role_name]);
 				// $request->replace(['role_id' => $data->role_id]);
 
-				$param = array(
+				$param_approve = array(
 					'noreg' => $data->no_reg,
+					'status' => 'A',
 					'user_id' => $data->user_id,
 					'id' => $data->user_id,
 					'role_name' => $data->role_name,
 					'role_id' => $data->role_id
 				);
 
-				$id = urlencode(serialize($param));
-				$data->approve_url = url('/email_approve/?id='.$id);
-				$data->reject_url = url('/email_reject/?id='.$id);
+				$param_reject = array(
+					'noreg' => $data->no_reg,
+					'status' => 'R',
+					'user_id' => $data->user_id,
+					'id' => $data->user_id,
+					'role_name' => $data->role_name,
+					'role_id' => $data->role_id
+				);
+
+				$ida = urlencode(serialize($param_approve));
+				$idr = urlencode(serialize($param_reject));
+				$data->approve_url = url('/email_approve/?id='.$ida);
+				$data->reject_url = url('/email_reject/?id='.$idr);
 				// $data->approve_url = url('/approval/update_status_disposal_email/?status=A');
 				// $data->reject_url = url('/approval/update_status_disposal_email/?status=R');
 		
@@ -137,11 +148,9 @@ class FamsEmailController extends Controller
 		$request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-		$param = unserialize(urldecode($_GET['id']));
-		$status =  array ('status'=>'A');
-		$param = array_merge($param, $status);
+		// $param = unserialize(urldecode($_GET['id']));
 
-		$id = urlencode(serialize($param));
+		$id =  $_GET['id'];
 		$this->ApprovalController->update_status_disposal_email($id);
 
 
@@ -164,11 +173,9 @@ class FamsEmailController extends Controller
 		$request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-		$param = unserialize(urldecode($_GET['id']));
-		$status =  array ('status'=>'R');
-		$param = array_merge($param, $status);
-		
-		$id = urlencode(serialize($param));
+		// $param = unserialize(urldecode($_GET['id']));
+
+		$id =  $_GET['id'];
 		$this->ApprovalController->update_status_disposal_email($id);
 
 		// $client = new Client([
