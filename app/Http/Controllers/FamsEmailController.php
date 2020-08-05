@@ -14,6 +14,11 @@ use App\Http\Controllers\ApprovalController;
 
 class FamsEmailController extends Controller
 {
+	protected $ApprovalController;
+    public function __construct(ApprovalController $ApprovalController)
+    {
+        $this->ApprovalController = $ApprovalController;
+    }
 
 	public function index(Request $request)
 	{
@@ -136,7 +141,7 @@ class FamsEmailController extends Controller
 		$param['status'] = 'A';
 
 		$id = urlencode(serialize($param));
-		ApprovalController::update_status_disposal_email($id);
+		$this->ApprovalController->update_status_disposal_email($id);
 
 
 		// $client = new Client([
@@ -162,7 +167,7 @@ class FamsEmailController extends Controller
 		$param['status'] = 'R';
 		
 		$id = urlencode(serialize($param));
-		ApprovalController::update_status_disposal_email($id);
+		$this->ApprovalController->update_status_disposal_email($id);
 
 		// $client = new Client([
 		// 	'base_uri' => url('/'),  // <-- base_uri instead of base_url
