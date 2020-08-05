@@ -100,7 +100,6 @@ class FamsEmailController extends Controller
 				$request->replace(['noreg' => $data->user_id]);
 				$request->replace(['role_name' => $data->role_name]);
 				$request->replace(['role_id' => $data->role_id]);
-				$request->replace(['status' => $data->status]);
 
 				$data->approve_url = url('/approval/update_status_disposal_email/A');
 				$data->reject_url = url('/approval/update_status_disposal_email/R');
