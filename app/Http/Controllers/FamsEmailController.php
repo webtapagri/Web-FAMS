@@ -143,7 +143,13 @@ class FamsEmailController extends Controller
 		$client = new Client([
 			'base_uri' => url('/'),  // <-- base_uri instead of base_url
 		]);
-		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,('Content-Type: multipart/form-data'));
+		
+		$headers =  [
+			'Content-Type: multipart/form-data',
+			'X-CSRF-TOKEN' => csrf_token()
+		];
+		
+		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
 		$response = $request->send();
 	}
 
@@ -158,7 +164,11 @@ class FamsEmailController extends Controller
 		$client = new Client([
 			'base_uri' => url('/'),  // <-- base_uri instead of base_url
 		]);
-		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,('Content-Type: multipart/form-data'));
+		$headers =  [
+			'Content-Type: multipart/form-data',
+			'X-CSRF-TOKEN' => csrf_token()
+		];
+		$request = $client->post('/approval/update_status_disposal_email')->addPostFiles($param,["headers" => $headers]);
 		$response = $request->send();
 	}
 
