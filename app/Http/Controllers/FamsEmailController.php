@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\TR_REG_ASSET_DETAIL;
 use API;
 use App\Jobs\SendEmail;
-use Guzzle\Http\Client;
+use GuzzleHttp\Client;
 
 class FamsEmailController extends Controller
 {
