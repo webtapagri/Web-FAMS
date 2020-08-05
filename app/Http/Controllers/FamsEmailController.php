@@ -97,7 +97,8 @@ class FamsEmailController extends Controller
 
 				$request = new \Illuminate\Http\Request();
 				$request->replace(['noreg' => $data->no_reg]);
-				$request->replace(['noreg' => $data->user_id]);
+				$request->replace(['id' => $data->user_id]);
+				$request->replace(['user_id' => $data->user_id]);
 				$request->replace(['role_name' => $data->role_name]);
 				$request->replace(['role_id' => $data->role_id]);
 
