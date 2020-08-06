@@ -83,6 +83,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 
 		echo $content;
 		echo "<br>";
+		echo "<br>";
 		echo $data->message;
 	?>
 	<br/>

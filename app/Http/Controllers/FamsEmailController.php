@@ -130,7 +130,7 @@ class FamsEmailController extends Controller
 				//cek email jenjang approve berikutny sebelum approve via email 
 				$cek_email = $this->ApprovalController->get_email_next_approval($data->no_reg, $data->user_id);
 				if($cek_email['email'] == ""){
-					$data->message = "Email user ". $cek_email['next_approve'] ."tidak tersedia, sehingga user bersangkutan tidak dapat menerima email pemberitahauan.";
+					$data->message = "Email user <b>". $cek_email['next_approve'] ."</b> tidak tersedia, sehingga user bersangkutan tidak dapat menerima email pemberitahauan.";
 				}				
 						
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
