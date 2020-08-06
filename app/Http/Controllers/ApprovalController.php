@@ -848,6 +848,15 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         $rolename = Session::get('role');
         $asset_type = "";
 
+        //validasi email next approval
+        $user_id = Session::get('user_id');
+        $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+
+        if($cek_email['email'] == ""){
+            return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+        }
+
+
         // VALIDASI ASSET CONTROLLER 
         if($status != 'R')
         {
@@ -2897,7 +2906,6 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $req = $request->all();
 
         $no_registrasi = str_replace("-", "/", $noreg);
-        $user_id = Session::get('user_id');
         $note = $request->parNote;
         $role_id = Session::get('role_id');
         $role_name = Session::get('role'); //get role id user
@@ -2905,6 +2913,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
         //echo "2<pre>"; print_r($validasi_last_approve); die();
+
+        $user_id = Session::get('user_id');
+        $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+
+        if($cek_email['email'] == ""){
+            return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+        }
 
         if( $validasi_last_approve == 0 )
         {
@@ -3233,6 +3248,32 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         return $ac;
     }
+    function get_email_next_approval($noreg,$user_id)
+    {
+        $sql = " SELECT DISTINCT c.workflow_job_code, b.workflow_group_name, d.name, c.seq, c.operation, c.lintas, e.name as next_approve, c.limit_approve,f.email
+                FROM TR_WORKFLOW a
+                LEFT JOIN TR_WORKFLOW_DETAIL b ON a.workflow_code = b.workflow_code 
+                LEFT JOIN TR_WORKFLOW_JOB c ON c.workflow_detail_code = b.workflow_detail_code 
+                LEFT JOIN TBM_ROLE d ON c.id_role = d.id
+                LEFT JOIN TBM_ROLE e ON c.next_approve = e.id
+                LEFT JOIN TBM_USER f ON e.id = f.role_id -- next approval user 
+                LEFT JOIN TBM_USER g ON g.role_id = d.id -- current approval user
+                LEFT JOIN v_outstanding h ON b.workflow_detail_code = h.workflow_detail_code and h.user_id = g.id and h.document_code = '".$noreg."'
+                where h.user_id = '".$user_id."' ";
+
+        $data = DB::SELECT($sql);
+
+        if(!empty($data))
+        {   
+            $dt = array( 'email' => $data[0]->email,'next_approve' => $data[0]->next_approve);
+        }
+        else
+        {
+            $dt = array( 'email' => "" ,'next_approve' => "");
+        }
+
+        return $dt;
+    }
 
     function cek_kas_ac($noreg)
     {
@@ -3439,11 +3480,19 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $req = $request->all();
         
         $no_registrasi = str_replace("-", "/", $noreg);
-        $user_id = Session::get('user_id');
         $note = $request->parNote;
         $role_id = Session::get('role_id');
         $role_name = Session::get('role'); //get role id user
         $asset_controller = $this->get_ac_mutasi($no_registrasi); //get asset controller 
+
+        
+        $user_id = Session::get('user_id');
+        $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+
+        if($cek_email['email'] == ""){
+            return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+        }
+
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
 

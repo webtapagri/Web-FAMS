@@ -4224,7 +4224,7 @@
                             if(i > 1){
                                 return false;
                             }
-                            item += "<tr><td colspan='11' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
+                            item += "<tr><td colspan='15' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
                             
                         }
                         i++;

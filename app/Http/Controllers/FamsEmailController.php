@@ -76,6 +76,7 @@ class FamsEmailController extends Controller
 		$data->nilai_buku = $NILAI_BUKU;
 		$data->history_approval = $dt_history_approval;
 		$data->no_reg = $req['noreg'];
+		$data->message = "";
 		
 		$document_code_new = $data->datax[0]->document_code;
 		if($document_code_new != "")
@@ -120,11 +121,18 @@ class FamsEmailController extends Controller
 					'role_id' => $data->role_id
 				);
 
+
 				$ida = urlencode(serialize($param_approve));
 				$idr = urlencode(serialize($param_reject));
 				$data->approve_url = url('/email_approve/?id='.$ida);
 				$data->reject_url = url('/email_reject/?id='.$idr);
-		
+
+				//cek email jenjang approve berikutny sebelum approve via email 
+				$cek_email = $this->ApprovalController->get_email_next_approval($data->no_reg, $data->user_id);
+				if($cek_email['email'] == ""){
+					$data->message = "Email user ". $cek_email['next_approve'] ."tidak tersedia, sehingga user bersangkutan tidak dapat menerima email pemberitahauan.";
+				}				
+						
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
 				
 				// Mail::to($v->email)

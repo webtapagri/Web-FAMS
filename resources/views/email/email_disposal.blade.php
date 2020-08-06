@@ -127,6 +127,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 		echo "<br>";
 		echo $btn_approve."  ".$btn_reject; 
 		echo "<br>";
+		echo $data->message;
 	?>
 	<br/>
 	<h4> Historical Approval : </h4>

@@ -76,6 +76,8 @@ Dibutuhkan persetujuan atas dokumen berikut :
 		}
 
 		echo $content;
+		echo "<br>";
+		echo $data->message;
 	?>
 	<br/>
 	<h4> Historical Approval : </h4>
