@@ -1468,8 +1468,6 @@
         var param = '';     
         var getnoreg = $("#getnoreg").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
-        // var jns = [];
-        var jenis_asset = [];
         var input2 = document.getElementsByName('asset_class[]'); 
         var asset_class = [];
         var no = 1;
@@ -1479,19 +1477,19 @@
 
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value);
-            var input4 = document.getElementsByName('jenis-asset-'+no); 
+            var jenis_asset = document.getElementsByName('jenis-asset-'+no)[i+input2.length/2].value; 
             //  data.push($('input[name="jenis-asset-"+no]').select2(('data')[0].id));
             // // var jsa = data[0].id;
 
             // if (typeof input4[i+input4.length/2] !== 'undefined'){
-                jenis_asset.push(input4[i+input4.length/2].value);
+                // jenis_asset.push(input4[i+input4.length/2].value);
             // }else{
             //     jenis_asset = data;
             // }
             // var dt = $("#request-form jenis-asset-"+no+"").val();
             // jenis_asset = $("#jenis-asset-"+no+"").val(); 
             console.log(jenis_asset);
-            if( $.trim(jenis_asset[i]) == "" )
+            if( $.trim(jenis_asset) == "" )
             {
                 notify({
                     type: 'warning',
@@ -1500,7 +1498,7 @@
                 return false;
             } 
 
-            if(jenis_asset[i].charAt(0) !== asset_class[i])
+            if(jenis_asset.charAt(0) !== asset_class[i])
             {
                 notify({
                     type: 'warning',
