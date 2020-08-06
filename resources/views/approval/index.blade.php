@@ -1478,17 +1478,12 @@
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value);
             var input4 = document.getElementsByName('jenis-asset-'+no); 
-            // var jenis_asset = document.getElementsByName('jenis-asset-'+no)[i+input2.length/2].value; 
-            //  data.push($('input[name="jenis-asset-"+no]').select2(('data')[0].id));
-            // // var jsa = data[0].id;
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
                jenis_asset = (input4[i+input4.length/2].value);
             }else{
                 jenis_asset = $('input[name="jenis-asset-'+no+'"]').select2('data')[0].id;
             }
-            // var dt = $("#request-form jenis-asset-"+no+"").val();
-            // jenis_asset = $("#jenis-asset-"+no+"").val(); 
             console.log(jenis_asset);
             if( $.trim(jenis_asset) == "" )
             {
@@ -1506,41 +1501,15 @@
                     message: " Jenis Asset tidak sesuai "
                 });
                 return false;
-            }            
-            // jenis_asset.push($("#jenis-asset-"+no+"").val());            
+            }                
             no++;
         } 
-        // alert(selectValue);
         var input3 = document.getElementsByName('kode_asset_ams[]'); 
         var kode_asset_ams = [];
     
         for (var i = 0; i < input3.length/2; i++) { 
             kode_asset_ams.push(input3[i+input3.length/2].value); 
         }   
-
-        // VALIDASI 
-        // for (var i = 0; i < input2.length/2; i++) {   
-        //     console.log(jenis_asset);
-        //     console.log(jenis_asset[i].charAt(0));
-        //     console.log(asset_class[i]);
-        //     if( $.trim(jenis_asset[i].charAt(0)) == "" )
-        //     {
-        //         notify({
-        //             type: 'warning',
-        //             message: " Jenis Asset harus diisi"
-        //         });
-        //         return false;
-        //     } 
-
-        //     if(jenis_asset[i].charAt(0) !== asset_class[i])
-        //     {
-        //         notify({
-        //             type: 'warning',
-        //             message: " Jenis Asset tidak sesuai "
-        //         });
-        //         return false;
-        //     } 
-        // }
        
         if(confirm('Confirm Jenis Asset ?'))
         {
