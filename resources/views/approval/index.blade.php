@@ -1472,7 +1472,7 @@
         var asset_class = [];
         var no = 1;
         var data = [];
-        var jenis_asset = "";
+        var jenis_asset = [];
         
 
         for (var i = 0; i < input2.length/2; i++) { 
@@ -1483,14 +1483,14 @@
             // // var jsa = data[0].id;
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
-               jenis_asset = (input4[i+input4.length/2].value);
+               jenis_asset[i] = (input4[i+input4.length/2].value);
             }else{
-                jenis_asset = $("#jenis-asset-"+no).select2('data')[0].id;
+                jenis_asset[i] = $("#jenis-asset-"+no).select2('data')[0].id;
             }
             // var dt = $("#request-form jenis-asset-"+no+"").val();
             // jenis_asset = $("#jenis-asset-"+no+"").val(); 
-            console.log(jenis_asset);
-            if( $.trim(jenis_asset) == "" )
+            console.log(jenis_asset[i]);
+            if( $.trim(jenis_asset[i]) == "" )
             {
                 notify({
                     type: 'warning',
@@ -1499,7 +1499,7 @@
                 return false;
             } 
 
-            if(jenis_asset.charAt(0) !== asset_class[i])
+            if(jenis_asset[i].charAt(0) !== asset_class[i])
             {
                 notify({
                     type: 'warning',
