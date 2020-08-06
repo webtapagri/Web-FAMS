@@ -1472,17 +1472,18 @@
         var input2 = document.getElementsByName('asset_class[]'); 
         var asset_class = [];
         var no = 1;
-        
+        var data = [];
+
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value);
             var input4 = document.getElementsByName('jenis-asset-'+no); 
-            var data = $('#jenis-asset-'+no).select2('data');
+            var data.push($('#jenis-asset-'+no).select2('data')[0].id);
             // var jsa = data[0].id;
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
                 jenis_asset.push(input4[i+input4.length/2].value);
             }else{
-                jenis_asset.push(data[0].id);
+                jenis_asset = data;
             }
             no++;
         } 
