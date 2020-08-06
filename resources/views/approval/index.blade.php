@@ -1472,7 +1472,7 @@
         var asset_class = [];
         var no = 1;
         var data = [];
-
+        var jenis_asset = "";
         
 
         for (var i = 0; i < input2.length/2; i++) { 
@@ -1483,9 +1483,9 @@
             // // var jsa = data[0].id;
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
-               var jenis_asset = (input4[i+input4.length/2].value);
+               jenis_asset = (input4[i+input4.length/2].value);
             }else{
-                var jenis_asset = $('input[name="jenis-asset-"+no]').select2('data')[0].id;
+                jenis_asset = $('input[name="jenis-asset-"'+no+'"]').select2('data')[0].id;
             }
             // var dt = $("#request-form jenis-asset-"+no+"").val();
             // jenis_asset = $("#jenis-asset-"+no+"").val(); 
