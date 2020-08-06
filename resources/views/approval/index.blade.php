@@ -1477,7 +1477,7 @@
             asset_class.push(input2[i+input2.length/2].value);
             var input4 = document.getElementsByName('jenis-asset-'+no); 
             var data = $('#jenis-asset-'+no).select2('data');
-            var jsa = data[0].id;
+            var jsa = data[i].id;
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
                 jenis_asset.push(input4[i+input4.length/2].value);
