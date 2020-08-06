@@ -1477,15 +1477,16 @@
 
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value);
-            var jenis_asset = document.getElementsByName('jenis-asset-'+no)[i+input2.length/2].value; 
+            var input4 = document.getElementsByName('jenis-asset-'+no); 
+            // var jenis_asset = document.getElementsByName('jenis-asset-'+no)[i+input2.length/2].value; 
             //  data.push($('input[name="jenis-asset-"+no]').select2(('data')[0].id));
             // // var jsa = data[0].id;
 
-            // if (typeof input4[i+input4.length/2] !== 'undefined'){
-                // jenis_asset.push(input4[i+input4.length/2].value);
-            // }else{
-            //     jenis_asset = data;
-            // }
+            if (typeof input4[i+input4.length/2] !== 'undefined'){
+               var jenis_asset = (input4[i+input4.length/2].value);
+            }else{
+                var jenis_asset = $('input[name="jenis-asset-"+no]').select2(('data')[0].id);
+            }
             // var dt = $("#request-form jenis-asset-"+no+"").val();
             // jenis_asset = $("#jenis-asset-"+no+"").val(); 
             console.log(jenis_asset);
