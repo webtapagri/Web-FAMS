@@ -1485,7 +1485,7 @@
             if (typeof input4[i+input4.length/2] !== 'undefined'){
                jenis_asset = (input4[i+input4.length/2].value);
             }else{
-                jenis_asset = $('input[name="jenis-asset-"'+no+']').select2('data')[0].id;
+                jenis_asset = $(input[name="jenis-asset-"+no]).select2('data')[0].id;
             }
             // var dt = $("#request-form jenis-asset-"+no+"").val();
             // jenis_asset = $("#jenis-asset-"+no+"").val(); 
