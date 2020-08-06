@@ -1496,11 +1496,13 @@
 
         // VALIDASI 
         for (var i = 0; i < input2.length/2; i++) {   
-            var x = jenis_asset[i];
-            var jns = x.charAt(0);
-            console.log(jns);
+            console.log(jenis_asset);
+            // var x = jenis_asset[i];
+            // var jns = x.charAt(0);
+            // var jns = jenis_asset[i].charAt(0);
+            console.log(jenis_asset[i].charAt(0));
             console.log(asset_class[i]);
-            if( $.trim(x) == "" )
+            if( $.trim(jenis_asset[i].charAt(0)) == "" )
             {
                 notify({
                     type: 'warning',
@@ -1509,7 +1511,7 @@
                 return false;
             } 
 
-            if(jns !== asset_class[i])
+            if(jenis_asset[i].charAt(0) !== asset_class[i])
             {
                 notify({
                     type: 'warning',
