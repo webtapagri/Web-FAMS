@@ -1477,12 +1477,12 @@
             asset_class.push(input2[i+input2.length/2].value);
             var input4 = document.getElementsByName('jenis-asset-'+no); 
             var data = $('#jenis-asset-'+no).select2('data');
-            var jsa = data[i].id;
+            // var jsa = data[0].id;
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
                 jenis_asset.push(input4[i+input4.length/2].value);
             }else{
-                jenis_asset.push(jsa);
+                jenis_asset.push(data[0].id);
             }
             no++;
         } 
