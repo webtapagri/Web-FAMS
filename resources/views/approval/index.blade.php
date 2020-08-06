@@ -1468,23 +1468,27 @@
         var param = '';     
         var getnoreg = $("#getnoreg").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
+        // var jns = [];
         var jenis_asset = [];
         var input2 = document.getElementsByName('asset_class[]'); 
         var asset_class = [];
         var no = 1;
         var data = [];
 
+        
+
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value);
-            var input4 = document.getElementsByName('jenis-asset-'+no); 
-             data.push($('input[name="jenis-asset-"+no]').select2(('data')[0].id));
-            // var jsa = data[0].id;
+            // var input4 = document.getElementsByName('jenis-asset-'+no); 
+            //  data.push($('input[name="jenis-asset-"+no]').select2(('data')[0].id));
+            // // var jsa = data[0].id;
 
-            if (typeof input4[i+input4.length/2] !== 'undefined'){
-                jenis_asset.push(input4[i+input4.length/2].value);
-            }else{
-                jenis_asset = data;
-            }
+            // if (typeof input4[i+input4.length/2] !== 'undefined'){
+            //     jenis_asset.push(input4[i+input4.length/2].value);
+            // }else{
+            //     jenis_asset = data;
+            // }
+            jenis_asset.push($("#jenis-asset-"+no+"").val());            
             no++;
         } 
         // alert(selectValue);
@@ -4173,7 +4177,7 @@
                         item += "<td>" + val.tujuan + "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
                                         if(val.kode_asset_ams_tujuan === "") { 
-                                            item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+no+"' id='jenis-asset-"+no+"' value='"+val.jenis_asset+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                                            item += "<td width='10%'><input type='text' class='form-control input-xs jenis_asset' name='jenis-asset-"+no+"' id='jenis-asset-"+no+"' ><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
                                         }
                                         else{
                                             item += "<td>" + val.jenis_asset_tujuan + "</td>";
