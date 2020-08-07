@@ -3250,16 +3250,15 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     }
     function get_email_next_approval($noreg,$user_id)
     {
-        $sql = " SELECT DISTINCT c.workflow_job_code, b.workflow_group_name, d.name, c.seq, c.operation, c.lintas, e.name as next_approve, c.limit_approve,f.email
-                FROM TR_WORKFLOW a
-                LEFT JOIN TR_WORKFLOW_DETAIL b ON a.workflow_code = b.workflow_code 
-                LEFT JOIN TR_WORKFLOW_JOB c ON c.workflow_detail_code = b.workflow_detail_code 
-                LEFT JOIN TBM_ROLE d ON c.id_role = d.id
-                LEFT JOIN TBM_ROLE e ON c.next_approve = e.id
-                LEFT JOIN TBM_USER f ON e.id = f.role_id -- next approval user 
-                LEFT JOIN TBM_USER g ON g.role_id = d.id -- current approval user
-                LEFT JOIN v_outstanding h ON b.workflow_detail_code = h.workflow_detail_code and h.user_id = g.id and h.document_code = '".$noreg."'
-                where h.user_id = '".$user_id."' ";
+        $sql = " SELECT * FROM (
+            SELECT @prev_col_a as prev_name, @user_id as prev_user_id,b.name as next_approve, b.email, b.role_id,
+               @prev_col_a := a.name AS col_a,
+                 @user_id := user_id AS user_id
+            FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID LEFT JOIN TBM_ROLE c ON b.role_id = c.id,
+            (SELECT @prev_col_a := NULL, @user_id := 0) prv
+            WHERE a.document_code = '".$noreg."' 
+            ORDER BY -a.date ASC, a.date ASC) approver
+            WHERE approver.prev_user_id = '".$user_id."' ";
 
         $data = DB::SELECT($sql);
 
