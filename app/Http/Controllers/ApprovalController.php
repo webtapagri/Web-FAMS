@@ -850,10 +850,16 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
 
         //validasi email next approval
         $user_id = Session::get('user_id');
-        $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+        $last_email_approve = $this->get_last_email_approve($no_registrasi);
+        //echo "2<pre>"; print_r($validasi_last_approve); die();
 
-        if($cek_email['email'] == ""){
-            return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+        if($last_email_approve <> 1){
+
+            $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+
+            if($cek_email['email'] == ""){
+                return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+            }
         }
 
 
@@ -1511,6 +1517,30 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         $data = DB::table('v_history')
 							->selectRaw(" COUNT(*) AS jml")
 							->whereRaw ("status_dokumen = 'Disetujui' AND document_code = '$noreg'")
+                            ->get();
+                            
+
+        if($data)
+        { 
+            $dt = $data[0]->jml; 
+        }
+        else
+        { 
+            $dt = '0'; 
+        }
+        
+        return $dt;
+    }
+
+    public function get_last_email_approve($noreg)
+    {
+        // $sql = " SELECT COUNT(*) AS jml FROM v_history WHERE status_dokumen = 'Disetujui' AND document_code = '{$noreg}' ";
+        // $data = DB::SELECT($sql);
+        
+        // $noreg = str_replace("-", "/", $noreg);
+        $data = DB::table('v_history_approval')
+							->selectRaw(" COUNT(*) AS jml")
+							->whereRaw ("status_approval = 'Menunggu' AND document_code = '$noreg'")
                             ->get();
                             
 
@@ -2912,13 +2942,17 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
+        $last_email_approve = $this->get_last_email_approve($no_registrasi);
+        $user_id = Session::get('user_id');
         //echo "2<pre>"; print_r($validasi_last_approve); die();
 
-        $user_id = Session::get('user_id');
-        $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+        if($last_email_approve <> 1){
 
-        if($cek_email['email'] == ""){
-            return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+            $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+
+            if($cek_email['email'] == ""){
+                return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+            }
         }
 
         if( $validasi_last_approve == 0 )
@@ -3486,10 +3520,16 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         
         $user_id = Session::get('user_id');
-        $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+        $last_email_approve = $this->get_last_email_approve($no_registrasi);
+        //echo "2<pre>"; print_r($validasi_last_approve); die();
 
-        if($cek_email['email'] == ""){
-            return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+        if($last_email_approve <> 1){
+
+            $cek_email = $this->get_email_next_approval($no_registrasi,$user_id);
+
+            if($cek_email['email'] == ""){
+                return response()->json(['status' => false, "message" => "Email User ". $cek_email['next_approve'] ."tidak tersedia"]);
+            }
         }
 
     
