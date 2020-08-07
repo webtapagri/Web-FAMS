@@ -1473,6 +1473,7 @@
         var no = 1;
         var data = [];
         var jenis_asset = "";
+        var jns_asset = [];
         
 
         for (var i = 0; i < input2.length/2; i++) { 
@@ -1484,6 +1485,7 @@
             }else{
                 jenis_asset = $('input[name="jenis-asset-'+no+'"]').select2('data')[0].id;
             }
+            jns_asset.push(jenis_asset);
             console.log(jenis_asset);
             if( $.trim(jenis_asset) == "" )
             {
@@ -1523,7 +1525,7 @@
             $.ajax({
                 url: "{{ url('approval/update_jenis_asset') }}",
                 method: "POST",
-                data: param+"&no_reg="+no_registrasi+"&jenis_asset="+jenis_asset+"&kode_asset_ams="+kode_asset_ams,
+                data: param+"&no_reg="+no_registrasi+"&jenis_asset="+jns_asset+"&kode_asset_ams="+kode_asset_ams,
                 
                 success: function(result) 
                 {
