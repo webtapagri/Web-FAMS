@@ -122,7 +122,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 		if (in_array($data->role_name, $list_approve))
 		{
 			$btn_approve = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-primary'>APPROVE</button></a>";
-			$btn_reject = "<a href='".$data->approve_url."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
+			$btn_reject = "<a href='".$data->reject_url."' 'target='_blank'><button type='button' class='btn btn-flat label-danger'>REJECT</button></a>";
 		}
 		
 		echo "<br>";

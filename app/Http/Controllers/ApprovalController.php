@@ -3040,12 +3040,16 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 
                 DB::commit();
 
-                return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                $message =  'Data is successfully updated' ;
+                return Redirect::route('mail_response', array('message' => $message));
             } 
             catch (\Exception $e) 
             {
                 DB::rollback();
-                return response()->json(['status' => false, "message" => $e->getMessage()]);
+                // return response()->json(['status' => false, "message" => $e->getMessage()]);
+                $message =  $e->getMessage() ;
+                return Redirect::route('mail_response', array('message' => $message));
             }
         }    
         else
@@ -3061,17 +3065,23 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 {
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req['user_id'].'")');
                     DB::commit();
-                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                    // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                    $message =  'Data is successfully updated' ;
+                    return Redirect::route('mail_response', array('message' => $message));
                 } 
                 catch (\Exception $e) 
                 {
                     DB::rollback();
-                    return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    // return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    $message =  $e->getMessage() ;
+                    return Redirect::route('mail_response', array('message' => $message));
                 }
             }
             else
             {
-                return response()->json(['status' => false, "message" => "Error Validasi GI"]);
+                // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
+                $message =  'Error Validasi GI' ;
+                return Redirect::route('mail_response', array('message' => $message));
             }
            
         }

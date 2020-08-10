@@ -109,7 +109,8 @@ class FamsEmailController extends Controller
 					'user_id' => $data->user_id,
 					'id' => $data->user_id,
 					'role_name' => $data->role_name,
-					'role_id' => $data->role_id
+					'role_id' => $data->role_id,
+					'note' =>''
 				);
 
 				$param_reject = array(
@@ -118,7 +119,8 @@ class FamsEmailController extends Controller
 					'user_id' => $data->user_id,
 					'id' => $data->user_id,
 					'role_name' => $data->role_name,
-					'role_id' => $data->role_id
+					'role_id' => $data->role_id,
+					'note' => ''
 				);
 
 
@@ -160,11 +162,14 @@ class FamsEmailController extends Controller
 	public function reject()
 	{		
 		$request = new \Illuminate\Http\Request();
-
 		$request->replace(['id' => $_GET['id']]);
+		$req = unserialize(urldecode($_GET['id']));
+		return Redirect::route('mail_response', array('message' => $req));
 
-		$id =  $_GET['id'];
-		$this->ApprovalController->update_status_disposal_email($id);
+		// $request->replace(['id' => $_GET['id']]);
+
+		// $id =  $_GET['id'];
+		// $this->ApprovalController->update_status_disposal_email($id);
 	}
 
 	public function kirim_email()
