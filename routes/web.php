@@ -94,17 +94,12 @@ Route::post('/approval/update_status_disposal/{status}/{no_reg}','ApprovalContro
 Route::post('/approval/update_status_disposal_email','ApprovalController@update_status_disposal_email');
 Route::get('/email_approve','FamsEmailController@approve');
 Route::get('/email_reject','FamsEmailController@reject');
+Route::get('/mail_response/{message}','FamsEmailController@respon');
 Route::get('/approval/view_disposal/{no_reg}', 'ApprovalController@view_disposal')->name('no_reg');
 Route::post('/approval/delete_asset_disposal', 'ApprovalController@delete_asset_disposal');
 Route::get('/approval/view_mutasi/{no_reg}', 'ApprovalController@view_mutasi')->name('no_reg');
 Route::post('/approval/update_status_mutasi/{status}/{no_reg}','ApprovalController@update_status_mutasi');
 Route::post('/approval/delete_asset_mutasi', 'ApprovalController@delete_asset_mutasi');
-
-//respon email
-Route::get('/mail_response/{message}', function($message)
-{
-    return View::make('email.respon', array('message' => $message));
-});
 
 Route::get('get-select_jenis_kendaraan', ['as' => 'get.select_jenis_kendaraan', 'uses' => 'Select2Controller@select_jenis_kendaraan']);
 Route::get('get-select_jenis_asset', ['as' => 'get.select_jenis_asset', 'uses' => 'Select2Controller@select_jenis_asset']);

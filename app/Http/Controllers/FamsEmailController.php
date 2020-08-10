@@ -172,6 +172,11 @@ class FamsEmailController extends Controller
 		// $this->ApprovalController->update_status_disposal_email($id);
 	}
 
+	public function respon($message)
+	{			
+		 return View::make('email.respon', array('message' => $message));
+	}
+
 	public function kirim_email()
 	{
 		$request = new \Illuminate\Http\Request();
