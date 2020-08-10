@@ -164,7 +164,7 @@ class FamsEmailController extends Controller
 	{		
 		$request = new \Illuminate\Http\Request();
 		$request->replace(['id' => $_GET['id']]);
-		$req = unserialize(urldecode($_GET['id']));
+		$req['message'] = unserialize(urldecode($_GET['id']));
 		// return Redirect::route('mail_response', array('message' => $req));		
         return view('email.respon')->with(compact('req'));
 
