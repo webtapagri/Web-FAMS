@@ -10,6 +10,9 @@ use Session;
 use API;
 use AccessRight;
 use App\User;
+use App\Http\Requests\UserRequest;
+
+
 class UsersController extends Controller
 {
     public function index()
@@ -110,7 +113,7 @@ class UsersController extends Controller
         return response()->json($records);
     }
 
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
        try {
             if ($request->edit_id) {
@@ -147,6 +150,8 @@ class UsersController extends Controller
        } catch (\Exception $e) {
             return response()->json(['status' => false, "message" => $e->getMessage()]);
        }
+
+
     }
 
     public function validateUsername($username) {

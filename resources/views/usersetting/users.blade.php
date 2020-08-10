@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-xs-12">
         <div class="box">
-            <div class="box-body">
+            <div class="box-body">            
                 <div class="table-container">
                     <div class="table-scroll">
                         <div class="table-actions-wrapper">
@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-xs-12">
                             <label class="control-label" for="name">Email</label>
-                            <input type="email" class="form-control" name='email' id="email" maxlength="250">
+                            <input type="email" class="form-control" name='email' id="email" maxlength="250" required>
                         </div>
                         <div class="col-xs-12">
                             <label class="control-label" for="name">Job Code</label>
