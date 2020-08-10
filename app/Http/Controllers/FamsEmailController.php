@@ -11,6 +11,7 @@ use API;
 use App\Jobs\SendEmail;
 use GuzzleHttp\Client;
 use App\Http\Controllers\ApprovalController;
+use Redirect;
 
 class FamsEmailController extends Controller
 {
