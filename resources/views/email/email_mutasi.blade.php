@@ -98,7 +98,8 @@ Dibutuhkan persetujuan atas dokumen berikut :
 			{
 				if( $vv->notes != "" )
 				{
-					$note .= "( ".$vv->notes." )";
+					// $note .= "( ".$vv->notes." )";
+					$note = "( ".$vv->notes." )";
 				}
 
 				$l .= $no.". ".$vv->name." :: ".$vv->status_approval." ".$note." <br/>";

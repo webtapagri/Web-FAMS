@@ -127,15 +127,15 @@ class FamsEmailController extends Controller
 				$data->approve_url = url('/email_approve/?id='.$ida);
 				$data->reject_url = url('/email_reject/?id='.$idr);
 
-				//cek email jenjang approve berikutny sebelum approve via email 
-				$last_email_approve = $this->ApprovalController->get_last_email_approve($data->no_reg);
-				if($last_email_approve <> 1){
+				// //cek email jenjang approve berikutny sebelum approve via email 
+				// $last_email_approve = $this->ApprovalController->get_last_email_approve($data->no_reg);
+				// if($last_email_approve <> 1){
 
-					$cek_email = $this->ApprovalController->get_email_next_approval($data->no_reg, $data->user_id);
-						if($cek_email['email'] == "" && $cek_email['next_approve'] !=""){
-							$data->message = "Email user <b>". $cek_email['next_approve'] ."</b> tidak tersedia, sehingga user bersangkutan tidak dapat menerima email pemberitahauan.";
-						}	
-				}
+				// 	$cek_email = $this->ApprovalController->get_email_next_approval($data->no_reg, $data->user_id);
+				// 		if($cek_email['email'] == "" && $cek_email['next_approve'] !=""){
+				// 			$data->message = "Email user <b>". $cek_email['next_approve'] ."</b> tidak tersedia, sehingga user bersangkutan tidak dapat menerima email pemberitahauan.";
+				// 		}	
+				// }
 						
 				dispatch((new SendEmail($v->email, $data))->onQueue('high'));	
 				
