@@ -57,7 +57,11 @@ function changeStatusDisposal(status)
             var message = <?php echo json_encode($message); ?>;
             message['note'] = note_reject;
             // var param = JSON.stringify(message);
-            var param = encodeURIComponent(JSON.stringify(message));
+            <?php 
+                $param = "<script>document.writeln(message);</script>";
+                $id = urlencode(serialize($param));
+            ?>
+            var param = <?php echo json_encode($id); ?>;
 
             $.ajaxSetup({
                 headers: {
