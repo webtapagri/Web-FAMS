@@ -23,6 +23,7 @@
    }
    else
    {
+        $message = unserialize(urldecode($message));
         echo $message;
    }
 ?>
