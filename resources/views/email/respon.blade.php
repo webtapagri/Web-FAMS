@@ -25,39 +25,7 @@
 
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
 <script>
-
-// $("#reject-note").submit(function(event) {
-
-//     var note_reject = $("#notes").val();
-//     /* stop form from submitting normally */
-//     event.preventDefault();
-
-//     /* get the action attribute from the <form action=""> element */
-//             var $form = $(this),
-//             url = "{{ url('approval/update_status_disposal_email') }}";
-//             var message = <?php echo json_encode($message); ?>
-//             message['note'] = note_reject;
-//             var param = JSON.stringify(message);
-
-//     /* Send the data using post with element id name and name2*/
-//         var posting = $.post(url, param);
-
-//     /* Alerts the results */
-//     posting.done(function(data) {
-//         send_email_create_po(message['noreg']);
-//         $('#result').text('Data successfully updated');
-//     });
-//     posting.fail(function() {
-//          $('#result').text('Failed to Update');
-//     });
-// });
-
-// $("#reject-note").submit(function(event){
-//         var getnoreg = $("#getnoreg").val();
-//         var no_registrasi= getnoreg.replace(/\//g, '-');
-//         var specification = $("#specification-disposal").val();
-//         var note_reject = $("#notes").val();
-
+$(document).ready(function(){
 function changeStatusDisposal(status)
     {
         var getnoreg = $("#getnoreg").val();
@@ -136,6 +104,7 @@ function changeStatusDisposal(status)
             }
         }); 
     }
+});
 </script>
 </body>
 </html>
