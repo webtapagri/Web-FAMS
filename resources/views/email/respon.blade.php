@@ -33,13 +33,13 @@ function changeStatusDisposal(status)
     {
         var getnoreg = $("#getnoreg").val();
         // var no_registrasi= getnoreg.replace(/\//g, '-');
-        var specification = $("#specification-disposal").val();
+        var specification = $("#notes").val();
 
         if( status == 'A' ){ status_desc = 'approve'; }else
         if( status == 'R' )
         { 
             status_desc = 'reject';
-            note_reject = $("#specification-disposal").val();
+            note_reject = $("#notes").val();
 
             if( note_reject == '' )
             {
