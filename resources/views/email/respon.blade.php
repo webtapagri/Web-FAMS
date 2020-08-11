@@ -9,9 +9,8 @@
             ?>
             <form id="reject-note">
                 <label for="notes">Note Reject Document Code: <?php echo $message['noreg'] ?></label><br>
-                <textarea id="notes" name="notes" rows="4" cols="50" required>
-                </textarea><br>
-                <button type="submit" class="btn btn-flat label-danger button-reject" >REJECT</button>
+                <textarea id="notes" name="notes" rows="4" cols="50" required></textarea><br>
+                <button type="button" class="btn btn-flat label-danger button-reject" OnClick="changeStatusDisposal('R')" >REJECT</button>
             <form>   
 
             <div id="result"></div>
@@ -26,30 +25,31 @@
 
 <script>
 
-$("#reject-note").submit(function(event) {
+// $("#reject-note").submit(function(event) {
 
-    /* stop form from submitting normally */
-    event.preventDefault();
+//     var note_reject = $("#notes").val();
+//     /* stop form from submitting normally */
+//     event.preventDefault();
 
-    /* get the action attribute from the <form action=""> element */
-            var $form = $(this),
-            url = "{{ url('approval/update_status_disposal_email') }}";
-            var message = <?php echo json_encode($message); ?>
-            message['note'] = note_reject;
-            var param = JSON.stringify(message);
+//     /* get the action attribute from the <form action=""> element */
+//             var $form = $(this),
+//             url = "{{ url('approval/update_status_disposal_email') }}";
+//             var message = <?php echo json_encode($message); ?>
+//             message['note'] = note_reject;
+//             var param = JSON.stringify(message);
 
-    /* Send the data using post with element id name and name2*/
-        var posting = $.post(url, param);
+//     /* Send the data using post with element id name and name2*/
+//         var posting = $.post(url, param);
 
-    /* Alerts the results */
-    posting.done(function(data) {
-        send_email_create_po(message['noreg']);
-        $('#result').text('Data successfully updated');
-    });
-    posting.fail(function() {
-         $('#result').text('Failed to Update');
-    });
-});
+//     /* Alerts the results */
+//     posting.done(function(data) {
+//         send_email_create_po(message['noreg']);
+//         $('#result').text('Data successfully updated');
+//     });
+//     posting.fail(function() {
+//          $('#result').text('Failed to Update');
+//     });
+// });
 
 // $("#reject-note").submit(function(event){
 //         var getnoreg = $("#getnoreg").val();
@@ -57,41 +57,52 @@ $("#reject-note").submit(function(event) {
 //         var specification = $("#specification-disposal").val();
 //         var note_reject = $("#notes").val();
 
-//             status_desc = 'reject';
+function changeStatusDisposal(status)
+    {
+        var getnoreg = $("#getnoreg").val();
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+        var specification = $("#specification-disposal").val();
 
-//             if( $.trim(note_reject) < 2 )
-//             {
-//                 notify({
-//                     type: 'warning',
-//                     message: " Note Reject is required (min 2 char)"
-//                 });
-//                 return false;
-//             } 
+        if( status == 'A' ){ status_desc = 'approve'; }else
+        if( status == 'R' )
+        { 
+            status_desc = 'reject';
+            note_reject = $("#specification-disposal").val();
 
+            if( $.trim(note_reject) < 2 )
+            {
+                notify({
+                    type: 'warning',
+                    message: " Note Reject is required (min 2 char)"
+                });
+                return false;
+            } 
 
-//         // if(confirm('confirm '+status_desc+' data ?'))
-//         // {
-//             var message = <?php echo json_encode($message); ?>
-//             message['note'] = note_reject;
-//             var param = JSON.stringify(message);
+        }else{ status_desc = 'cancel'; }
 
-//             $.ajaxSetup({
-//                 headers: {
-//                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-//                 }
-//             });
+        if(confirm('confirm '+status_desc+' data ?'))
+        {
+            var message = <?php echo json_encode($message); ?>
+            message['note'] = note_reject;
+            var param = JSON.stringify(message);
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             
-//             $.ajax({
-//                 url: "{{ url('approval/update_status_disposal_email') }}",
-//                 method: "POST",
-//                 data: param,
-//                 success: function() 
-//                 {
-//                         send_email_create_po(message['noreg']);
-//                 }
-//             });
-//         // }
-//     });
+            $.ajax({
+                url: "{{ url('approval/update_status_disposal_email') }}",
+                method: "POST",
+                data: param,
+                success: function() 
+                {
+                        send_email_create_po(message['noreg']);
+                }
+            });
+        }
+    };
 
     function send_email_create_po(noreg)
     {
