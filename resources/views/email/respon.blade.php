@@ -6,7 +6,7 @@
 <body>
 
 <?php 
-    $message = unserialize(urldecode($message));
+    $message = unserialize(urldecode($_GET['id']));
    if (array_key_exists("status",$message))
    {
         if($message['status'] == 'R'){
