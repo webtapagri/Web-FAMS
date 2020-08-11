@@ -3016,7 +3016,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
            
         }
     }
-    function update_status_disposal_email()
+    function update_status_disposal_email(Request $request)
     {
         $request = new \Illuminate\Http\Request();
 
