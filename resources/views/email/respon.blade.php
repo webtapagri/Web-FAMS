@@ -72,6 +72,7 @@ function changeStatusDisposal(status)
             });
         }
     };
+});
 
     function send_email_create_po(noreg)
     {
@@ -104,7 +105,6 @@ function changeStatusDisposal(status)
             }
         }); 
     }
-});
 </script>
 </body>
 </html>
