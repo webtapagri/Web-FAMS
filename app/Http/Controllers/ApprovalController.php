@@ -3104,6 +3104,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $req = json_decode($_GET['id']);
         $status = $req->status;
         $note = $req->note;
+        $no_registrasi = $req->noreg;
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
