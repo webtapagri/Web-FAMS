@@ -29,7 +29,7 @@
 function changeStatusDisposal(status)
     {
         var getnoreg = $("#getnoreg").val();
-        var no_registrasi= getnoreg.replace(/\//g, '-');
+        // var no_registrasi= getnoreg.replace(/\//g, '-');
         var specification = $("#specification-disposal").val();
 
         if( status == 'A' ){ status_desc = 'approve'; }else
@@ -79,7 +79,7 @@ function changeStatusDisposal(status)
         //alert(noreg);
 
         var getnoreg = noreg;
-        var no_registrasi= getnoreg.replace(/\//g, '-');
+        // var no_registrasi= getnoreg.replace(/\//g, '-');
 
         //alert(id+"_"+no_po+"_"+no_reg_item+"_"+no_registrasi);
 
@@ -95,7 +95,7 @@ function changeStatusDisposal(status)
             // method: "POST",
             type: "POST",
             // data: param+"&noreg="+no_registrasi,
-            data: "noreg="+no_registrasi,
+            data: "noreg="+getnoreg,
             beforeSend: function() {
                 $('.loading-event').fadeIn();
             },
