@@ -95,7 +95,7 @@ Route::post('/approval/update_status_disposal_email','ApprovalController@update_
 Route::post('/approval/update_disposal_email','ApprovalController@update_disposal_email');
 Route::get('/email_approve','FamsEmailController@approve');
 Route::get('/email_reject','FamsEmailController@reject');
-Route::get('/mail_response/{message}',array('as'=>'mail_response','uses'=>'FamsEmailController@respon'));
+Route::get('/mail_response/{message}','FamsEmailController@respon')->name('mail_response');
 Route::get('/approval/view_disposal/{no_reg}', 'ApprovalController@view_disposal')->name('no_reg');
 Route::post('/approval/delete_asset_disposal', 'ApprovalController@delete_asset_disposal');
 Route::get('/approval/view_mutasi/{no_reg}', 'ApprovalController@view_mutasi')->name('no_reg');
