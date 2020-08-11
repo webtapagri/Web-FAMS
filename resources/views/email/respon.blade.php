@@ -51,7 +51,7 @@ function changeStatusDisposal(status)
 
         if(confirm('confirm '+status_desc+' data ?'))
         {
-            var message = <?php echo json_encode($message); ?>
+            var message = <?php echo json_encode($message); ?>;
             message.push({'note' : note_reject});
             var param = JSON.stringify(message);
 
@@ -64,7 +64,7 @@ function changeStatusDisposal(status)
             $.ajax({
                 url: "{{ url('approval/update_status_disposal_email') }}",
                 method: "POST",
-                data: param,
+                data: param ,
                 success: function() 
                 {
                         send_email_create_po(message['noreg']);
