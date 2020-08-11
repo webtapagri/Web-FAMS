@@ -27,7 +27,7 @@
 ?>
 
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
-<script>
+<script type="text/javascript">
 // $(document).ready(function(){
 function changeStatusDisposal(status)
     {
@@ -58,7 +58,7 @@ function changeStatusDisposal(status)
             message['note'] = note_reject;
             // var param = JSON.stringify(message);
             <?php 
-                $param = "<script>document.writeln(message);</script>";
+                $param = "<script>document.write(message);</script>";
                 $id = urlencode(serialize($param));
             ?>
             var param = <?php echo json_encode($id); ?>;
