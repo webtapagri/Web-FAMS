@@ -120,7 +120,8 @@ class FamsEmailController extends Controller
 					'user_id' => $data->user_id,
 					'id' => $data->user_id,
 					'role_name' => $data->role_name,
-					'role_id' => $data->role_id
+					'role_id' => $data->role_id,
+					'note' => ''
 				);
 
 

@@ -52,7 +52,7 @@ function changeStatusDisposal(status)
         if(confirm('confirm '+status_desc+' data ?'))
         {
             var message = <?php echo json_encode($message); ?>;
-            message.push({'note' : note_reject});
+            message['note'] = note_reject;
             var param = JSON.stringify(message);
 
             $.ajaxSetup({
