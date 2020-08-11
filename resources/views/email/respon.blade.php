@@ -65,7 +65,7 @@ function changeStatusDisposal(status)
             });
             
             $.ajax({
-                url: "{{ url('approval/update_status_disposal_email') }}",
+                url: "{{ url('approval/update_status_disposal_email') }}?"+param,
                 method: "POST",
                 data: param ,
                 success: function() 
