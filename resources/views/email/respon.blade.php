@@ -7,11 +7,12 @@
    {
         if($message['status'] == 'R'){
             ?>
-                <label for="notes">Notes</label>
+            <form id="reject-note">
+                <label for="notes">Note Reject Document Code: <?php echo $message['noreg'] ?></label><br>
                 <textarea id="notes" name="notes" rows="4" cols="50">
                 </textarea>
-                <button type="button" class="btn btn-flat label-danger button-reject" OnClick="changeStatusDisposal('R')" style="margin-right: 5px;">REJECT</button>
-               
+                <button type="submit" class="btn btn-flat label-danger button-reject" >REJECT</button>
+            <form>   
             <?php
         }
    }
@@ -22,16 +23,13 @@
 ?>
 
 <script>
-function changeStatusDisposal(status)
-    {
+
+$("#reject-note").submit(function(event){
         var getnoreg = $("#getnoreg").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var specification = $("#specification-disposal").val();
         var note_reject = $("#notes").val();
 
-        if( status == 'A' ){ status_desc = 'approve'; }else
-        if( status == 'R' )
-        { 
             status_desc = 'reject';
 
             if( $.trim(note_reject) < 2 )
@@ -43,7 +41,6 @@ function changeStatusDisposal(status)
                 return false;
             } 
 
-        }else{ status_desc = 'cancel'; }
 
         if(confirm('confirm '+status_desc+' data ?'))
         {
@@ -67,8 +64,7 @@ function changeStatusDisposal(status)
                 }
             });
         }
-    }
-
+    });
 
     function send_email_create_po(noreg)
     {
