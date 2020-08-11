@@ -653,6 +653,8 @@ class ApprovalController extends Controller
         $kode_ams = str_replace(",", "','", $req->kode_asset_ams);
         $no_registrasi = str_replace("-", "/", $req->no_reg);   
         $jenis_asset = explode(',', $req->jenis_asset);
+        $group = explode(',', $req->group);
+        $subgroup = explode(',', $req->subgroup);
        
         DB::beginTransaction();
 
@@ -664,9 +666,14 @@ class ApprovalController extends Controller
         $sql ="";      
             for($i=0;$i<count($kode_asset_ams);$i++){
                 $case_jenis_asset .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$jenis_asset[$i]' ";
+                $case_asset_group .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$group[$i]' ";
+                $case_asset_subgroup .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$subgroup[$i]' ";
             }
-            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL SET jenis_asset_tujuan = (case $case_jenis_asset end)
-                         WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
+            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL 
+                        SET jenis_asset_tujuan = (case $case_jenis_asset end) ,
+                        SET group = (case $case_asset_group end) ,
+                        SET sub_group = (case $case_asset_subgroup end)
+                        WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
 
             DB::UPDATE($sql);
             DB::commit();
@@ -3043,14 +3050,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
-                return view('disposal.index')->with(compact('data'));
+                return redirect()->route('mail_response', [$data]);
             } 
             catch (\Exception $e) 
             {
                 DB::rollback();
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
                 $data['message'] =   $e->getMessage() ;
-                return view('disposal.index')->with(compact('data'));
+                return redirect()->route('mail_response', [$data]);
             }
         }    
         else
@@ -3068,21 +3075,21 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::commit();
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;
-                    return view('disposal.index')->with(compact('data'));
+                    return redirect()->route('mail_response', [$data]);
                 } 
                 catch (\Exception $e) 
                 {
                     DB::rollback();
                     // return response()->json(['status' => false, "message" => $e->getMessage()]);
                     $data['message'] =    $e->getMessage() ; 
-                    return view('disposal.index')->with(compact('data'));
+                    return redirect()->route('mail_response', [$data]);
                 }
             }
             else
             {
                 // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
                 $data['message'] =   'Error Validasi GI' ;
-                return view('disposal.index')->with(compact('data'));
+                return redirect()->route('mail_response', [$data]);
             }
            
         }
@@ -3404,21 +3411,6 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                                          LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = b.TUJUAN  and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' 
                                LEFT JOIN TBM_USER c ON a.created_by = c.id 
                            WHERE a.no_reg = '$noreg' group by a.NO_REG";
-
-    //     $sql = " SELECT a.*,d.COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
-    //     (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
-    //    SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
-    //                         FROM TR_MUTASI_ASSET a   
-    //                                         LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
-    //                                         LEFT JOIN TM_MSTR_ASSET d ON d.KODE_ASSET_AMS = b.KODE_ASSET_AMS  
-    //                             LEFT JOIN TBM_USER c ON a.created_by = c.id 
-    //                         WHERE a.no_reg = '$noreg' group by a.NO_REG "; 
-//         $sql = " SELECT a.*, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, 
-//  (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
-// SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
-//                     FROM TR_MUTASI_ASSET a        
-//                         LEFT JOIN TBM_USER c ON a.created_by = c.id 
-//                     WHERE a.no_reg = '$noreg' "; 
         $data = DB::SELECT($sql);
         
         // $data_sap = $this->get_master_asset_by_id($noreg);

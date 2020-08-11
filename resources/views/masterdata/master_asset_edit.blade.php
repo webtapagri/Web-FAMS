@@ -251,14 +251,14 @@
               <label for="" class="col-sm-4 control-label">Jenis Asset</label>
 
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="jenis_asset" placeholder="Jenis Asset" value="{{@$data['content']->JENIS_ASSET}}" readonly="1">
+                <input type="text" class="form-control" id="jenis_asset" placeholder="Jenis Asset" value="{{@$data['content']->JENIS_ASSET}} - {{@$data['content']->JENIS_ASSET_DESCRIPTION}}" readonly="1">
               </div>
             </div>
 
             <div class="form-group">
               <label for="" class="col-sm-4 control-label">Group</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="group" placeholder="Group" value="{{@$data['content']->GROUP}}" readonly="1">
+                <input type="text" class="form-control" id="group" placeholder="Group" value="{{@$data['content']->GROUP}} - {{@$data['content']->GROUP_DESCRIPTION}}" readonly="1">
               </div>
             </div>
 
@@ -320,7 +320,7 @@
         	<div class="form-group">
               <label for="" class="col-sm-4 control-label">Sub Group</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="sub_group" placeholder="Sub Group" value="{{@$data['content']->SUB_GROUP}}" readonly="1">
+                <input type="text" class="form-control" id="sub_group" placeholder="Sub Group" value="{{@$data['content']->SUB_GROUP}} - {{@$data['content']->SUBGROUP_DESCRIPTION}}" readonly="1">
               </div>
             </div>
 
