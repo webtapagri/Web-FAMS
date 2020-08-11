@@ -3051,14 +3051,16 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
-                return redirect()->route('mail_response', [$data]);
+                $data = json_encode($data);
+return route('mail_response', array('param'=>$data));
             } 
             catch (\Exception $e) 
             {
                 DB::rollback();
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
                 $data['message'] =   $e->getMessage() ;
-                return redirect()->route('mail_response', [$data]);
+                $data = json_encode($data);
+return route('mail_response', array('param'=>$data));
             }
         }    
         else
@@ -3076,21 +3078,24 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::commit();
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;
-                    return redirect()->route('mail_response', [$data]);
+                    $data = json_encode($data);
+                    return route('mail_response', array('param'=>$data));
                 } 
                 catch (\Exception $e) 
                 {
                     DB::rollback();
                     // return response()->json(['status' => false, "message" => $e->getMessage()]);
                     $data['message'] =    $e->getMessage() ; 
-                    return redirect()->route('mail_response', [$data]);
+                    $data = json_encode($data);
+                    return route('mail_response', array('param'=>$data));
                 }
             }
             else
             {
                 // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
                 $data['message'] =   'Error Validasi GI' ;
-                return redirect()->route('mail_response', [$data]);
+                $data = json_encode($data);
+                return route('mail_response', array('param'=>$data));
             }
            
         }
@@ -3129,14 +3134,16 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
-                return redirect()->route('mail_response', [$data]);
+                $data = json_encode($data);
+                return route('mail_response', array('param'=>$data));
             } 
             catch (\Exception $e) 
             {
                 DB::rollback();
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
                 $data['message'] =   $e->getMessage() ;
-                return redirect()->route('mail_response', [$data]);
+                $data = json_encode($data);
+                return route('mail_response', array('param'=>$data));
             }
         }    
         else
@@ -3154,21 +3161,24 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::commit();
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;
-                    return redirect()->route('mail_response', [$data]);
+                    $data = json_encode($data);
+                    return route('mail_response', array('param'=>$data));
                 } 
                 catch (\Exception $e) 
                 {
                     DB::rollback();
                     // return response()->json(['status' => false, "message" => $e->getMessage()]);
                     $data['message'] =    $e->getMessage() ; 
-                    return redirect()->route('mail_response', [$data]);
+                    $data = json_encode($data);
+                    return route('mail_response', array('param'=>$data));
                 }
             }
             else
             {
                 // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
                 $data['message'] =   'Error Validasi GI' ;
-                return redirect()->route('mail_response', [$data]);
+                $data = json_encode($data);
+                return route('mail_response', array('param'=>$data));
             }
            
         }

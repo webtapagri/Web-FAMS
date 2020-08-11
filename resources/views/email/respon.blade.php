@@ -6,6 +6,7 @@
 <body>
 
 <?php 
+$message = json_decode($request->param);
    if (array_key_exists("status",$message))
    {
         if($message['status'] == 'R'){
