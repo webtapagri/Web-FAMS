@@ -3021,7 +3021,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-        $req = unserialize(urldecode($_GET['id']));
+        $req = unurlencode(serialize(urldecode($_GET['id']));
 
         
         $no_registrasi = str_replace("-", "/", $req['noreg']);
@@ -3051,7 +3051,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
-                $data = serialize($data);
+                $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
             } 
             catch (\Exception $e) 
@@ -3059,7 +3059,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::rollback();
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
                 $data['message'] =   $e->getMessage() ;
-                $data = serialize($data);
+                $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
             }
         }    
@@ -3078,7 +3078,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::commit();
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;                    
-                    $data = serialize($data);
+                    $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
                 } 
                 catch (\Exception $e) 
@@ -3086,7 +3086,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::rollback();
                     // return response()->json(['status' => false, "message" => $e->getMessage()]);
                     $data['message'] =    $e->getMessage() ;                     
-                    $data = serialize($data);
+                    $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
                 }
             }
@@ -3094,7 +3094,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             {
                 // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
                 $data['message'] =   'Error Validasi GI' ;                
-                $data = serialize($data);
+                $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
             }
            
@@ -3135,7 +3135,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
                 
-                $data = serialize($data);
+                $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
             } 
             catch (\Exception $e) 
@@ -3144,7 +3144,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
                 $data['message'] =   $e->getMessage() ;
                 
-                $data = serialize($data);
+                $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
             }
         }    
@@ -3164,7 +3164,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;
                     
-                    $data = serialize($data);
+                    $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
                 } 
                 catch (\Exception $e) 
@@ -3173,7 +3173,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     // return response()->json(['status' => false, "message" => $e->getMessage()]);
                     $data['message'] =    $e->getMessage() ; 
                     
-                    $data = serialize($data);
+                    $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
                 }
             }
@@ -3182,7 +3182,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
                 $data['message'] =   'Error Validasi GI' ;
                 
-                $data = serialize($data);
+                $data = urlencode(serialize($data));
                     return route('mail_response', [$data]);
             }
            
