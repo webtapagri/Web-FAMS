@@ -25,7 +25,7 @@
 
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
 <script>
-$(document).ready(function(){
+// $(document).ready(function(){
 function changeStatusDisposal(status)
     {
         var getnoreg = $("#getnoreg").val();
@@ -72,7 +72,7 @@ function changeStatusDisposal(status)
             });
         }
     };
-});
+// });
 
     function send_email_create_po(noreg)
     {
