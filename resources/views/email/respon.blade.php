@@ -38,7 +38,7 @@ function changeStatusDisposal(status)
             status_desc = 'reject';
             note_reject = $("#specification-disposal").val();
 
-            if( $.trim(note_reject) < 2 )
+            if( note_reject == '' )
             {
                 notify({
                     type: 'warning',
