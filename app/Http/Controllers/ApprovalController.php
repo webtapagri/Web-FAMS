@@ -3021,7 +3021,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $request = new \Illuminate\Http\Request();
 
 		$request->replace(['id' => $_GET['id']]);
-        $req = unurlencode(serialize(urldecode($_GET['id']));
+        $req = unserialize(urldecode($_GET['id']));
 
         
         $no_registrasi = str_replace("-", "/", $req['noreg']);
