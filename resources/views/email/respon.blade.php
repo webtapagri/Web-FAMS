@@ -6,10 +6,10 @@
 <body>
 
 <?php 
-    $message = unserialize(urldecode($_GET['id']));
-   if (array_key_exists("status",$message))
+    $dt = unserialize(urldecode($_GET['id']));
+   if (array_key_exists("status",$dt))
    {
-        if($message['status'] == 'R'){
+        if($dt['status'] == 'R'){
             ?>
             <form id="reject-note">
                 <label for="notes">Note Reject Document Code: <?php echo $message['noreg'] ?></label><br>
