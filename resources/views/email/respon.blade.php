@@ -23,6 +23,7 @@
    }
 ?>
 
+<script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
 <script>
 
 // $("#reject-note").submit(function(event) {
