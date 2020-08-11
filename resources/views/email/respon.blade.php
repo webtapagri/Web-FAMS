@@ -6,7 +6,6 @@
 <body>
 
 <?php 
-$message = json_decode($message,true);
    if (array_key_exists("status",$message))
    {
         if($message['status'] == 'R'){
@@ -23,6 +22,7 @@ $message = json_decode($message,true);
    }
    else
    {
+        $message = json_decode($message,true);
         echo $message;
    }
 ?>
