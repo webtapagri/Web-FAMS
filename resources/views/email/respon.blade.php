@@ -22,7 +22,6 @@
    }
    else
    {
-        $message = json_decode($message,true);
         echo $message;
    }
 ?>
