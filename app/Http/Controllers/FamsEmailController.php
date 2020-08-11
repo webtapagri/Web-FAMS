@@ -156,7 +156,7 @@ class FamsEmailController extends Controller
 		$request->replace(['id' => $_GET['id']]);
 
 		$id =  $_GET['id'];
-		$this->ApprovalController->update_status_disposal_email($id);
+		return $this->ApprovalController->update_status_disposal_email($id);
 
 	}
 
@@ -167,7 +167,7 @@ class FamsEmailController extends Controller
 		$message = unserialize(urldecode($_GET['id']));
 		// return Redirect::route('mail_response', array('message' => $req));		
 		// return view('email.respon')->with(compact('req'));
-		return view('greetings')->with('message', $message);
+		return view('email.respon')->with('message', $message);
 
 		// $request->replace(['id' => $_GET['id']]);
 
