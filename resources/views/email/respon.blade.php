@@ -6,6 +6,7 @@
 <body>
 
 <?php 
+    $message = unserialize($message);
    if (array_key_exists("status",$message))
    {
         if($message['status'] == 'R'){
