@@ -27,7 +27,7 @@
 ?>
 
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
-<script type="text/javascript">
+<script type="text/javascript" charset="utf-8">
 // $(document).ready(function(){
 function changeStatusDisposal(status)
     {
@@ -56,12 +56,7 @@ function changeStatusDisposal(status)
         {
             var message = <?php echo json_encode($message); ?>;
             message['note'] = note_reject;
-            // var param = JSON.stringify(message);
-            <?php 
-                $param = "<script>document.write(message);</script>";
-                $id = urlencode(serialize($param));
-            ?>
-            var param = <?php echo json_encode($id); ?>;
+            var param = JSON.stringify(message);
 
             $.ajaxSetup({
                 headers: {
@@ -70,7 +65,7 @@ function changeStatusDisposal(status)
             });
             
             $.ajax({
-                url: "{{ url('approval/update_status_disposal_email') }}?id="+param,
+                url: "{{ url('approval/update_disposal_email') }}?id="+param,
                 method: "POST",
                 data: param ,
                 success: function() 

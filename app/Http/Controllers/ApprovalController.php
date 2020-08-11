@@ -3022,6 +3022,87 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
 		$request->replace(['id' => $_GET['id']]);
         $req = unserialize(urldecode($_GET['id']));
+
+        
+        $no_registrasi = str_replace("-", "/", $req['noreg']);
+        $status = $req['status'];
+        $note = '';
+        $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
+    
+        $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
+        //echo "2<pre>"; print_r($validasi_last_approve); die();
+
+        if( $validasi_last_approve == 0 )
+        {
+            DB::beginTransaction();
+            
+            try 
+            {
+                if($status=='R')
+                {
+                    // SEMENTARA DI DELETE DULU JIKA DI REJECT IT@081019 
+                    //DB::DELETE(" DELETE FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '".$no_registrasi."' ");
+                    DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
+                }
+
+                DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req['user_id'].'","'.$status.'", "'.$note.'", "'.$req['role_name'].'", "'.$asset_controller.'")');
+                
+                DB::commit();
+
+                // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                $data['message'] =  'Data is successfully updated' ;
+                return redirect()->route('mail_response', [$data]);
+            } 
+            catch (\Exception $e) 
+            {
+                DB::rollback();
+                // return response()->json(['status' => false, "message" => $e->getMessage()]);
+                $data['message'] =   $e->getMessage() ;
+                return redirect()->route('mail_response', [$data]);
+            }
+        }    
+        else
+        {
+            //$validasi_check_gi_amp = $this->get_validasi_check_gi_amp($request,$no_registrasi); //true;
+            //echo "1<pre>"; print_r($validasi_check_gi_amp); die();
+            $validasi_check_gi_amp['status'] = 'success';
+
+            if($validasi_check_gi_amp['status'] == 'success')
+            {
+                DB::beginTransaction();
+                try 
+                {
+                    DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req['user_id'].'")');
+                    DB::commit();
+                    // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                    $data['message'] =   'Data is successfully updated' ;
+                    return redirect()->route('mail_response', [$data]);
+                } 
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    // return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    $data['message'] =    $e->getMessage() ; 
+                    return redirect()->route('mail_response', [$data]);
+                }
+            }
+            else
+            {
+                // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
+                $data['message'] =   'Error Validasi GI' ;
+                return redirect()->route('mail_response', [$data]);
+            }
+           
+        }
+    }
+
+    function update_disposal_email()
+    {
+        $request = new \Illuminate\Http\Request();
+
+		$request->replace(['id' => $_GET['id']]);
+        $req = json_decode($_GET['id']);
+
         
         $no_registrasi = str_replace("-", "/", $req['noreg']);
         $status = $req['status'];

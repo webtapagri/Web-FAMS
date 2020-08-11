@@ -92,6 +92,7 @@ Route::get('/approval/berkas-amp/{no_reg}', 'ApprovalController@berkas_amp')->na
 Route::get('/printio/{noreg}/{asset_po_id}/{jenis_kendaraan}/{no_reg_item}', 'ApprovalController@print_io');
 Route::post('/approval/update_status_disposal/{status}/{no_reg}','ApprovalController@update_status_disposal');
 Route::post('/approval/update_status_disposal_email','ApprovalController@update_status_disposal_email');
+Route::post('/approval/update_disposal_email','ApprovalController@update_disposal_email');
 Route::get('/email_approve','FamsEmailController@approve');
 Route::get('/email_reject','FamsEmailController@reject');
 Route::get('/mail_response/{message}','FamsEmailController@respon');
