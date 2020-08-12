@@ -1478,18 +1478,19 @@
 
         for (var i = 0; i < input2.length/2; i++) { 
             asset_class.push(input2[i+input2.length/2].value);
-            var input4 = document.getElementsByName('jenis_asset-'+no); 
-            var input5 = document.getElementsByName('jenis_asset_group-'+no); 
-            var input6 = document.getElementsByName('jenis_asset_subgroup-'+no); 
+            var noreg = $("#noreg-"+no).val();
+            var input4 = document.getElementsByName('jenis_asset-'+noreg); 
+            var input5 = document.getElementsByName('jenis_asset_group-'+noreg); 
+            var input6 = document.getElementsByName('jenis_asset_subgroup-'+noreg); 
 
             if (typeof input4[i+input4.length/2] !== 'undefined'){
                jenis_asset = (input4[i+input4.length/2].value);
                jenis_asset_group = (input5[i+input5.length/2].value);
                jenis_asset_subgroup = (input6[i+input6.length/2].value);
             }else{
-                jenis_asset = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
-                jenis_asset_group = $('input[name="jenis_asset_group-'+no+'"]').select2('data')[0].id;
-                jenis_asset_subgroup = $('input[name="jenis_asset_subgroup-'+no+'"]').select2('data')[0].id;
+                jenis_asset = $('input[name="jenis_asset-'+noreg+'"]').select2('data')[0].id;
+                jenis_asset_group = $('input[name="jenis_asset_group-'+noreg+'"]').select2('data')[0].id;
+                jenis_asset_subgroup = $('input[name="jenis_asset_subgroup-'+noreg+'"]').select2('data')[0].id;
             }
             jns_asset.push(jenis_asset);
             group.push(jenis_asset_group);
@@ -4192,7 +4193,7 @@
                         item += "<td>" + val.tujuan + "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
                                         if(val.kode_asset_ams_tujuan === "") { 
-                                            item += "<td width='10%'><input type='text' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' autocomplete='off' onChange='get_group("+val.no_reg_item+")' ><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                                            item += "<td width='10%'><input type='text' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' autocomplete='off' onChange='get_group("+val.no_reg_item+")' ><input type='hidden' name='noreg-"+no+"' id='noreg-"+no+"' value='"+val.no_reg_item+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
                                             item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"'  id='' autocomplete='off' onChange='get_subgroup("+val.no_reg_item+")'></td>";
                                             item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"'  id='' autocomplete='off' ></td>";
                                         }
@@ -4287,10 +4288,10 @@
                     <?php } ?>    
 
                     <?php if( $user_role == 'AMS' ){ ?>
-                    var i = 1;
+                    // var i = 1;
                     $.each(data.item_detail, function(key, val) 
                     {
-                        opt_jenis_asset(i);
+                        opt_jenis_asset(val.no_reg_item);
                         i++;
                     });
                     <?php } ?>  
