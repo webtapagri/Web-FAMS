@@ -3135,11 +3135,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 
                 DB::commit();
 
-                // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
-                $data['message'] =  'Data is successfully updated' ;
+                return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                // $data['message'] =  'Data is successfully updated' ;
                 
-                $data = serialize($data);
-                return view('email.respon')->with('message', $data);
+                // $data = serialize($data);
+                // return view('email.respon')->with('message', $data);
             } 
             catch (\Exception $e) 
             {

@@ -74,9 +74,14 @@ function changeStatusDisposal(status)
                 url: "{{ url('approval/update_disposal_email') }}?id="+param,
                 method: "POST",
                 data: param ,
-                success: function() 
+                success: function(result) 
                 {
                         send_email_create_po(message['noreg']);
+                        
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
                 }
             });
         }
