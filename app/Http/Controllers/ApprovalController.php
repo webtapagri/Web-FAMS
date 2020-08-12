@@ -3058,7 +3058,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             {
                 DB::rollback();
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
-                $data['message'] =   $e->getMessage() ;
+                $msg = $e->getMessage() ;
+                $data['message'] =   $msg;
+                $data = serialize($data);
                 return route('mail_response', [$data]);
             }
         }    
@@ -3140,7 +3142,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             {
                 DB::rollback();
                 // return response()->json(['status' => false, "message" => $e->getMessage()]);
-                $data['message'] =   $e->getMessage() ;
+                $msg = $e->getMessage() ;
+                $data['message'] =   $msg;
+                $data = serialize($data);
                     return route('mail_response', [$data]);
             }
         }    
