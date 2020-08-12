@@ -3052,7 +3052,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
                 $data = serialize($data);
-                return redirect()->route('mail_response', $data);
+                return view('email.respon')->with('message', $data);
             } 
             catch (\Exception $e) 
             {
@@ -3061,7 +3061,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 
                 $data = array('message' => $e->getMessage());
                 $data = serialize($data);
-                return redirect()->route('mail_response', $data);
+                return view('email.respon')->with('message', $data);
             }
         }    
         else
@@ -3080,7 +3080,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;                    
                     $data = serialize($data);
-                    return redirect()->route('mail_response', $data);
+                    return view('email.respon')->with('message', $data);
                 } 
                 catch (\Exception $e) 
                 {
@@ -3089,7 +3089,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     
                     $data = array('message' => $e->getMessage());
                     $data = serialize($data);
-                    return redirect()->route('mail_response', $data);
+                    return view('email.respon')->with('message', $data);
                     
                 }
             }
@@ -3098,7 +3098,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 // return response()->json(['status' => false, "message" => "Error Validasi GI"]);
                 $data['message'] =   'Error Validasi GI' ;                
                 $data = serialize($data);
-                return redirect()->route('mail_response', $data);
+                return view('email.respon')->with('message', $data);
             }
            
         }
@@ -3139,7 +3139,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 $data['message'] =  'Data is successfully updated' ;
                 
                 $data = serialize($data);
-                return redirect()->route('mail_response', $data);
+                return view('email.respon')->with('message', $data);
             } 
             catch (\Exception $e) 
             {
@@ -3148,7 +3148,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 
                 $data = array('message' => $e->getMessage());
                 $data = serialize($data);
-                return redirect()->route('mail_response', $data);
+                return view('email.respon')->with('message', $data);
             }
         }    
         else
@@ -3168,7 +3168,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     $data['message'] =   'Data is successfully updated' ;
                     
                     $data = serialize($data);
-                    return redirect()->route('mail_response', $data);
+                    return view('email.respon')->with('message', $data);
                 } 
                 catch (\Exception $e) 
                 {
@@ -3177,7 +3177,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     
                     $data = array('message' => $e->getMessage());
                     $data = serialize($data);
-                    return redirect()->route('mail_response', $data);
+                    return view('email.respon')->with('message', $data);
                 }
             }
             else
@@ -3186,7 +3186,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 $data['message'] =   'Error Validasi GI' ;
                 
                 $data = serialize($data);
-                return redirect()->route('mail_response', $data);
+                return view('email.respon')->with('message', $data);
             }
            
         }
