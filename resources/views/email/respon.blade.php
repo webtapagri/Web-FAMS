@@ -7,22 +7,24 @@
 
 <?php 
 if (@unserialize($message)==""){ //clear array
-   if (array_key_exists("status",$message))
-   {
-        if($message['status'] == 'R'){
-            ?>
-            <form id="reject-note">
-                <label for="notes">Note Reject Document Code: <?php echo $message['noreg'] ?></label><br>
-                <textarea id="notes" name="notes" rows="4" cols="50" required></textarea><br>
-                <button type="button" class="btn btn-flat label-danger button-reject" OnClick="changeStatusDisposal('R')" >REJECT</button>
-            <form>   
+    if(is_array($message)){
+        if (array_key_exists("status",$message))
+        {
+                if($message['status'] == 'R'){
+                    ?>
+                    <form id="reject-note">
+                        <label for="notes">Note Reject Document Code: <?php echo $message['noreg'] ?></label><br>
+                        <textarea id="notes" name="notes" rows="4" cols="50" required></textarea><br>
+                        <button type="button" class="btn btn-flat label-danger button-reject" OnClick="changeStatusDisposal('R')" >REJECT</button>
+                    <form>   
 
-            <div id="result"></div>
-            <?php
+                    <div id="result"></div>
+                    <?php
+                }
         }
-   }else{
-    echo $message;
-   }
+    }else{
+        echo $message;
+    }
 }
 else
 {
