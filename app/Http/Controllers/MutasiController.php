@@ -11,10 +11,17 @@ use function GuzzleHttp\json_encode;
 use Session;
 use API;
 use AccessRight;
+use App\Http\Controllers\FamsEmailController;
 /* use NahidulHasan\Html2pdf\Facades\Pdf; */
 
 class MutasiController extends Controller
 {
+    protected $FamsEmailController;
+    public function __construct(FamsEmailController $FamsEmailController)
+    {
+        $this->FamsEmailController = $FamsEmailController;
+    }
+	
     public function index()
     {
         /*  if (empty(Session::get('authenticated')))
@@ -204,6 +211,10 @@ class MutasiController extends Controller
             DB::STATEMENT('call create_approval("M1", "'.$LOKASI_CODE.'","'.$TUJUAN_CODE.'","'.$NO_REG.'","'.$user_id.'","'.$ASSET_CONTROLLER.'","0")');
 
             DB::commit();
+            
+            $request = new \Illuminate\Http\Request();
+            $request->replace(['noreg' => $NO_REG]);
+            $this->FamsEmailController->index($request);
 
             return response()->json(['status' => true, "message" => 'Data is successfully created ('.$NO_REG.')']);
         } 
@@ -1108,6 +1119,11 @@ WHERE b.KODE_ASSET_AMS = '".$kode_asset_ams."' AND b.FILE_CATEGORY = '".$file_ca
             DB::STATEMENT('call create_approval("M1", "'.$LOKASI_CODE.'","'.$TUJUAN_CODE.'","'.$NO_REG.'","'.$user_id.'","'.$ASSET_CONTROLLER.'","0")');
 
             DB::commit();
+
+             
+            $request = new \Illuminate\Http\Request();
+            $request->replace(['noreg' => $NO_REG]);
+            $this->FamsEmailController->index($request);
 
             return response()->json(['status' => true, "message" => 'Data is successfully created ('.$NO_REG.')']);
         } 
