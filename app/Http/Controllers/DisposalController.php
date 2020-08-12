@@ -605,11 +605,11 @@ class DisposalController extends Controller
 	            return Redirect::to('/disposal-'.$jp.'');
 	       }
 		}
-		else
-		{
-			Session::flash('alert', 'Proses failed!');
-			return Redirect::to('/disposal-'.$jp.'');
-		}
+		// else
+		// {
+		// 	Session::flash('alert', 'Proses failed!');
+		// 	return Redirect::to('/disposal-'.$jp.'');
+		// }
 	}
 
 	public function get_reg_no()
