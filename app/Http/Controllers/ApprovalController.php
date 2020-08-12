@@ -3136,19 +3136,16 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::commit();
 
                 return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
-                // $data['message'] =  'Data is successfully updated' ;
                 
-                // $data = serialize($data);
-                // return view('email.respon')->with('message', $data);
             } 
             catch (\Exception $e) 
             {
                 DB::rollback();
-                // return response()->json(['status' => false, "message" => $e->getMessage()]);
+                return response()->json(['status' => false, "message" => $e->getMessage()]);
                 
-                $data = array('message' => $e->getMessage());
-                $data = serialize($data);
-                return view('email.respon')->with('message', $data);
+                // $data = array('message' => $e->getMessage());
+                // $data = serialize($data);
+                // return view('email.respon')->with('message', $data);
             }
         }    
         else
@@ -3164,20 +3161,20 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 {
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req->user_id.'")');
                     DB::commit();
-                    // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
-                    $data['message'] =   'Data is successfully updated' ;
+                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                    // $data['message'] =   'Data is successfully updated' ;
                     
-                    $data = serialize($data);
-                    return view('email.respon')->with('message', $data);
+                    // $data = serialize($data);
+                    // return view('email.respon')->with('message', $data);
                 } 
                 catch (\Exception $e) 
                 {
                     DB::rollback();
-                    // return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    return response()->json(['status' => false, "message" => $e->getMessage()]);
                     
-                    $data = array('message' => $e->getMessage());
-                    $data = serialize($data);
-                    return view('email.respon')->with('message', $data);
+                    // $data = array('message' => $e->getMessage());
+                    // $data = serialize($data);
+                    // return view('email.respon')->with('message', $data);
                 }
             }
             else
