@@ -181,7 +181,7 @@ class FamsEmailController extends Controller
 			$message = unserialize(urldecode($message));
 		}
 		
-		return view('email.respon')->with('message', $data);
+		return view('email.respon')->with('message', $message);
 	}
 
 	public function kirim_email()
