@@ -77,11 +77,7 @@ function changeStatusDisposal(status)
                 success: function(result) 
                 {
                     send_email_create_po(result.new_noreg);
-                        
-                        notify({
-                            type: 'success',
-                            message: result.message
-                        });
+                    window.location = "{{ url('/mail_response/') }}?message="+result;
                 }
             });
         }
