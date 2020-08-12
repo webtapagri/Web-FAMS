@@ -177,7 +177,7 @@ class FamsEmailController extends Controller
 
 	public function respon($message)
 	{			
-		if (@unserialize($message)==""){
+		if (@unserialize($message)<>""){
 			$message = unserialize(urldecode($message));
 		}
 		 return View::make('email.respon', array('message' => $message));
