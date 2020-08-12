@@ -9,7 +9,7 @@
 if (@unserialize($message)==""){ //clear array
    if (array_key_exists("status",$message))
    {
-        if($dt['status'] == 'R'){
+        if($message['status'] == 'R'){
             ?>
             <form id="reject-note">
                 <label for="notes">Note Reject Document Code: <?php echo $message['noreg'] ?></label><br>
