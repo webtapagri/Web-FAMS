@@ -6,8 +6,8 @@
 <body>
 
 <?php 
-    $dt = unserialize(urldecode($_GET['id']));
-   if (array_key_exists("status",$dt))
+if (@unserialize($message)==""){ //clear array
+   if (array_key_exists("status",$message))
    {
         if($dt['status'] == 'R'){
             ?>
@@ -20,12 +20,15 @@
             <div id="result"></div>
             <?php
         }
-   }
-   else
-   {
-        $message = unserialize(urldecode($message));
+   }else{
         echo $message;
    }
+}
+else
+{
+    $message = unserialize($message);
+    echo $message;
+}
 ?>
 
 <script src="{{ asset('vendor/adminlte/vendor/jquery/dist/jquery.min.js') }}"></script>
