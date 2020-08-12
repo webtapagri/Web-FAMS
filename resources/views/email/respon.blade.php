@@ -76,7 +76,7 @@ function changeStatusDisposal(status)
                 data: param ,
                 success: function(result) 
                 {
-                        send_email_create_po(message['noreg']);
+                    send_email_create_po(result.new_noreg);
                         
                         notify({
                             type: 'success',
