@@ -180,7 +180,8 @@ class FamsEmailController extends Controller
 		if (@unserialize($message)<>""){
 			$message = unserialize(urldecode($message));
 		}
-		 return View::make('email.respon', array('message' => $message));
+		
+		return view('email.respon')->with('message', $data);
 	}
 
 	public function kirim_email()
