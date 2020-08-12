@@ -21,13 +21,13 @@ if (@unserialize($message)==""){ //clear array
             <?php
         }
    }else{
-        echo $message;
+    echo $message['message'];
    }
 }
 else
 {
     $message = unserialize($message);
-    echo $message;
+    echo $message['message'];
 }
 ?>
 
