@@ -973,8 +973,8 @@
         var valid = true;
         var thisyear = <?php echo date('Y'); ?>
 
-        $.each(JSON.parse(request_item), function(i, field) 
-        // $.each(request_item, function(i, field) 
+        $.each(JSON.parse(request_item), function(key, data){
+        $.each(data, function(i, field) 
         {
             if (field) 
             {
@@ -1122,6 +1122,7 @@
 
                 });
             }
+        });
         });
 
         return valid;
