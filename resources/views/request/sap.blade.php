@@ -1743,9 +1743,9 @@
             {
                 $.each(field.detail, function(key, val) 
                 {
-                if( val.asset_type == 'U4010' || val.asset_type == 'M4010' || val.asset_type == 'A4010' || val.asset_type == 'E4010' || val.asset_type == 'E4030' || val.asset_type == 4030 || val.asset_type == 4010 )
+                if( item.asset_type == 'U4010' || item.asset_type == 'M4010' || item.asset_type == 'A4010' || item.asset_type == 'E4010' || item.asset_type == 'E4030' || item.asset_type == 4030 || item.asset_type == 4010 )
                 {
-                    if (val.asset_serie_no === "") {
+                    if (item.asset_serie_no === "") {
                         valid = false;
                         jQuery('#asset_serie_no').parent().closest('div').addClass('has-warning');
                         notify({
@@ -1756,7 +1756,7 @@
                         jQuery('#asset_serie_no').parent().closest('div').removeClass('has-warning');
                     }
 
-                    if( $.trim(val.asset_serie_no).length < 3 )
+                    if( $.trim(item.asset_serie_no).length < 3 )
                     {
                         valid = false;
                         $('#asset_serie_no').parent().closest('div').addClass('has-warning');
@@ -1768,7 +1768,7 @@
                         $('#asset_serie_no').parent().closest('div').removeClass('has-warning');
                     }
 
-                    if (val.asset_imei === "") {
+                    if (item.asset_imei === "") {
                         valid = false;
                         jQuery('#asset_imei').focus();
                         notify({
@@ -1777,7 +1777,7 @@
                         });
                     }
 
-                    if( $.trim(val.asset_imei).length < 3 )
+                    if( $.trim(item.asset_imei).length < 3 )
                     {
                         valid = false;
                         $('#asset_imei').parent().closest('div').addClass('has-warning');
@@ -1791,7 +1791,7 @@
                     
                 }
 
-                if (val.asset_year === "") {
+                if (item.asset_year === "") {
                     valid = false;
                     jQuery('#asset_year').parent().closest('div').addClass('has-warning');
                     notify({
@@ -1802,7 +1802,7 @@
                     jQuery('#asset_year').parent().closest('div').removeClass('has-warning');
                 }
 
-                if (val.asset_location === "") {
+                if (item.asset_location === "") {
                     valid = false;
                     jQuery('#asset_location').focus();
                     notify({
@@ -1811,7 +1811,7 @@
                     });
                 }
 
-                if (val.asset_condition === "") {
+                if (item.asset_condition === "") {
                     valid = false;
                     notify({
                         type: 'warning',
@@ -1819,7 +1819,7 @@
                     });
                 }
 
-                if (val.asset_pic_name === "") {
+                if (item.asset_pic_name === "") {
                     valid = false;
                     notify({
                         type: 'warning',
@@ -1827,7 +1827,7 @@
                     });
                 }
 
-                if (val.asset_pic_level === "") {
+                if (item.asset_pic_level === "") {
                     valid = false;
                     notify({
                         type: 'warning',
