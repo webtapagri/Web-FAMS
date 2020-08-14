@@ -1737,100 +1737,100 @@
         var request = request_item[key];
         var item = request.detail[obj];
         var valid = true;
-        $.each(request, function(i, field) 
+        $.each(item, function(i, field) 
         {
-        if( item.asset_type == 'U4010' || item.asset_type == 'M4010' || item.asset_type == 'A4010' || item.asset_type == 'E4010' || item.asset_type == 'E4030' || item.asset_type == 4030 || item.asset_type == 4010 )
-        {
-            if (item.asset_serie_no === "") {
+            if( item.asset_type == 'U4010' || item.asset_type == 'M4010' || item.asset_type == 'A4010' || item.asset_type == 'E4010' || item.asset_type == 'E4030' || item.asset_type == 4030 || item.asset_type == 4010 )
+            {
+                if (item.asset_serie_no === "") {
+                    valid = false;
+                    jQuery('#asset_serie_no').parent().closest('div').addClass('has-warning');
+                    notify({
+                        type: 'warning',
+                        message: 'No Seri / Rangka tidak boleh kosong!'
+                    });
+                } else {
+                    jQuery('#asset_serie_no').parent().closest('div').removeClass('has-warning');
+                }
+
+                if( $.trim(item.asset_serie_no).length < 3 )
+                {
+                    valid = false;
+                    $('#asset_serie_no').parent().closest('div').addClass('has-warning');
+                    notify({
+                        type: 'warning',
+                        message: 'No Seri / Rangka minimal 3 char pada asset ' + field.name + ' page ' + (key + 1) + ' '
+                    });
+                }else {
+                    $('#asset_serie_no').parent().closest('div').removeClass('has-warning');
+                }
+
+                if (item.asset_imei === "") {
+                    valid = false;
+                    jQuery('#asset_imei').focus();
+                    notify({
+                        type: 'warning',
+                        message: 'No Mesin / IMEI tidak boleh kosong!'
+                    });
+                }
+
+                if( $.trim(item.asset_imei).length < 3 )
+                {
+                    valid = false;
+                    $('#asset_imei').parent().closest('div').addClass('has-warning');
+                    notify({
+                        type: 'warning',
+                        message: 'No Mesin / IMEI minimal 3 char pada asset ' + field.name + ' page ' + (key + 1) + ' '
+                    });
+                }else {
+                    $('#asset_imei').parent().closest('div').removeClass('has-warning');
+                }
+                
+            }
+
+            if (item.asset_year === "") {
                 valid = false;
-                jQuery('#asset_serie_no').parent().closest('div').addClass('has-warning');
+                jQuery('#asset_year').parent().closest('div').addClass('has-warning');
                 notify({
                     type: 'warning',
-                    message: 'No Seri / Rangka tidak boleh kosong!'
+                    message: 'Tahun Asset tidak boleh kosong!'
                 });
             } else {
-                jQuery('#asset_serie_no').parent().closest('div').removeClass('has-warning');
+                jQuery('#asset_year').parent().closest('div').removeClass('has-warning');
             }
 
-            if( $.trim(item.asset_serie_no).length < 3 )
-            {
+            if (item.asset_location === "") {
                 valid = false;
-                $('#asset_serie_no').parent().closest('div').addClass('has-warning');
+                jQuery('#asset_location').focus();
                 notify({
                     type: 'warning',
-                    message: 'No Seri / Rangka minimal 3 char pada asset ' + field.name + ' page ' + (key + 1) + ' '
-                });
-            }else {
-                $('#asset_serie_no').parent().closest('div').removeClass('has-warning');
-            }
-
-            if (item.asset_imei === "") {
-                valid = false;
-                jQuery('#asset_imei').focus();
-                notify({
-                    type: 'warning',
-                    message: 'No Mesin / IMEI tidak boleh kosong!'
+                    message: 'Lokasi Asset tidak boleh kosong!'
                 });
             }
 
-            if( $.trim(item.asset_imei).length < 3 )
-            {
+            if (item.asset_condition === "") {
                 valid = false;
-                $('#asset_imei').parent().closest('div').addClass('has-warning');
                 notify({
                     type: 'warning',
-                    message: 'No Mesin / IMEI minimal 3 char pada asset ' + field.name + ' page ' + (key + 1) + ' '
+                    message: 'Kondisi Asset tidak boleh kosong!'
                 });
-            }else {
-                $('#asset_imei').parent().closest('div').removeClass('has-warning');
             }
-            
-        }
 
-        if (item.asset_year === "") {
-            valid = false;
-            jQuery('#asset_year').parent().closest('div').addClass('has-warning');
-            notify({
-                type: 'warning',
-                message: 'Tahun Asset tidak boleh kosong!'
-            });
-        } else {
-            jQuery('#asset_year').parent().closest('div').removeClass('has-warning');
-        }
+            if (item.asset_pic_name === "") {
+                valid = false;
+                notify({
+                    type: 'warning',
+                    message: 'Nama Penanggung Jawab Asset tidak boleh kosong!'
+                });
+            }
 
-        if (item.asset_location === "") {
-            valid = false;
-            jQuery('#asset_location').focus();
-            notify({
-                type: 'warning',
-                message: 'Lokasi Asset tidak boleh kosong!'
-            });
-        }
-
-        if (item.asset_condition === "") {
-            valid = false;
-            notify({
-                type: 'warning',
-                message: 'Kondisi Asset tidak boleh kosong!'
-            });
-        }
-
-        if (item.asset_pic_name === "") {
-            valid = false;
-            notify({
-                type: 'warning',
-                message: 'Nama Penanggung Jawab Asset tidak boleh kosong!'
-            });
-        }
-
-        if (item.asset_pic_level === "") {
-            valid = false;
-            notify({
-                type: 'warning',
-                message: 'Jabatan Penanggung Jawab Asset tidak boleh kosong!'
-            });
-        }
-    });
+            if (item.asset_pic_level === "") {
+                valid = false;
+                notify({
+                    type: 'warning',
+                    message: 'Jabatan Penanggung Jawab Asset tidak boleh kosong!'
+                });
+            }
+        });
         return valid;
     }
 
