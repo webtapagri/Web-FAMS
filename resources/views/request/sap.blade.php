@@ -1737,7 +1737,7 @@
         var request = request_item[key];
         var item = request.detail[obj];
         var valid = true;
-        $.each(item, function(i, field) 
+        $.each(item[id], function(i, field) 
         {
             if( item.asset_type == 'U4010' || item.asset_type == 'M4010' || item.asset_type == 'A4010' || item.asset_type == 'E4010' || item.asset_type == 'E4030' || item.asset_type == 4030 || item.asset_type == 4010 )
             {
