@@ -1741,7 +1741,7 @@
         {
             if (field) 
             {
-                $.each(field.detail[obj], function(key, val) 
+                $.each(field.detail, function(key, val) 
                 {
                 if( item.asset_type == 'U4010' || item.asset_type == 'M4010' || item.asset_type == 'A4010' || item.asset_type == 'E4010' || item.asset_type == 'E4030' || item.asset_type == 4030 || item.asset_type == 4010 )
                 {
