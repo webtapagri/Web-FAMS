@@ -1737,7 +1737,8 @@
         var request = request_item[key];
         var item = request.detail[obj];
         var valid = true;
-
+        $.each(request_item, function(i, field) 
+        {
         if( item.asset_type == 'U4010' || item.asset_type == 'M4010' || item.asset_type == 'A4010' || item.asset_type == 'E4010' || item.asset_type == 'E4030' || item.asset_type == 4030 || item.asset_type == 4010 )
         {
             if (item.asset_serie_no === "") {
@@ -1829,7 +1830,7 @@
                 message: 'Jabatan Penanggung Jawab Asset tidak boleh kosong!'
             });
         }
-
+    });
         return valid;
     }
 
