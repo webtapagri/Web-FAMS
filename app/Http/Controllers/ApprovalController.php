@@ -674,8 +674,8 @@ class ApprovalController extends Controller
             }
             $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL 
                         SET jenis_asset_tujuan = (case $case_jenis_asset end) ,
-                        SET group = (case $case_asset_group end) ,
-                        SET sub_group = (case $case_asset_subgroup end)
+                        SET group_tujuan = (case $case_asset_group end) ,
+                        SET sub_group_tujuan = (case $case_asset_subgroup end)
                         WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
 
             DB::UPDATE($sql);
