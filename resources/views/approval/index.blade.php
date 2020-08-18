@@ -1474,6 +1474,8 @@
         var data = [];
         var jenis_asset = "";
         var jns_asset = [];
+        var group = [];
+        var subgroup = [];
         
 
         for (var i = 0; i < input2.length/2; i++) { 
@@ -3489,6 +3491,12 @@
         var assetgroup = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.assetgroup") !!}?type='+jenis_asset_code )));
         $('input[name="jenis_asset_group-'+no+'"]').empty().select2({
             data: assetgroup,
+            width: "100%",
+            allowClear: true,
+            placeholder: ' '
+        });
+        $('input[name="jenis_asset_subgroup-'+no+'"]').empty().select2({
+            data: null,
             width: "100%",
             allowClear: true,
             placeholder: ' '

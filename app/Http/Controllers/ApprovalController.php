@@ -655,6 +655,9 @@ class ApprovalController extends Controller
         $jenis_asset = explode(',', $req->jenis_asset);
         $group = explode(',', $req->group);
         $subgroup = explode(',', $req->subgroup);
+        $case_jenis_asset ="";
+        $case_asset_group ="";
+        $case_asset_subgroup ="";
        
         DB::beginTransaction();
 

@@ -61,6 +61,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<th>NO</th>
 						<th>KODE MATERIAL</th>
 						<th>ASSETS</th>
+						<th>QTY</th>
 						<th>LOKASI</th>
 					</tr>
 			";
@@ -71,6 +72,7 @@ Dibutuhkan persetujuan atas dokumen berikut :
 						<td>$no</td>
 						<td>$v->KODE_MATERIAL</td>
 						<td>$v->NAMA_MATERIAL</td>
+						<td>$v->QTY</td>
 						<td>$v->LOKASI_BA_CODE - $v->LOKASI_BA_CODE_DESC</td>
 					</tr> 
 				";
