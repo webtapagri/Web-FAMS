@@ -4217,8 +4217,8 @@
                         <?php  } ?>
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
-                        // item += "<td>" + val.group + "</td>";
-                        // item += "<td>" + val.sub_group + "</td>";
+                        item += "<td>" + val.group_tujuan + "</td>";
+                        item += "<td>" + val.sub_group_tujuan + "</td>";
                         item += "<td>" + val.asset_controller + "</td>";
                         <?php if( $user_role == 'AC' ){ ?>
                         
