@@ -4212,6 +4212,8 @@
                                         }
                         <?php } else {?>
                                     item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                    item += "<td>" + val.group_tujuan + "</td>";
+                                            item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
