@@ -4213,8 +4213,9 @@
                         <?php } else {?>
                                     item += "<td>" + val.jenis_asset_tujuan + "</td>";
                                     item += "<td>" + val.group_tujuan + "</td>";
-                                            item += "<td>" + val.sub_group_tujuan + "</td>";
+                                    item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
+                        
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
                         // item += "<td>" + val.group + "</td>";
@@ -4227,6 +4228,8 @@
                                 item += "<td><input type='text' class='form-control' placeholder='Jenis Kendaraan' id='jenis-kendaraan-"+val.no_reg_item+"' name='jenis-kendaraan-"+val.no_reg_item+"'><div class='btn btn-info btn-sm' OnClick='printFormIOMutasi("+val.asset_po_id+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px' data-toggle='modal' data-dismiss='modal'><i class='fa fa-print'> PRINT FORM IO</i></div></td>";
                         <?php } else {?>
                                     item += "<td>" + val.kode_asset_controller + "</td>";
+                        console.log(val.group_tujuan);
+                        console.log(val.sub_group_tujuan);
                         <?php  } ?>
                         if(area_code.includes(val.tujuan)){
                             item += "<td><input type='text' class='form-control input-sm' name='penanggung_jawab[]' id='penanggung_jawab[]' value='"+ val.penanggung_jawab +"' required></td>";
@@ -4268,7 +4271,7 @@
                             if(i > 1){
                                 return false;
                             }
-                            item += "<tr><td colspan='15' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
+                            item += "<tr><td colspan='16' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
                             
                         }
                         i++;
