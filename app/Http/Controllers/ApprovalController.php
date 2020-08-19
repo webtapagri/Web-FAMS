@@ -1198,7 +1198,7 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         $no_registrasi = str_replace("-", "/", $noreg);
         //echo $noreg; die();
 
-        $sql = " SELECT a.JENIS_ASSET_TUJUAN AS JENIS_ASSET,a.GROUP_TUJUAN AS GROUP,a.SUB_GROUP_TUJUAN AS SUB_GROUP FROM TR_MUTASI_ASSET_DETAIL a WHERE a.NO_REG = '{$no_registrasi}' AND (a.DELETED is null OR a.DELETED = '') ";
+        $sql = " SELECT a.JENIS_ASSET_TUJUAN AS JENIS_ASSET,a.GROUP_TUJUAN AS `GROUP`,a.SUB_GROUP_TUJUAN AS SUB_GROUP FROM TR_MUTASI_ASSET_DETAIL a WHERE a.NO_REG = '{$no_registrasi}' AND (a.DELETED is null OR a.DELETED = '') ";
         $data = DB::SELECT($sql); 
         //echo "1<pre>"; print_r($data); die();
         if( !empty($data) )
