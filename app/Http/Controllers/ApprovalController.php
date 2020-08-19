@@ -3681,6 +3681,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $req = $request->all();
         $jenis_dokumen = $req['po-type'];
+
+        $rolename = Session::get('role');
+        $asset_type = "";
+
+        //validasi email next approval
+        $user_id = Session::get('user_id');
         // $no_registrasi = str_replace("-", "/", $noreg);
         // $note = $request->parNote;
         // $role_id = Session::get('role_id');
