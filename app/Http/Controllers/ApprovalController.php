@@ -3612,14 +3612,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $req = $request->all();
         
-        $no_registrasi = str_replace("-", "/", $noreg);
-        $note = $request->parNote;
-        $role_id = Session::get('role_id');
-        $role_name = Session::get('role'); //get role id user
-        $asset_controller = $this->get_ac_mutasi($no_registrasi); //get asset controller 
+        // $no_registrasi = str_replace("-", "/", $noreg);
+        // $note = $request->parNote;
+        // $role_id = Session::get('role_id');
+        // $role_name = Session::get('role'); //get role id user
+        // $asset_controller = $this->get_ac_mutasi($no_registrasi); //get asset controller 
 
         
-        $user_id = Session::get('user_id');
+        // $user_id = Session::get('user_id');
         // $last_email_approve = $this->get_last_email_approve($no_registrasi);
         // //echo "2<pre>"; print_r($validasi_last_approve); die();
 
@@ -3633,59 +3633,304 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         // }
 
     
-        $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
+        // $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
 
-        if( $validasi_last_approve == 0 )
-        {
-            DB::beginTransaction();
+        // if( $validasi_last_approve == 0 )
+        // {
+        //     DB::beginTransaction();
             
-            try 
-            {
-                if($status=='R')
-                {
-                    DB::UPDATE(" UPDATE TR_MUTASI_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
-                }
+        //     try 
+        //     {
+        //         if($status=='R')
+        //         {
+        //             DB::UPDATE(" UPDATE TR_MUTASI_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
+        //         }
 
-                DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$user_id.'","'.$status.'", "'.$note.'", "'.$role_name.'", "'.$asset_controller.'")');
+        //         DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$user_id.'","'.$status.'", "'.$note.'", "'.$role_name.'", "'.$asset_controller.'")');
                 
-                DB::commit();
+        //         DB::commit();
 
-                return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
-            } 
-            catch (\Exception $e) 
-            {
-                DB::rollback();
-                return response()->json(['status' => false, "message" => $e->getMessage()]);
-            }
-        }    
-        else
+        //         return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+        //     } 
+        //     catch (\Exception $e) 
+        //     {
+        //         DB::rollback();
+        //         return response()->json(['status' => false, "message" => $e->getMessage()]);
+        //     }
+        // }    
+        // else
+        // {
+        //     //$validasi_check_gi_amp = $this->get_validasi_check_gi_amp($request,$no_registrasi); //true;
+        //     //echo "1<pre>"; print_r($validasi_check_gi_amp); die();
+        //     $validasi_check_gi_amp['status'] = 'success';
+
+        //     if($validasi_check_gi_amp['status'] == 'success')
+        //     {
+        //         DB::beginTransaction();
+        //         try 
+        //         {
+        //             // DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$user_id.'")');
+        //             DB::STATEMENT('CALL complete_document_mutasi("'.$no_registrasi.'", "'.$user_id.'")');
+        //             DB::commit();
+        //             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+        //         } 
+        //         catch (\Exception $e) 
+        //         {
+        //             DB::rollback();
+        //             return response()->json(['status' => false, "message" => $e->getMessage()]);
+        //         }
+        //     }
+        //     else
+        //     {
+        //         return response()->json(['status' => false, "message" => "Error Validasi GI"]);
+        //     }
+           
+        // }
+        // VALIDASI ASSET CONTROLLER 
+        if($status != 'R')
         {
-            //$validasi_check_gi_amp = $this->get_validasi_check_gi_amp($request,$no_registrasi); //true;
-            //echo "1<pre>"; print_r($validasi_check_gi_amp); die();
-            $validasi_check_gi_amp['status'] = 'success';
-
-            if($validasi_check_gi_amp['status'] == 'success')
+            $validasi_asset_controller = $this->validasi_asset_controller($noreg);
+            if( $validasi_asset_controller['status'] == false )
             {
-                DB::beginTransaction();
-                try 
+                return response()->json(['status' => false, "message" =>  $validasi_asset_controller['message'] ]);
+            }
+            else
+            {
+                $asset_type = $validasi_asset_controller['message'];
+            }
+        }
+
+        // VALIDASI PROSES CHANGE STATUS ASSET LAIN IT@090819
+        if( $jenis_dokumen == 'Asset Lainnya' )
+        {
+            $cek_sap = $this->get_sinkronisasi_sap($noreg);
+            
+            if($cek_sap != "")
+            { 
+                $jenis_dokumen = 'SAP'; 
+            }
+            else
+            {
+                $jenis_dokumen = 'AMP';
+            }
+        }
+
+        if( $jenis_dokumen == 'AMP' )
+        {
+            if($status != 'R')
+            {
+                if($rolename == 'AC')
                 {
-                    // DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$user_id.'")');
-                    DB::STATEMENT('CALL complete_document_mutasi("'.$no_registrasi.'", "'.$user_id.'")');
-                    DB::commit();
-                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                    $validasi_io = $this->get_validasi_io_amp($request, $status, $noreg);
                 } 
-                catch (\Exception $e) 
+                else
                 {
-                    DB::rollback();
-                    return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    $validasi_io['status'] = true;
                 }
             }
             else
             {
-                return response()->json(['status' => false, "message" => "Error Validasi GI"]);
+                $validasi_io['status'] = true;            
             }
-           
+
+            if( $validasi_io['status'] == false )
+            {
+                return response()->json(['status' => false, "message" => $validasi_io['message']]);
+            }
+            else
+            {
+                /* AMP PROCESS */
+
+                if( $status != 'R' )
+                {
+                    if($rolename == 'AC' )
+                    {
+                        // DISKIP KARENA SUDAH DI MAPPING DI TABLE TM_ASSET_CONTROLLER_MAP X IT@150719 
+                        /*
+                        $validasi_input_all_io = $this->validasi_input_all_io($request, $status, $noreg);
+                
+                        if(!$validasi_input_all_io['status'])
+                        {
+                            return response()->json(['status' => false, "message" => $validasi_input_all_io['message']] );
+                            die();
+                        }
+                        */
+                    }
+                }
+
+                //echo "masuk ke validasi last approve"; die();            
+                $no_registrasi = str_replace("-", "/", $noreg);
+                $user_id = Session::get('user_id');
+                $note = $request->parNote;
+                $role_id = Session::get('role_id');
+                $role_name = Session::get('role'); //get role id user
+                $asset_controller = $this->get_ac_mutasi($no_registrasi); //get asset controller 
+                //echo $note;die();
+
+                $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
+
+                if( $validasi_last_approve == 0 )
+                {
+                    DB::beginTransaction();
+                    
+                    try 
+                    {
+                        DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$user_id.'","'.$status.'", "'.$note.'", "'.$role_name.'", "'.$asset_type.'")');
+                        DB::commit();
+                        return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                    } 
+                    catch (\Exception $e) 
+                    {
+                        DB::rollback();
+                        return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    }
+                }    
+                else
+                {
+                    //$validasi_check_gi_amp = $this->get_validasi_check_gi_amp($request,$no_registrasi); //true;
+                    //echo "1<pre>"; print_r($validasi_check_gi_amp); die();
+                    $validasi_check_gi_amp['status'] = 'success';
+
+                    if($validasi_check_gi_amp['status'] == 'success')
+                    {
+                        DB::beginTransaction();
+                        try 
+                        {
+                            DB::STATEMENT('CALL complete_document_mutasi("'.$no_registrasi.'", "'.$user_id.'")');
+                            DB::commit();
+                            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
+                        } 
+                        catch (\Exception $e) 
+                        {
+                            DB::rollback();
+                            return response()->json(['status' => false, "message" => $e->getMessage()]);
+                        }
+                    }
+                    else
+                    {
+                        return response()->json(['status' => false, "message" => "Error Validasi GI"]);
+                    }
+                   
+                }
+            }
         }
+        else
+        {
+            /* SAP PROCESS */ 
+
+            if($status != 'R')
+            {
+                if($rolename == 'AC')
+                {
+                    $validasi_io = $this->get_validasi_io($request);
+                } 
+                else if($rolename == 'AMS')
+                {
+                    $validasi_io = $this->get_validasi_input_create_asset_sap($request);
+                }
+                else
+                {
+                    $validasi_io['status'] = true;
+                }
+            }
+            else
+            {
+                $validasi_io['status'] = true;            
+            }
+            //echo "1<pre>"; print_r($validasi_io); die();
+
+            if( $validasi_io['status'] == false )
+            {
+                return response()->json(['status' => false, "message" => $validasi_io['message']]);
+            }
+            else
+            {
+                // IF SYNCHRONIZE SAP SUCCESS
+
+                if( $status != 'R' )
+                {
+                    if($rolename == 'AC' )
+                    {
+                        // CEK SEKALI LAGI UNTUK ALL INPUT IO (KODE ASET CONTROLLER) IT@250719  ~ DISKIP KARENA SUDAH DI MAPPING DI TABLE TM_ASSET_CONTROLLER_MAP X IT@150719 
+                        $validasi_input_all_io = $this->validasi_input_all_io($request, $status, $noreg);
+                
+                        if(!$validasi_input_all_io['status'])
+                        {
+                            return response()->json(['status' => false, "message" => $validasi_input_all_io['message']] );
+                            die();
+                        }
+                        
+                    }
+                }
+
+                //echo "masuk ke validasi last approve"; die();            
+
+                $no_registrasi = str_replace("-", "/", $noreg);
+                $user_id = Session::get('user_id');
+                $note = $request->parNote;
+                $role_id = Session::get('role_id');
+                $role_name = Session::get('role'); //get role id user
+                $asset_controller = $this->get_ac_mutasi($no_registrasi); //get asset controller 
+                //echo $note;die();
+
+                $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
+                if( $validasi_last_approve == 0 )
+                {
+                    //echo "1".$asset_type; die();
+
+                    DB::beginTransaction();
+                    
+                    try 
+                    {
+                        DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$user_id.'","'.$status.'", "'.$note.'", "'.$role_name.'", "'.$asset_type.'")');
+                        DB::commit();
+                        return response()->json([ 'status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi ]);
+                    } 
+                    catch (\Exception $e) 
+                    {
+                        DB::rollback();
+                        return response()->json(['status' => false, "message" => $e->getMessage()]);
+                    }
+                }    
+                else
+                {
+                    //echo "3<pre>"; print_r($request->all()); die();
+
+                    if( $req['po-type'] == 'Asset Lainnya' )
+                    {
+                        $validasi_check_gi['status'] = 'success';
+                    }
+                    else
+                    {
+                        // $validasi_check_gi = $this->get_validasi_check_gi($request,$no_registrasi);
+                        $validasi_check_gi = $this->get_validasi_check_gi($req,$no_registrasi);
+                    }
+                    
+                    //echo "1<pre>"; print_r($validasi_check_gi); die();
+
+                    if($validasi_check_gi['status']=='success')
+                    {
+                        DB::beginTransaction();
+                        try 
+                        {
+                            DB::STATEMENT('CALL complete_document("'.$no_registrasi.'", "'.$user_id.'")');
+                            DB::commit();
+                            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'completed'), "new_noreg"=>$no_registrasi ]);
+                        } 
+                        catch (\Exception $e) 
+                        {
+                            DB::rollback();
+                            return response()->json(['status' => false, "message" => $e->getMessage()]);
+                        }
+                    }
+                    else
+                    {
+                        return response()->json(['status' => false, "message" => $validasi_check_gi['message'] ]);
+                    }
+                   
+                }
+            }
+        } 
     }
 
     function get_ac_mutasi($noreg)
