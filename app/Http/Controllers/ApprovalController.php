@@ -3880,11 +3880,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     //3. CREATE CODE ASSET AMS MUTASI
                     if( $dt->JENIS_PENGAJUAN == 1 )
                     {
-                        $sql_3 = " CALL create_kode_asset_ams_mutasi('".$dt->NO_REG_MUTASI."', '".$ANLA_BUKRS."', '".$dt->JENIS_ASSET."', '".$data->item->MESSAGE_V1."') ";//echo $sql_3; die();
+                        $sql_3 = " CALL create_kode_asset_ams_mutasi('".$dt->NO_REG_MUTASI."', '".$ANLA_BUKRS."', '".$dt->JENIS_ASSET_TUJUAN."', '".$data->item->MESSAGE_V1."') ";//echo $sql_3; die();
                     }
                     else
                     {
-                        $sql_3 = " CALL create_kode_asset_ams_mutasi('".$dt->NO_REG_MUTASI."', '".$ANLA_BUKRS."', '".$dt->JENIS_ASSET."', '-".$data->item->MESSAGE_V1."') ";//echo $sql_3; die();
+                        $sql_3 = " CALL create_kode_asset_ams_mutasi('".$dt->NO_REG_MUTASI."', '".$ANLA_BUKRS."', '".$dt->JENIS_ASSET_TUJUAN."', '-".$data->item->MESSAGE_V1."') ";//echo $sql_3; die();
                     }
                     
                     DB::STATEMENT($sql_3);

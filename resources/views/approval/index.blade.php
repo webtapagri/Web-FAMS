@@ -4005,7 +4005,7 @@
                         
                         if( jenis_pengajuan == 1 )
                         {
-                            pengajuan = 'AMP';
+                            pengajuan = 'BA ANTAR PT';
                         }
                         else{
                             pengajuan = 'NON AMP';
