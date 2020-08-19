@@ -4142,12 +4142,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 $costcenter = $v->COST_CENTER_BARU;
                 $this->update_costcenter($costcenter,$no_reg,$kode_ams);
                 $proses = $this->synchronize_sap_process_mutasi($v);   
-                
-                if($proses['status']=='error')
-                {
-                    return response()->json(['status' => false, "message" => $proses['message']]);
-                    die();
-                }
+                return $proses;
+                die;
+                // if($proses['status']=='error')
+                // {
+                //     return response()->json(['status' => false, "message" => $proses['message']]);
+                //     die();
+                // }
             }
 
             return response()->json(['status' => true, "message" => "Synchronize Mutasi success"]);
