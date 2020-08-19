@@ -1193,6 +1193,75 @@ WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KO
         return $result;
     }
 
+    function validasi_asset_controller_mutasi($noreg)
+    {
+        $no_registrasi = str_replace("-", "/", $noreg);
+        //echo $noreg; die();
+
+        $sql = " SELECT a.JENIS_ASSET_TUJUAN AS JENIS_ASSET,a.GROUP_TUJUAN AS GROUP,a.SUB_GROUP_TUJUAN AS SUB_GROUP FROM TR_MUTASI_ASSET_DETAIL a WHERE a.NO_REG = '{$no_registrasi}' AND (a.DELETED is null OR a.DELETED = '') ";
+        $data = DB::SELECT($sql); 
+        //echo "1<pre>"; print_r($data); die();
+        if( !empty($data) )
+        {
+            //$result = array("status"=>true, "message"=> 'success' );
+
+            $ac = array();
+            $ast = "";
+
+            foreach( $data as $k => $v )
+            {
+                //echo "1<pre>"; print_r($v);
+                /*
+                stdClass Object
+                (
+                    [JENIS_ASSET] => 4030
+                    [GROUP] => G20
+                    [SUB_GROUP] => SG161
+                )
+                */
+                
+                $sql = " SELECT ASSET_CTRL_CODE FROM TM_ASSET_CONTROLLER_MAP WHERE JENIS_ASSET_CODE = '".$v->JENIS_ASSET."' AND GROUP_CODE = '".$v->GROUP."' AND SUBGROUP_CODE = '".$v->SUB_GROUP."' "; //echo $sql; die();
+                $datax = DB::SELECT($sql); 
+                //echo "1<pre>"; print_r($data); die();
+                if(!empty($datax))
+                {
+                    foreach($datax as $kk => $vv)
+                    {
+                        //echo "1<pre>"; print_r($v);
+                        $ast = $vv->ASSET_CTRL_CODE.","; 
+                    }
+                    array_push($ac,rtrim($ast,","));
+                    //die();
+                }
+            }
+            //die();
+            //echo "1<pre>"; print_r($ac);die();
+
+            if (count(array_unique($ac)) === 1) 
+            {
+                $result = array("status"=>true, "message"=> $ac[0]);
+            }
+            else
+            {
+                //echo "1<pre>"; print_r($ac); die();
+                if(!empty( $ac ))
+                {
+                    $result = array("status"=>false, "message"=> "Aset Controller tidak sama / belum disetting");
+                }
+                else
+                {
+                    $result = array("status"=>true, "message"=> "");
+                }
+            }
+
+        }
+        else
+        {
+            $result = array("status"=>false, "message"=> "Data not found");
+        }
+        return $result;
+    }
+
     function get_validasi_check_gi_amp(Request $request, $noreg)
     {
         $req = $request->all();
@@ -3689,7 +3758,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         // VALIDASI ASSET CONTROLLER 
         if($status != 'R')
         {
-            $validasi_asset_controller = $this->validasi_asset_controller($noreg);
+            $validasi_asset_controller = $this->validasi_asset_controller_mutasi($noreg);
             if( $validasi_asset_controller['status'] == false )
             {
                 return response()->json(['status' => false, "message" =>  $validasi_asset_controller['message'] ]);
