@@ -3680,7 +3680,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     function update_status_mutasi(Request $request, $status, $noreg)
     {
         $req = $request->all();
-        
+        $jenis_dokumen = $req['po-type'];
         // $no_registrasi = str_replace("-", "/", $noreg);
         // $note = $request->parNote;
         // $role_id = Session::get('role_id');
@@ -3755,6 +3755,10 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         //     }
            
         // }
+
+
+
+
         // VALIDASI ASSET CONTROLLER 
         if($status != 'R')
         {
@@ -3982,7 +3986,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         DB::beginTransaction();
                         try 
                         {
-                            DB::STATEMENT('CALL complete_document("'.$no_registrasi.'", "'.$user_id.'")');
+                            DB::STATEMENT('CALL complete_document_mutasi("'.$no_registrasi.'", "'.$user_id.'")');
                             DB::commit();
                             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'completed'), "new_noreg"=>$no_registrasi ]);
                         } 
