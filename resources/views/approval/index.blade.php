@@ -4167,8 +4167,6 @@
                         var doc_no = val.document_code.replace(/\//g, '-');
                         var kode_fams = btoa(val.kode_asset_ams);
                         var jenis_pengajuan = val.jenis_pengajuan;
-                        var mandatory_ac = val.mandatory_ac;
-                        var required = '';
                         
                         if( jenis_pengajuan == 1 )
                         {
@@ -4226,11 +4224,9 @@
                         console.log(val.sub_group_tujuan);
                         item += "<td>" + val.asset_controller + "</td>";
                         <?php if( $user_role == 'AC' ){ ?>
-                           if(mandatory_ac == 'X'){
-                               required = 'required';
-                           }
-                                item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams-"+val.no_reg_item+"' id='kode_asset_ams-"+val.no_reg_item+"' value='"+ val.kode_asset_ams +"'>";
-                                item += "<td><input type='text' class='form-control input-sm' name='kode_aset_controller-"+val.no_reg_item+"' value='"+val.kode_asset_controller+"' id='kode_aset_controller-"+val.no_reg_item+"' autocomplete='off' onkeyup='get_kode_aset("+val.no_reg_item+")' "+required+" ><input type='hidden' id='request_kode_aset_input' name='request_kode_aset_input'><div class='btn btn-warning btn-sm' OnClick='validasiKodeAssetControllerMutasi("+po_type+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px;margin-bottom:5px'><i class='fa fa-save'></i> SAVE</div></td>";
+        
+                                item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams-"+val.no_reg_item+"' id='kode_asset_ams-"+val.no_reg_item+"' value='"+ val.kode_asset_ams +"'><input type='hidden' class='form-control input-sm' name='no_reg_item[]' id='no_reg_item[]' value='"+ val.no_reg_item +"'><input type='hidden' class='form-control input-sm' name='mandatory_ac[]' id='mandatory_ac[]' value='"+ val.mandatory_ac +"'>";
+                                item += "<td><input type='text' class='form-control input-sm' name='kode_aset_controller-"+val.no_reg_item+"' value='"+val.kode_asset_controller+"' id='kode_aset_controller-"+val.no_reg_item+"' autocomplete='off' onkeyup='get_kode_aset("+val.no_reg_item+")' " ><input type='hidden' id='request_kode_aset_input' name='request_kode_aset_input'><div class='btn btn-warning btn-sm' OnClick='validasiKodeAssetControllerMutasi("+po_type+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px;margin-bottom:5px'><i class='fa fa-save'></i> SAVE</div></td>";
                                 item += "<td><input type='text' class='form-control' placeholder='Jenis Kendaraan' id='jenis-kendaraan-"+val.no_reg_item+"' name='jenis-kendaraan-"+val.no_reg_item+"'><div class='btn btn-info btn-sm' OnClick='printFormIOMutasi("+val.asset_po_id+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px' data-toggle='modal' data-dismiss='modal'><i class='fa fa-print'> PRINT FORM IO</i></div></td>";
                         <?php } else {?>
                                     item += "<td>" + val.kode_asset_controller + "</td>";
@@ -4341,6 +4337,31 @@
                         });
             return false;
         }
+
+        var input = document.getElementsByName('mandatory_ac[]'); 
+        var input2 = document.getElementsByName('no_reg_item[]'); 
+        var mandatory_ac = [];    
+        var no_reg_item = [];    
+        for (var i = 0; i < input.length/2; i++) { 
+            mandatory_ac.push(input[i+input.length/2].value); 
+            no_reg_item.push(input2[i+input2.length/2].value); 
+        } 
+          
+        // VALIDASI
+        for (var i = 0; i < input.length/2; i++) {             
+            var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
+                if( mandatory_ac[i] == 'X' )
+                {
+                    if( ka_con == ''){
+                        notify({
+                            type: 'warning',
+                            message: " Kode Asset Controller Harus Diisi "
+                        });
+                        return false;
+                    }
+                } 
+        }
+
         
         <?php if( $user_role == 'AMS' ){ ?>
                 if(update_jenis_asset() ==  false ){
