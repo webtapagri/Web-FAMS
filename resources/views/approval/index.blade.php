@@ -4168,6 +4168,7 @@
                         var kode_fams = btoa(val.kode_asset_ams);
                         var jenis_pengajuan = val.jenis_pengajuan;
                         var mandatory_ac = val.mandatory_ac;
+                        var required = '';
                         
                         if( jenis_pengajuan == 1 )
                         {
@@ -4226,12 +4227,10 @@
                         item += "<td>" + val.asset_controller + "</td>";
                         <?php if( $user_role == 'AC' ){ ?>
                            if(mandatory_ac == 'X'){
-                               <?php $required = 'required';?>
-                           } else{
-                              <?php $required = '';?>
+                               required = 'required';
                            }
                                 item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams-"+val.no_reg_item+"' id='kode_asset_ams-"+val.no_reg_item+"' value='"+ val.kode_asset_ams +"'>";
-                                item += "<td><input type='text' class='form-control input-sm' name='kode_aset_controller-"+val.no_reg_item+"' value='"+val.kode_asset_controller+"' id='kode_aset_controller-"+val.no_reg_item+"' autocomplete='off' onkeyup='get_kode_aset("+val.no_reg_item+")' <?php echo $required ?>><input type='hidden' id='request_kode_aset_input' name='request_kode_aset_input'><div class='btn btn-warning btn-sm' OnClick='validasiKodeAssetControllerMutasi("+po_type+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px;margin-bottom:5px'><i class='fa fa-save'></i> SAVE</div></td>";
+                                item += "<td><input type='text' class='form-control input-sm' name='kode_aset_controller-"+val.no_reg_item+"' value='"+val.kode_asset_controller+"' id='kode_aset_controller-"+val.no_reg_item+"' autocomplete='off' onkeyup='get_kode_aset("+val.no_reg_item+")' "+required+" ><input type='hidden' id='request_kode_aset_input' name='request_kode_aset_input'><div class='btn btn-warning btn-sm' OnClick='validasiKodeAssetControllerMutasi("+po_type+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px;margin-bottom:5px'><i class='fa fa-save'></i> SAVE</div></td>";
                                 item += "<td><input type='text' class='form-control' placeholder='Jenis Kendaraan' id='jenis-kendaraan-"+val.no_reg_item+"' name='jenis-kendaraan-"+val.no_reg_item+"'><div class='btn btn-info btn-sm' OnClick='printFormIOMutasi("+val.asset_po_id+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px' data-toggle='modal' data-dismiss='modal'><i class='fa fa-print'> PRINT FORM IO</i></div></td>";
                         <?php } else {?>
                                     item += "<td>" + val.kode_asset_controller + "</td>";
