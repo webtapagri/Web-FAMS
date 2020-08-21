@@ -2706,7 +2706,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
             if( $po_type == 1 || $po_type == 2 )
             {   
                 // AMP & LAIN
-                $kode_asset = "KODE_ASSET_AMS";
+                $kode_asset = "KODE_ASSET_AMS_TUJUAN";
                 
                 if( $po_type == 1 )
                 {
