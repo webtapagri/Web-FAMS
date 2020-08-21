@@ -3609,16 +3609,16 @@
         var getnoreg = $("#getnoreg").val(); //alert(getnoreg);
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var kode_asset_controller = $("#request-form #kode_aset_controller-"+no_reg_item+"").val();
-        if(po_type == 1 || po_type == 2 )
-        {
-            // AMP & LAIN
-            var kode_asset_nilai = $("#request-form #kode_asset_ams_tujuan-"+no_reg_item+"").val();
-        }
-        else
-        {
+        // if(po_type == 1 || po_type == 2 )
+        // {
+        //     // AMP & LAIN
+        //     var kode_asset_nilai = $("#request-form #kode_asset_ams_tujuan-"+no_reg_item+"").val();
+        // }
+        // else
+        // {
             // SAP
             var kode_asset_nilai = $("#request-form #kode_sap_tujuan-"+no_reg_item+"").val();
-        }
+        // }
         
 
         var param = '';

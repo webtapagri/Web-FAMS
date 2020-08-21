@@ -2733,7 +2733,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     return $result;  
                 }
                 
-                $result = array('status'=>false,'message'=> ' kode_asset_controller'.$ka_con.' & kode_sap '.$ka_sap. '');
+                // $result = array('status'=>false,'message'=> ' kode_asset_controller'.$ka_con.' & kode_sap '.$ka_sap. '');
 
                 $service = API::exec(array(
                     'request' => 'GET',
