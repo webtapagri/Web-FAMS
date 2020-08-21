@@ -2740,7 +2740,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 ));
                 
                 $data = $service;
-                return $service;
+                return response()->json($service);
                 //$data = 1;
                 
                 //echo "<pre>"; print_r($data); die();
