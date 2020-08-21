@@ -3612,12 +3612,12 @@
         if(po_type == 1 || po_type == 2 )
         {
             // AMP & LAIN
-            var kode_asset_nilai = $("#request-form #kode_asset_ams-"+no_reg_item+"").val();
+            var kode_asset_nilai = $("#request-form #kode_asset_ams_tujuan-"+no_reg_item+"").val();
         }
         else
         {
             // SAP
-            var kode_asset_nilai = $("#request-form #kode_aset_sap-"+no_reg_item+"").val();
+            var kode_asset_nilai = $("#request-form #kode_sap_tujuan-"+no_reg_item+"").val();
         }
         
 
@@ -4216,8 +4216,8 @@
                                     item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
                         
-                        item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
-                        item += "<td>" + val.kode_sap_tujuan + "</td>";
+                        item += "<td>" + val.kode_asset_ams_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_asset_ams_tujuan-"+val.no_reg_item+"' id='kode_asset_ams_tujuan-"+val.no_reg_item+"' value='"+ val.kode_asset_ams_tujuan +"'></td>";
+                        item += "<td>" + val.kode_sap_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_sap_tujuan-"+val.no_reg_item+"' id='kode_sap_tujuan-"+val.no_reg_item+"' value='"+ val.kode_sap_tujuan +"'></td>";
                         // item += "<td>" + val.group + "</td>";
                         // item += "<td>" + val.sub_group + "</td>";
                         console.log(val.group_tujuan);
