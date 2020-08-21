@@ -1952,13 +1952,13 @@
 
                         if( val.po_type == 2 )
                         {
-                            <?php if( $user_role == 'AMS' ){ ?>
-
+                            <?php if( $user_role == 'AMS' ){ if($data['outstanding'] != 0 ){?>
                             var kode_vendor = val.vendor.split('-');
                             //var jenis_asset_code = jenis_asset.split('-');
 
                             item += "<div class='form-group'><label for='' class='col-md-4'>VENDOR</label><div class='col-md-8'><input type='text' class='form-control input-sm' name='vendor-"+val.no_reg_item+"' value='"+kode_vendor[0]+"' id='vendor-"+val.no_reg_item+"' autocomplete='off' placeholder='Masukkan Kode Vendor'> <div class='btn btn-warning btn-sm' value='Update' OnClick='updateKodeVendor(\""+val.no_po+"\","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px'><i class='fa fa-save'></i> UPDATE VENDOR</div></div></div>";
-                            <?php } ?>
+                            <?php } 
+                        }?>
                         }
                         else
                         {
