@@ -2739,8 +2739,8 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     'method' => "check_io?AUFNR=$ka_con&AUFUSER3=$ka_sap", 
                 ));
                 
-                $data = $service;
-                return response()->json($service);
+                // $data = $service;
+                // return response()->json($service);
                 //$data = 1;
                 
                 //echo "<pre>"; print_r($data); die();
