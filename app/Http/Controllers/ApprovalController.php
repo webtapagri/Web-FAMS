@@ -2693,11 +2693,11 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         $data = DB::SELECT($sql); //echo "2<pre>"; print_r($data); die(); 
 
         Debugbar::info($sql);
-        
+
         if(!empty($data))
         {
             // #2 VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
-            $sql2 = " SELECT a.KODE_SAP_TUJUAN AS KODE_ASSET_SAP, b.MANDATORY_KODE_ASSET_CONTROLLER, b.MANDATORY_CHECK_IO_SAP  FROM TR_MUTASI_ASSET_DETAIL a 
+            $sql2 = " SELECT distinct a.KODE_SAP_TUJUAN AS KODE_ASSET_SAP, b.MANDATORY_KODE_ASSET_CONTROLLER, b.MANDATORY_CHECK_IO_SAP  FROM TR_MUTASI_ASSET_DETAIL a 
             LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE 
                 LEFT JOIN TM_MSTR_ASSET c ON c.KODE_ASSET_AMS = a.KODE_ASSET_AMS AND c.GROUP = b.GROUP_CODE AND c.SUB_GROUP = b.SUBGROUP_CODE
             WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
@@ -3638,7 +3638,10 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $request = array();
         
-        $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) WHERE a.no_reg = '{$noreg}' ";
+        // $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) WHERE a.no_reg = '{$noreg}' ";
+        $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS, d.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) 
+        LEFT JOIN TM_ASSET_CONTROLLER_MAP d ON a.JENIS_ASSET_TUJUAN = d.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = d.GROUP_CODE AND a.SUB_GROUP_TUJUAN = d.SUBGROUP_CODE
+        WHERE a.no_reg = '{$noreg}' ";
 
         $data = DB::SELECT($sql);
 
@@ -3676,6 +3679,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'asset_controller' => trim($v->ASSET_CONTROLLER),
                     'kode_asset_controller' => trim($v->KODE_ASSET_CONTROLLER),
                     'no_reg_item' => trim($v->NO_REG_ITEM),
+                    'mandatory_ac' => trim($v->mandatory_kode_asset_controller),
                 );
             }
         }
