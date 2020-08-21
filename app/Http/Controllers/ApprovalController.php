@@ -2703,27 +2703,27 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
             WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
             $data2 = DB::SELECT($sql2); //echo "2<pre>"; print_r($data2); die(); 
 
-            if( $po_type == 1 || $po_type == 2 )
-            {   
-                // AMP & LAIN
-                $kode_asset = "KODE_ASSET_AMS_TUJUAN";
+            // if( $po_type == 1 || $po_type == 2 )
+            // {   
+            //     // AMP & LAIN
+            //     $kode_asset = "KODE_ASSET_AMS_TUJUAN";
                 
-                if( $po_type == 1 )
-                {
-                    $kode_asset_label = "KODE ASSET FAMS";
-                }
-                else
-                {
-                    $kode_asset_label = "KODE ASSET FAMS / SAP";    
-                }
+            //     if( $po_type == 1 )
+            //     {
+            //         $kode_asset_label = "KODE ASSET FAMS";
+            //     }
+            //     else
+            //     {
+            //         $kode_asset_label = "KODE ASSET FAMS / SAP";    
+            //     }
                    
-            }
-            else
-            {
+            // }
+            // else
+            // {
                 // SAP
                 $kode_asset = "KODE_SAP_TUJUAN";//"KODE_ASSET_SAP";
                 $kode_asset_label = "KODE ASSET SAP"; 
-            }
+            // }
 
             if(!empty($data2))
             {
