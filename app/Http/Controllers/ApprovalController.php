@@ -2721,7 +2721,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
             else
             {
                 // SAP
-                $kode_asset = "KODE_ASSET_SAP";
+                $kode_asset = "KODE_SAP_TUJUAN";//"KODE_ASSET_SAP";
                 $kode_asset_label = "KODE ASSET SAP"; 
             }
 
@@ -2740,6 +2740,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 ));
                 
                 $data = $service;
+                return $data;
                 //$data = 1;
                 
                 //echo "<pre>"; print_r($data); die();
