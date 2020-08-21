@@ -2734,6 +2734,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 }
                 
                 // $result = array('status'=>false,'message'=> ' kode_asset_controller'.$ka_con.' & kode_sap '.$ka_sap. '');
+                // return $result;
 
                 $service = API::exec(array(
                     'request' => 'GET',
@@ -2741,7 +2742,6 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     'method' => "check_io?AUFNR=$ka_con&AUFUSER3=$ka_sap", 
                 ));
 
-                return $result;
                 
                 $data = $service;
                 // return response()->json($service);
