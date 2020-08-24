@@ -3755,7 +3755,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         if( $po_type == 1 )
         {   
             // AMP & LAIN
-            $kode_asset = "KODE_ASSET_AMS";
+            $kode_asset = "KODE_ASSET_AMS_TUJUAN";
             
             if( $po_type == 1 )
             {
@@ -3770,7 +3770,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         else
         {
             // SAP
-            $kode_asset = "KODE_ASSET_SAP";
+            $kode_asset = "KODE_SAP_TUJUAN";
             $kode_asset_label = "KODE ASSET SAP"; 
         }
 
