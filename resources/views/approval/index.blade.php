@@ -1571,6 +1571,75 @@
         }
     }
 
+    function validasi_io(po_type,no_reg_item)
+    {
+        var getnoreg = $("#getnoreg").val(); //alert(getnoreg);
+        var no_registrasi= getnoreg.replace(/\//g, '-');
+        var kode_asset_controller = $("#request-form #kode_aset_controller-"+no_reg_item+"").val();
+        //jenis pengajuan 1: PO Sendiri,  2: AMP
+        //po type 0:SAP, 1: AMP
+        if(po_type == 1)
+        {
+            // AMP & LAIN
+            var kode_asset_nilai = $("#request-form #kode_asset_ams_tujuan-"+no_reg_item+"").val();
+        }
+        else
+        {
+            SAP
+            var kode_asset_nilai = $("#request-form #kode_sap_tujuan-"+no_reg_item+"").val();
+        }
+        
+
+        var param = '';
+
+        // VALIDASI KODE ASSET CONTROLLER 2 CHAR
+        if( $.trim(kode_asset_controller) < 2 )
+        {
+            console.log(kode_asset_controller);
+            notify({
+                type: 'warning',
+                message: " Kode Asset Controller belum diisi (min 2 char)"
+            });
+            return false;
+        } 
+
+       
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ url('approval/check_io_mutasi') }}",
+                method: "POST",
+                data: param+"&kode_asset_controller="+kode_asset_controller+"&getnoreg="+getnoreg+"&kode_asset_nilai="+kode_asset_nilai+"&no_reg_item="+no_reg_item+"&po_type="+po_type,
+                beforeSend: function() {
+                    $('.loading-event').fadeIn();
+                },
+                success: function(result) 
+                {
+                    if (result.status) 
+                    {
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }
+                    
+                },
+                complete: function() {
+                    jQuery('.loading-event').fadeOut();
+                }
+            }); 
+    }
+
 
     function approval_disposal(id)
     {
@@ -4356,6 +4425,7 @@
         // VALIDASI
         for (var i = 0; i < input.length/2; i++) {             
             var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
+            validasi_io(po_type[i],no_reg_item[i]);
                 if( mandatory_ac[i] == 'X' )
                 {
                     if( ka_con == ''){
@@ -4366,7 +4436,6 @@
                         return false;
                     }
                 } 
-            validasiKodeAssetControllerMutasi(po_type[i],no_reg_item[i])
         }
 
 

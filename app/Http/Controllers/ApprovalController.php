@@ -2814,6 +2814,58 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         //#1 END VALIDASI MAPPING INPUT KODE ASSET / IO
     }
 
+    function check_io_mutasi(Request $request)
+    {
+        $po_type = $request->po_type;
+        $noreg = $request->getnoreg;
+        $ka_con = $request->kode_asset_controller;
+        $ka_sap = $request->kode_asset_nilai;
+        $user_id = Session::get('user_id');
+       
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "check_io?AUFNR=$ka_con&AUFUSER3=$ka_sap", 
+            ));
+
+                
+            $data = $service;
+
+            if( $data->TYPE == 'S' )
+            //if($data==1)
+            {
+                if( $ka_sap == '' )
+                {
+                    $result = array('status'=>false,'message'=> ''.$kode_asset_label.' required! ');
+                    return $result;  
+                }
+
+                // SKIP VALIDASI CHECK IO SAP JIKA ASSET LAINNYA
+                DB::beginTransaction();
+                try 
+                {   
+                    $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$ka_con}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ka_sap}' ";
+                    //echo $sql; die();
+                    DB::UPDATE($sql);
+                    DB::commit();
+
+                    $result = array('status'=>true,'message'=> "Updated Success");
+                }
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    $result = array('status'=>false,'message'=>$e->getMessage());
+                }
+            }
+            else
+            {
+                $result = array('status'=>false,'message'=> $data->MESSAGE.' (Kode Aset Controller:'.$ka_con.')');
+            }
+                
+            return $result;
+            
+    }
+
     function save_gi_number_year(Request $request)
     {
         $po_type = $request->po_type;
