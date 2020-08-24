@@ -1618,12 +1618,13 @@
                 },
                 success: function(result) 
                 {
-                    if (result.status) 
+                    if (result.status == true) 
                     {
                         notify({
                             type: 'success',
                             message: result.message
                         });
+                        return true;
                     } 
                     else 
                     {
@@ -1631,6 +1632,7 @@
                             type: 'warning',
                             message: result.message
                         });
+                        return false;
                     }
                     
                 },
@@ -4425,9 +4427,7 @@
         // VALIDASI
         for (var i = 0; i < input.length/2; i++) {             
             var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
-            if(validasi_io(po_type[i],no_reg_item[i]) ==  false ){
-                    return false
-                }
+               
                 if( mandatory_ac[i] == 'X' )
                 {
                     if( ka_con == ''){
@@ -4438,6 +4438,9 @@
                         return false;
                     }
                 } 
+                if(validasi_io(po_type[i],no_reg_item[i]) ==  false ){
+                    return false
+                }
         }
 
 
