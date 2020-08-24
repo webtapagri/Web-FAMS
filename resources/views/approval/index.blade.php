@@ -4502,6 +4502,7 @@
                     url: "{{ url('approval/update_status_mutasi') }}/"+status+"/"+no_registrasi,
                     method: "POST",
                     data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi,
+                    async: false,
                     beforeSend: function() {
                         jQuery('.loading-event').fadeIn();
                     },
