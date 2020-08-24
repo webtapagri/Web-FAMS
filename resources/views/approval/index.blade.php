@@ -1619,7 +1619,7 @@
                 },
                 success: function(result) 
                 {
-                    if (result.status === true) 
+                    if (result.status === 'true') 
                     {
                         notify({
                             type: 'success',
@@ -4423,6 +4423,10 @@
             mandatory_ac.push(input[i+input.length/2].value); 
             no_reg_item.push(input2[i+input2.length/2].value); 
             po_type.push(input3[i+input3.length/2].value); 
+
+            if(validasi_io(po_type[i],no_reg_item[i]) ==  false ){
+                return false;
+            }
         } 
           
         // VALIDASI
@@ -4439,9 +4443,6 @@
                         return false;
                     }
                 } 
-                if(validasi_io(po_type[i],no_reg_item[i]) ==  false ){
-                    return false
-                }
         }
 
 
