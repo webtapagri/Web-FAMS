@@ -4425,7 +4425,9 @@
         // VALIDASI
         for (var i = 0; i < input.length/2; i++) {             
             var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
-            validasi_io(po_type[i],no_reg_item[i]);
+            if(validasi_io(po_type[i],no_reg_item[i]) ==  false ){
+                    return false
+                }
                 if( mandatory_ac[i] == 'X' )
                 {
                     if( ka_con == ''){
