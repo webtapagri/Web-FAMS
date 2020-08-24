@@ -3619,7 +3619,7 @@
         }
         else
         {
-            SAP
+            // SAP
             var kode_asset_nilai = $("#request-form #kode_sap_tujuan-"+no_reg_item+"").val();
         }
         
