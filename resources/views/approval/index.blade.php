@@ -1952,12 +1952,13 @@
 
                         if( val.po_type == 2 )
                         {
-                            <?php if( $user_role == 'AMS' ){ if($data['outstanding'] != 0 ){?>
                             var kode_vendor = val.vendor.split('-');
+                            <?php if( $user_role == 'AMS' ){ if($data['outstanding'] != 0 ){?>
                             //var jenis_asset_code = jenis_asset.split('-');
-
-                            item += "<div class='form-group'><label for='' class='col-md-4'>VENDOR</label><div class='col-md-8'><input type='text' class='form-control input-sm' name='vendor-"+val.no_reg_item+"' value='"+kode_vendor[0]+"' id='vendor-"+val.no_reg_item+"' autocomplete='off' placeholder='Masukkan Kode Vendor'> <div class='btn btn-warning btn-sm' value='Update' OnClick='updateKodeVendor(\""+val.no_po+"\","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px'><i class='fa fa-save'></i> UPDATE VENDOR</div></div></div>";
-                            <?php } 
+                                    item += "<div class='form-group'><label for='' class='col-md-4'>VENDOR</label><div class='col-md-8'><input type='text' class='form-control input-sm' name='vendor-"+val.no_reg_item+"' value='"+kode_vendor[0]+"' id='vendor-"+val.no_reg_item+"' autocomplete='off' placeholder='Masukkan Kode Vendor'> <div class='btn btn-warning btn-sm' value='Update' OnClick='updateKodeVendor(\""+val.no_po+"\","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px'><i class='fa fa-save'></i> UPDATE VENDOR</div></div></div>";
+                            <?php }else{?>
+                                    item += "<div class='form-group'><label for='' class='col-md-4'>VENDOR</label><div class='col-md-8'><input type='text' class='form-control input-sm' name='vendor-"+val.no_reg_item+"' value='"+kode_vendor[0]+"' id='vendor-"+val.no_reg_item+"' autocomplete='off' placeholder='Masukkan Kode Vendor' readonly> </div></div>";
+                            <?php }
                         }?>
                         }
                         else
@@ -3609,16 +3610,18 @@
         var getnoreg = $("#getnoreg").val(); //alert(getnoreg);
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var kode_asset_controller = $("#request-form #kode_aset_controller-"+no_reg_item+"").val();
-        // if(po_type == 1 || po_type == 2 )
-        // {
-        //     // AMP & LAIN
-        //     var kode_asset_nilai = $("#request-form #kode_asset_ams_tujuan-"+no_reg_item+"").val();
-        // }
-        // else
-        // {
-            // SAP
+        //jenis pengajuan 1: PO Sendiri,  2: AMP
+        //po type 0:SAP, 1: AMP
+        if(po_type == 1)
+        {
+            // AMP & LAIN
+            var kode_asset_nilai = $("#request-form #kode_asset_ams_tujuan-"+no_reg_item+"").val();
+        }
+        else
+        {
+            SAP
             var kode_asset_nilai = $("#request-form #kode_sap_tujuan-"+no_reg_item+"").val();
-        // }
+        }
         
 
         var param = '';

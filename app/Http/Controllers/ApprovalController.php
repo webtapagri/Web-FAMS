@@ -2559,15 +2559,16 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
         //#1 VALIDASI MAPPING INPUT KODE ASSET / IO
         $sql = " SELECT a.KODE_ASSET_SAP AS KODE_ASSET_SAP, b.mandatory_kode_asset_controller FROM TR_REG_ASSET_DETAIL a 
-LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE
-WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
+                    LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE
+                    WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
         $data = DB::SELECT($sql); //echo "2<pre>"; print_r($data); die(); 
-        if(!empty($data))
-        {
+
+        // if(!empty($data))  //kode_asset_controller optional
+        // {
             // #2 VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
             $sql2 = " SELECT a.KODE_ASSET_SAP AS KODE_ASSET_SAP, b.MANDATORY_KODE_ASSET_CONTROLLER, b.MANDATORY_CHECK_IO_SAP  FROM TR_REG_ASSET_DETAIL a 
-    LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE
-    WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
+                        LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE
+                        WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
             $data2 = DB::SELECT($sql2); //echo "2<pre>"; print_r($data2); die(); 
 
             if( $po_type == 1 || $po_type == 2 )
@@ -2665,12 +2666,12 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 return $result;   
             }
             // #2 END VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
-        }
-        else
-        {
-            $result = array('status'=>false,'message'=> 'Tidak perlu menginput Kode Asset Controller / IO');
-            return $result;   
-        }
+        // }
+        // else
+        // {
+        //     $result = array('status'=>false,'message'=> 'Tidak perlu menginput Kode Asset Controller / IO');
+        //     return $result;   
+        // }
         //#1 END VALIDASI MAPPING INPUT KODE ASSET / IO
     }
 
@@ -2688,42 +2689,43 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         // LEFT JOIN TM_MSTR_ASSET c ON c.KODE_ASSET_AMS = a.KODE_ASSET_AMS AND c.GROUP = b.GROUP_CODE AND c.SUB_GROUP = b.SUBGROUP_CODE
         // WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
         $sql = " SELECT a.KODE_SAP_TUJUAN AS KODE_ASSET_SAP, b.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a 
-        LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = b.GROUP_CODE AND a.SUB_GROUP_TUJUAN = b.SUBGROUP_CODE
-        WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
+                    LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = b.GROUP_CODE AND a.SUB_GROUP_TUJUAN = b.SUBGROUP_CODE
+                    WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
         $data = DB::SELECT($sql); //echo "2<pre>"; print_r($data); die(); 
 
         Debugbar::info($sql);
 
-        if(!empty($data))
-        {
+        // if(!empty($data)) //kode_asset_controller optional
+        // {
             // #2 VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
             $sql2 = " SELECT distinct a.KODE_SAP_TUJUAN AS KODE_ASSET_SAP, b.MANDATORY_KODE_ASSET_CONTROLLER, b.MANDATORY_CHECK_IO_SAP  FROM TR_MUTASI_ASSET_DETAIL a 
-            LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE 
-                LEFT JOIN TM_MSTR_ASSET c ON c.KODE_ASSET_AMS = a.KODE_ASSET_AMS AND c.GROUP = b.GROUP_CODE AND c.SUB_GROUP = b.SUBGROUP_CODE
-            WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
+                        LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE 
+                        LEFT JOIN TM_MSTR_ASSET c ON c.KODE_ASSET_AMS = a.KODE_ASSET_AMS AND c.GROUP = b.GROUP_CODE AND c.SUB_GROUP = b.SUBGROUP_CODE
+                        WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '')  AND (b.MANDATORY_CHECK_IO_SAP is not null AND b.MANDATORY_CHECK_IO_SAP != '') ";
             $data2 = DB::SELECT($sql2); //echo "2<pre>"; print_r($data2); die(); 
-
-            // if( $po_type == 1 || $po_type == 2 )
-            // {   
-            //     // AMP & LAIN
-            //     $kode_asset = "KODE_ASSET_AMS_TUJUAN";
+            //jenis pengajuan 1: PO Sendiri,  2: AMP
+            //po type 0:SAP, 1: AMP
+            if( $po_type == 1 )
+            {   
+                // AMP & LAIN
+                $kode_asset = "KODE_ASSET_AMS_TUJUAN";
                 
-            //     if( $po_type == 1 )
-            //     {
-            //         $kode_asset_label = "KODE ASSET FAMS";
-            //     }
-            //     else
-            //     {
-            //         $kode_asset_label = "KODE ASSET FAMS / SAP";    
-            //     }
+                if( $po_type == 1 )
+                {
+                    $kode_asset_label = "KODE ASSET FAMS";
+                }
+                else
+                {
+                    $kode_asset_label = "KODE ASSET FAMS / SAP";    
+                }
                    
-            // }
-            // else
-            // {
+            }
+            else
+            {
                 // SAP
                 $kode_asset = "KODE_SAP_TUJUAN";//"KODE_ASSET_SAP";
                 $kode_asset_label = "KODE ASSET SAP"; 
-            // }
+            }
 
             if(!empty($data2))
             {
@@ -2803,12 +2805,12 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 return $result;   
             }
             // #2 END VALIDASI MANDATORY_CHECK_IO_SAP IT@140819
-        }
-        else
-        {
-            $result = array('status'=>false,'message'=> 'Tidak perlu menginput Kode Asset Controller / IO');
-            return $result;   
-        }
+        // }
+        // else
+        // {
+        //     $result = array('status'=>false,'message'=> 'Tidak perlu menginput Kode Asset Controller / IO');
+        //     return $result;   
+        // }
         //#1 END VALIDASI MAPPING INPUT KODE ASSET / IO
     }
 
