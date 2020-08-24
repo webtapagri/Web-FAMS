@@ -1613,12 +1613,13 @@
                 url: "{{ url('approval/check_io_mutasi') }}",
                 method: "POST",
                 data: param+"&kode_asset_controller="+kode_asset_controller+"&getnoreg="+getnoreg+"&kode_asset_nilai="+kode_asset_nilai+"&no_reg_item="+no_reg_item+"&po_type="+po_type,
+                async: false,
                 beforeSend: function() {
                     $('.loading-event').fadeIn();
                 },
                 success: function(result) 
                 {
-                    if (result.status == true) 
+                    if (result.status === true) 
                     {
                         notify({
                             type: 'success',
