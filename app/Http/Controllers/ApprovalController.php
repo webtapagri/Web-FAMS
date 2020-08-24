@@ -802,8 +802,42 @@ class ApprovalController extends Controller
         //$sql = " SELECT * FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '{$no_registrasi}' AND (KODE_ASSET_CONTROLLER is null OR KODE_ASSET_CONTROLLER = '' ) AND (DELETED is null OR DELETED = '') AND JENIS_ASSET IN ('E4030','4030', '4010') ";
 
         $sql = " SELECT * FROM TR_REG_ASSET_DETAIL a 
-LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE
-WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
+                LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE
+                WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
+
+        $dt = DB::SELECT($sql); 
+        //echo "2<pre>"; print_r($dt);die();
+
+        if(!empty($dt))
+        {
+            foreach($dt as $k => $v)
+            {
+                $list_kode_asset .= $v->KODE_ASSET_SAP.",";
+            }
+            $result = array('status'=>false,'message'=> 'Kode Aset Controller (KODE ASET SAP : '.rtrim($list_kode_asset,',').') belum diisi');
+        }
+        else
+        {
+            $result = array('status'=>true,'message'=> '');
+        }
+        
+        return $result; 
+    }
+
+    function validasi_input_all_io_mutasi(Request $request, $status, $noreg)
+    {
+        $req = $request->all();
+        //echo "<pre>"; print_r($req); die();
+
+        $request_ka = json_decode($req['request_ka']);
+        $no_registrasi = str_replace("-", "/", $noreg);
+        $list_kode_asset = "";
+
+        //$sql = " SELECT * FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '{$no_registrasi}' AND (KODE_ASSET_CONTROLLER is null OR KODE_ASSET_CONTROLLER = '' ) AND (DELETED is null OR DELETED = '') AND JENIS_ASSET IN ('E4030','4030', '4010') ";
+
+        $sql = " SELECT * FROM TR_MUTASI_ASSET_DETAIL a 
+        LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET_TUJUAN = b.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = b.GROUP_CODE AND a.SUB_GROUP_TUJUAN = b.SUBGROUP_CODE
+        WHERE a.NO_REG = '{$no_registrasi}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET_CONTROLLER = '' ) AND (a.DELETED is null OR a.DELETED = '') AND (b.MANDATORY_KODE_ASSET_CONTROLLER is not null AND b.MANDATORY_KODE_ASSET_CONTROLLER != '') ";
 
         $dt = DB::SELECT($sql); 
         //echo "2<pre>"; print_r($dt);die();
@@ -2813,66 +2847,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         // }
         //#1 END VALIDASI MAPPING INPUT KODE ASSET / IO
     }
-
-    function check_io_mutasi(Request $request)
-    {
-        $po_type = $request->po_type;
-        $noreg = $request->getnoreg;
-        $ka_con = $request->kode_asset_controller;
-        $ka_sap = $request->kode_asset_nilai;
-        $user_id = Session::get('user_id');
-        try 
-        {   
-            $service = API::exec(array(
-                'request' => 'GET',
-                'host' => 'ldap',
-                'method' => "check_io?AUFNR=$ka_con&AUFUSER3=$ka_sap", 
-            ));
-   
-            $data = $service;
-
-        }
-        catch (\Exception $e) 
-        {
-            DB::rollback();
-            $result = array('status'=>false,'message'=>$e->getMessage());
-        }
-
-
-        if( $data->TYPE == 'S' )
-        //if($data==1)
-        {
-            if( $ka_sap == '' )
-            {
-                $result = array('status'=>false,'message'=> ''.$kode_asset_label.' required! ');
-                return $result;  
-            }
-
-            // SKIP VALIDASI CHECK IO SAP JIKA ASSET LAINNYA
-            DB::beginTransaction();
-            try 
-            {   
-                $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$ka_con}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ka_sap}' ";
-                //echo $sql; die();
-                DB::UPDATE($sql);
-                DB::commit();
-
-                $result = array('status'=>true,'message'=> "Updated Success");
-            }
-            catch (\Exception $e) 
-            {
-                DB::rollback();
-                $result = array('status'=>false,'message'=>$e->getMessage());
-            }
-        }
-        else
-        {
-            $result = array('status'=>false,'message'=> $data->MESSAGE.' (Kode Aset Controller:'.$ka_con.')');
-        }
-            
-        return $result;
-            
-    }
+    
 
     function save_gi_number_year(Request $request)
     {
@@ -3766,6 +3741,93 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         //validasi email next approval
         $user_id = Session::get('user_id');
+
+
+        //validasi IO Mutasi
+        $po_type = $jenis_dokumen;
+        $noreg = str_replace("-", "/", $noreg);
+
+        
+        $ka_con = json_decode($req['ka_con']);
+        $ka_sap = json_decode($req['ka_sap']);
+
+
+        if( $po_type == 1 )
+        {   
+            // AMP & LAIN
+            $kode_asset = "KODE_ASSET_AMS";
+            
+            if( $po_type == 1 )
+            {
+                $kode_asset_label = "KODE ASSET FAMS";
+            }
+            else
+            {
+                $kode_asset_label = "KODE ASSET FAMS / SAP";    
+            }
+                
+        }
+        else
+        {
+            // SAP
+            $kode_asset = "KODE_ASSET_SAP";
+            $kode_asset_label = "KODE ASSET SAP"; 
+        }
+
+        // $ka_con = $request->kode_asset_controller;
+        // $ka_sap = $request->kode_asset_nilai;
+        for($i=0;$i<count($ka_sap);$i++){
+            $kac = $ka_con[$i];
+            $ksap = $ka_sap[$i];
+            try 
+            {   
+                $service = API::exec(array(
+                    'request' => 'GET',
+                    'host' => 'ldap',
+                    'method' => "check_io?AUFNR=$kac&AUFUSER3=$ksap", 
+                ));
+    
+                $data = $service;
+
+            }
+            catch (\Exception $e) 
+            {
+                return response()->json(['status' => false, "message" => $e->getMessage() ]);
+            }
+
+
+            if( $data->TYPE == 'S' )
+            //if($data==1)
+            {
+                if( $ksap == '' )
+                {
+                    return response()->json(['status' => false, "message" => ''.$kode_asset_label.' required! ' ]);
+                }
+
+                // SKIP VALIDASI CHECK IO SAP JIKA ASSET LAINNYA
+                DB::beginTransaction();
+                try 
+                {   
+                    $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
+                    //echo $sql; die();
+                    DB::UPDATE($sql);
+                    DB::commit();
+
+                    return response()->json(['status' => false, "message" =>  "Updated Success" ]);
+                }
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    return response()->json(['status' => false, "message" => $e->getMessage() ]);
+                }
+            }
+            else
+            {
+                return response()->json(['status' => false, "message" =>  $data->MESSAGE.' (Kode Aset Controller:'.$kac.')' ]);
+            }
+        }
+
+
         // $no_registrasi = str_replace("-", "/", $noreg);
         // $note = $request->parNote;
         // $role_id = Session::get('role_id');
@@ -4010,7 +4072,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     if($rolename == 'AC' )
                     {
                         // CEK SEKALI LAGI UNTUK ALL INPUT IO (KODE ASET CONTROLLER) IT@250719  ~ DISKIP KARENA SUDAH DI MAPPING DI TABLE TM_ASSET_CONTROLLER_MAP X IT@150719 
-                        $validasi_input_all_io = $this->validasi_input_all_io($request, $status, $noreg);
+                        $validasi_input_all_io = $this->validasi_input_all_io_mutasi($request, $status, $noreg);
                 
                         if(!$validasi_input_all_io['status'])
                         {
