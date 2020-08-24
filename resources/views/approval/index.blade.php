@@ -1619,21 +1619,22 @@
                 },
                 success: function(result) 
                 {
-                    if (result.status === 'true') 
-                    {
-                        notify({
-                            type: 'success',
-                            message: result.message
-                        });
-                        return true;
-                    } 
-                    else 
+                    if (result.status === false) 
                     {
                         notify({
                             type: 'warning',
                             message: result.message
                         });
                         return false;
+                    } 
+                    else 
+                    {
+                        
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+                        return true;
                     }
                     
                 },
@@ -4424,7 +4425,7 @@
             no_reg_item.push(input2[i+input2.length/2].value); 
             po_type.push(input3[i+input3.length/2].value); 
 
-            if(validasi_io(po_type[i],no_reg_item[i]) ==  false ){
+            if(validasi_io(po_type[i],no_reg_item[i]) === false ){
                 return false;
             }
         } 
