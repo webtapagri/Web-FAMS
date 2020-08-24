@@ -3644,11 +3644,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $records = array();
         $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
-       SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET 
-                           FROM TR_MUTASI_ASSET a   
-                                         LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
-                                         LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = b.TUJUAN  and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' 
-                               LEFT JOIN TBM_USER c ON a.created_by = c.id 
+       SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET ,f.PO_TYPE
+                            FROM TR_MUTASI_ASSET a
+                            LEFT JOIN TR_MUTASI_ASSET_DETAIL h ON h.NO_REG =  a.NO_REG
+                            LEFT JOIN TR_REG_ASSET_DETAIL e ON h.KODE_ASSET_AMS =  e.KODE_ASSET_AMS
+                            LEFT JOIN TR_REG_ASSET f ON f.NO_REG = e.NO_REG   
+                            LEFT JOIN TR_MUTASI_ASSET_DETAIL b ON a.NO_REG = b.NO_REG  
+                            LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = b.TUJUAN  and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' 
+                            LEFT JOIN TBM_USER c ON a.created_by = c.id 
                            WHERE a.no_reg = '$noreg' group by a.NO_REG";
         $data = DB::SELECT($sql);
         
@@ -3672,8 +3675,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 $records[] = array(
                     'no_reg' => trim($v->NO_REG),
                     'type_transaksi' => trim($type_transaksi[$v->TYPE_TRANSAKSI]),
-                    //'po_type' => '', //trim($po_type[$v->PO_TYPE]),
-                    'po_type' => trim($v->JENIS_PENGAJUAN),
+                    'po_type' => trim($po_type[$v->PO_TYPE]),
                     'ba_pemilik_asset' => trim($v->BA_PEMILIK_ASSET),
                     'requestor' => trim($v->REQUESTOR),
                     'tanggal_reg' => trim($v->TANGGAL_REG),
