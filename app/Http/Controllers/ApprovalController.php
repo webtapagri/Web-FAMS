@@ -3650,7 +3650,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 $records[] = array(
                     'no_reg' => trim($v->NO_REG),
                     'type_transaksi' => trim($type_transaksi[$v->TYPE_TRANSAKSI]),
-                    'po_type' => trim($po_type[$v->PO_TYPE]),
+                    // 'po_type' => trim($po_type[$v->PO_TYPE]),
+                    'po_type' => trim($v->PO_TYPE),
                     'ba_pemilik_asset' => trim($v->BA_PEMILIK_ASSET),
                     'requestor' => trim($v->REQUESTOR),
                     'tanggal_reg' => trim($v->TANGGAL_REG),
@@ -3813,7 +3814,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::UPDATE($sql);
                     DB::commit();
 
-                    return response()->json(['status' => false, "message" =>  "Updated Success" ]);
+                    // return response()->json(['status' => true, "message" =>  "Updated Success" ]);
                 }
                 catch (\Exception $e) 
                 {
