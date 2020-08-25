@@ -453,9 +453,6 @@
 		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
 		        <h3 class="modal-title" id="myModalLabel">Upload Berkas</h3>
 		    </div>
-                <div class="callout callout-warning">
-                    <p>Upload Berkas Maximum 1 MB </p>
-                </div>
 		    
 		    <form id="form-detil" name="form-detil" class="form-horizontal" method="POST" action="{{ url('/disposal/upload_berkas_rusak') }}" enctype="multipart/form-data">
 
@@ -464,6 +461,9 @@
 				<input type="hidden" class="form-control" id="tipe" name="tipe" value="3"/>
 		        
 		        <div class="modal-body">
+                <div class="callout callout-warning">
+                    <p>Upload Berkas Maximum 1 MB </p>
+                </div>
 
 		        	<div class="form-group">
 		                <label class="control-label col-xs-4" >KODE ASSET AMS</label>

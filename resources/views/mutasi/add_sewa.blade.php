@@ -190,9 +190,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
                 <h3 class="modal-title" id="myModalLabel">Upload Berkas</h3>
             </div>
-                <div class="callout callout-warning">
-                    <p>Upload Berkas Maximum 1 MB </p>
-                </div>
             
             <form id="form-detil" name="form-detil" class="form-horizontal" method="POST" action="{{ url('/mutasi/upload_berkas_amp') }}" enctype="multipart/form-data">
 
@@ -202,7 +199,8 @@
                 
                 <div class="modal-body">
 
-                    <div class="callout callout-warning"><p>Note, Tipe File yang di Upload hanya JPG/PNG dan PDF</p></div>
+                    <div class="callout callout-warning"><p>Note, Tipe File yang di Upload hanya JPG/PNG dan PDF</p><br>
+                    <p>Upload Berkas Maximum 1 MB </p></div>
 
                     <div class="form-group">
                         <label class="control-label col-xs-4" >KODE ASSET AMS</label>
