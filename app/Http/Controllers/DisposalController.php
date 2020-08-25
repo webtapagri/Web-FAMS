@@ -1573,7 +1573,13 @@ class DisposalController extends Controller
     	if(!empty($data))
     	{
     		$mandatory = "";
-    		$mandatory_label = "";
+			$mandatory_label = "";
+			
+			$l .= ' <div class="callout callout-info">
+						<p>Upload Berkas Maximum 1 MB </p>
+					</div>';
+
+
     		foreach($data as $k => $v)
     		{
     			$dc = explode("-",$v->DESCRIPTION);
