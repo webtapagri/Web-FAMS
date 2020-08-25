@@ -66,7 +66,7 @@
                         <div class="form-group {{ $data['type'] == 'amp' ? '':'hide' }}">
                             <label for="plant" class="col-md-3">Berita acara serah terima</label>
                             <div class="col-md-4">
-                                <input type="file" class="form-control input-sm" name="docs" multiple id="docs">
+                                <input type="file" class="form-control input-sm" name="docs" multiple id="docs">(Upload Berkas Max 1 MB)
                             </div>
                         </div>
                         <div class="form-group select-item-panel hide">

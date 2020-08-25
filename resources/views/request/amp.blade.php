@@ -68,7 +68,7 @@
                         <div class="form-group">
                             <label for="plant" class="col-md-3">BERITA ACARA SERAH TERIMA <sup style="color:red">*</sup></label>
                             <div class="col-md-4">
-                                <input type="file" class="form-control input-sm" name="docs" multiple id="docs" required>
+                                <input type="file" class="form-control input-sm" name="docs" multiple id="docs" required>(Upload Berkas Max 1 MB)
                             </div>
                         </div>
                         <hr>
