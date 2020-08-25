@@ -188,6 +188,22 @@ Route::match(['get', 'post'], 'grid-accessright', [
     'uses' => 'AccessRightController@dataGrid'
 ]);
 
+
+Route::resource('/blanko', 'BlankoController');
+Route::get('/blanko/berkas/{id}', 'BlankoController@berkas');
+Route::get('/blanko/list-kategori-upload/{id}', 'BlankoController@list_file_category');
+Route::post('/blanko/upload_berkas', 'BlankoController@upload_berkas');
+// Route::post('/blanko/post', 'BlankoController@store');
+Route::get('/blanko/edit/', 'BlankoController@show');
+Route::post('/blanko/inactive', 'BlankoController@inactive');
+Route::post('/blanko/active', 'BlankoController@active');
+Route::match(['get', 'post'], 'grid-blanko', [
+    'as' => 'get.blanko',
+    'uses' => 'BlankoController@dataGrid'
+]);
+
+
+
 /* DOCS */
 Route::get('SapDownloadExcel', 'SAPController@downloadExcel');
 
