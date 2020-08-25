@@ -27,39 +27,23 @@ html, body {
             $l .= "<table border=1 cellspacing=0 cellpadding=5 class='table tabel-responsive table-bordered'>";
             $l .= "<tr>
                 <th rowspan='2'>NO</th>
-                <th rowspan='2'>KODE ASET FAMS</th>
-                <th rowspan='2'>KODE SAP</th>
-                <th rowspan='2'>KODE ASET CONTROLLER</th>
-                <th rowspan='2'>BA PT PEMILIK</th>
-                <th rowspan='2'>NAMA PT PEMILIK</th>
-                <th rowspan='2'>BA PT LOKASI</th>
-                <th rowspan='2'>NAMA PT LOKASI</th>
                 <th rowspan='2'>NAMA ASET</th>
+                <th rowspan='2'>QTY</th>
+                <th rowspan='2'>UOM</th>
                 <th rowspan='2'>MERK</th>
                 <th rowspan='2'>SPESIFIKASI / TYPE / MODEL</th>
                 <th rowspan='2'>NO SERI / RANGKA</th>
                 <th rowspan='2'>NO MESIN / IMEI</th>
                 <th rowspan='2'>NO POLISI</th>
+                <th rowspan='2'>TAHUN PEROLEHAN</th>
                 <th rowspan='2'>LOKASI ASET</th>
                 <th colspan='2'>PENANGGUNG JAWAB</th>
                 <th colspan='3'>KONDISI</th>
-                <th rowspan='2'>NO PO / SPO / KONTRAK</th>
-                <th rowspan='2'>NAMA VENDOR</th>
-                <th rowspan='2'>INFORMASI TAMBAHAN</th>
                 <th rowspan='2'>FOTO ASSET</th>
                 <th rowspan='2'>FOTO NO SERI / RANGKA</th>
                 <th rowspan='2'>FOTO NO MESIN / IMEI</th>
-                <th rowspan='2'>ASSET CLASS</th>
-                <th rowspan='2'>TAHUN PEROLEHAN</th>
                 <th rowspan='2'>HARGA PEROLEHAN</th>
                 <th rowspan='2'>NILAI BUKU SAAT INI</th>
-                <th rowspan='2'>USE LIFE</th>
-                <th rowspan='2'>COST CENTER</th>
-                <th rowspan='2'>QTY</th>
-                <th rowspan='2'>UOM</th>
-                <th rowspan='2'>MRP</th>
-                <th colspan='3'>ASSET</th>
-                <th colspan='4'>STATUS</th>
             </tr>
             <tr>
                 <th>NAMA</th>
@@ -67,14 +51,57 @@ html, body {
                 <th>B</th>
                 <th>BP</th>
                 <th>RTLP</th>
-                <th>JENIS</th>
-                <th>GROUP</th>
-                <th>SUB GROUP</th>
-                <th>ASET</th>
-                <th>SEWA</th>
-                <th>DISPOSAL</th>
-                <th>MUTASI</th>
             </tr>";
+            // $l .= "<tr>
+            //     <th rowspan='2'>NO</th>
+            //     <th rowspan='2'>KODE ASET FAMS</th>
+            //     <th rowspan='2'>KODE SAP</th>
+            //     <th rowspan='2'>KODE ASET CONTROLLER</th>
+            //     <th rowspan='2'>BA PT PEMILIK</th>
+            //     <th rowspan='2'>NAMA PT PEMILIK</th>
+            //     <th rowspan='2'>BA PT LOKASI</th>
+            //     <th rowspan='2'>NAMA PT LOKASI</th>
+            //     <th rowspan='2'>NAMA ASET</th>
+            //     <th rowspan='2'>MERK</th>
+            //     <th rowspan='2'>SPESIFIKASI / TYPE / MODEL</th>
+            //     <th rowspan='2'>NO SERI / RANGKA</th>
+            //     <th rowspan='2'>NO MESIN / IMEI</th>
+            //     <th rowspan='2'>NO POLISI</th>
+            //     <th rowspan='2'>LOKASI ASET</th>
+            //     <th colspan='2'>PENANGGUNG JAWAB</th>
+            //     <th colspan='3'>KONDISI</th>
+            //     <th rowspan='2'>NO PO / SPO / KONTRAK</th>
+            //     <th rowspan='2'>NAMA VENDOR</th>
+            //     <th rowspan='2'>INFORMASI TAMBAHAN</th>
+            //     <th rowspan='2'>FOTO ASSET</th>
+            //     <th rowspan='2'>FOTO NO SERI / RANGKA</th>
+            //     <th rowspan='2'>FOTO NO MESIN / IMEI</th>
+            //     <th rowspan='2'>ASSET CLASS</th>
+            //     <th rowspan='2'>TAHUN PEROLEHAN</th>
+            //     <th rowspan='2'>HARGA PEROLEHAN</th>
+            //     <th rowspan='2'>NILAI BUKU SAAT INI</th>
+            //     <th rowspan='2'>USE LIFE</th>
+            //     <th rowspan='2'>COST CENTER</th>
+            //     <th rowspan='2'>QTY</th>
+            //     <th rowspan='2'>UOM</th>
+            //     <th rowspan='2'>MRP</th>
+            //     <th colspan='3'>ASSET</th>
+            //     <th colspan='4'>STATUS</th>
+            // </tr>
+            // <tr>
+            //     <th>NAMA</th>
+            //     <th>JABATAN</th>
+            //     <th>B</th>
+            //     <th>BP</th>
+            //     <th>RTLP</th>
+            //     <th>JENIS</th>
+            //     <th>GROUP</th>
+            //     <th>SUB GROUP</th>
+            //     <th>ASET</th>
+            //     <th>SEWA</th>
+            //     <th>DISPOSAL</th>
+            //     <th>MUTASI</th>
+            // </tr>";
 
             $b = "";
             $bp = "";
@@ -134,52 +161,77 @@ html, body {
                 if($v['FOTO_MESIN'] <>''){
                     $foto_mesin = "<img src='{$v['FOTO_MESIN']}' width='100px' onerror="."this.style.display='none'"." />";
                 }
-
+               
                 $l .= "<tr> 
                     <td>$no</td>
-                    <td>".$v['KODE_ASSET_AMS']."</td>
-                    <td>".$v['KODE_ASSET_SAP']."</td>
-                    <td>".$v['KODE_ASSET_CONTROLLER']."</td>
-                    <td>".$v['BA_PEMILIK_ASSET']."</td>
-                    <td>".$v['NAMA_PT_PEMILIK']."</td>
-                    <td>".$v['LOKASI_BA_CODE']."</td>
-                    <td>".$v['LOKASI_BA_DESCRIPTION']."</td>
                     <td>".$v['NAMA_ASSET']."</td>
+                    <td>".$v['QUANTITY_ASSET_SAP']."</td>
+                    <td>".$v['UOM_ASSET_SAP']."</td>
                     <td>".$v['MERK']."</td>
                     <td>".$v['SPESIFIKASI_OR_WARNA']."</td>
                     <td>".$v['NO_RANGKA_OR_NO_SERI']."</td>
                     <td>".$v['NO_MESIN_OR_IMEI']."</td>
                     <td>".$v['NO_POLISI']."</td>
+                    <td>".$v['TAHUN_ASSET']."</td>
                     <td></td>
                     <td>".$v['NAMA_PENANGGUNG_JAWAB_ASSET']."</td>
                     <td>".$v['JABATAN_PENANGGUNG_JAWAB_ASSET']."</td>
                     <td>".$b."</td>
                     <td>".$bp."</td>
                     <td>".$rltp."</td>
-                    <td>".$v['NO_PO']."</td>
-                    <td>".$v['NAMA_VENDOR']."</td>
-                    <td>".$v['INFORMASI']."</td>
                     <td>".$foto_aset."</td>
                     <td>".$foto_seri."</td>
                     <td>".$foto_mesin."</td>
-                    <td>".$v['ASSET_CLASS']."</td>
-                    <td>".$v['TAHUN_ASSET']."</td>
                     <td>".number_format($v['HARGA_PEROLEHAN'],0,',','.')."</td>
                     <td>".number_format($v['NILAI_BUKU'],0,',','.')."</td>
-                    <td>".$v['BOOK_DEPREC_01']."</td>
-                    <td>".$v['COST_CENTER']."</td>
-                    <td>".$v['QUANTITY_ASSET_SAP']."</td>
-                    <td>".$v['UOM_ASSET_SAP']."</td>
-                    <td></td>
-                    <td>".$v['JENIS_ASSET']."</td>
-                    <td>".$v['GROUP']."</td>
-                    <td>".$v['SUB_GROUP']."</td>
-                    <td>".$milik."</td>
-                    <td>".$sewa."</td>
-                    <td>".$dspa."</td>
-                    <td>".$mtsa."</td>
                 </tr>
                 ";
+               
+                // $l .= "<tr> 
+                //     <td>$no</td>
+                //     <td>".$v['KODE_ASSET_AMS']."</td>
+                //     <td>".$v['KODE_ASSET_SAP']."</td>
+                //     <td>".$v['KODE_ASSET_CONTROLLER']."</td>
+                //     <td>".$v['BA_PEMILIK_ASSET']."</td>
+                //     <td>".$v['NAMA_PT_PEMILIK']."</td>
+                //     <td>".$v['LOKASI_BA_CODE']."</td>
+                //     <td>".$v['LOKASI_BA_DESCRIPTION']."</td>
+                //     <td>".$v['NAMA_ASSET']."</td>
+                //     <td>".$v['MERK']."</td>
+                //     <td>".$v['SPESIFIKASI_OR_WARNA']."</td>
+                //     <td>".$v['NO_RANGKA_OR_NO_SERI']."</td>
+                //     <td>".$v['NO_MESIN_OR_IMEI']."</td>
+                //     <td>".$v['NO_POLISI']."</td>
+                //     <td></td>
+                //     <td>".$v['NAMA_PENANGGUNG_JAWAB_ASSET']."</td>
+                //     <td>".$v['JABATAN_PENANGGUNG_JAWAB_ASSET']."</td>
+                //     <td>".$b."</td>
+                //     <td>".$bp."</td>
+                //     <td>".$rltp."</td>
+                //     <td>".$v['NO_PO']."</td>
+                //     <td>".$v['NAMA_VENDOR']."</td>
+                //     <td>".$v['INFORMASI']."</td>
+                //     <td>".$foto_aset."</td>
+                //     <td>".$foto_seri."</td>
+                //     <td>".$foto_mesin."</td>
+                //     <td>".$v['ASSET_CLASS']."</td>
+                //     <td>".$v['TAHUN_ASSET']."</td>
+                //     <td>".number_format($v['HARGA_PEROLEHAN'],0,',','.')."</td>
+                //     <td>".number_format($v['NILAI_BUKU'],0,',','.')."</td>
+                //     <td>".$v['BOOK_DEPREC_01']."</td>
+                //     <td>".$v['COST_CENTER']."</td>
+                //     <td>".$v['QUANTITY_ASSET_SAP']."</td>
+                //     <td>".$v['UOM_ASSET_SAP']."</td>
+                //     <td></td>
+                //     <td>".$v['JENIS_ASSET']."</td>
+                //     <td>".$v['GROUP']."</td>
+                //     <td>".$v['SUB_GROUP']."</td>
+                //     <td>".$milik."</td>
+                //     <td>".$sewa."</td>
+                //     <td>".$dspa."</td>
+                //     <td>".$mtsa."</td>
+                // </tr>
+                // ";
 
                 $no++;
             }
