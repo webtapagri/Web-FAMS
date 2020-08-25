@@ -158,6 +158,7 @@
                     <td>".$v->NO_MESIN_OR_IMEI."</td>
                     <td>".$v->NO_POLISI."</td>
                     <td>".$v->TAHUN_ASSET."</td>
+                    <td></td>
                     <td>".$v->NAMA_PENANGGUNG_JAWAB_ASSET."</td>
                     <td>".$v->JABATAN_PENANGGUNG_JAWAB_ASSET."</td>
                     <td>".$b."</td>
