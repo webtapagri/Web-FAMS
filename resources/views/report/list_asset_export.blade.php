@@ -167,7 +167,6 @@
                     <td><img src='".$v->FOTO_ASET."' width='100px' /></td>
                     <td><img src='".$v->FOTO_SERI."' width='100px' /></td>
                     <td><img src='".$v->FOTO_MESIN."' width='100px' /></td>
-                    <td>".$v->ASSET_CLASS."</td>
                     <td>".$harga[$i]."</td>
                     <td>".$nilai_buku[$i]."</td>
                 </tr>

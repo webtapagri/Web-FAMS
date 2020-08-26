@@ -11,6 +11,8 @@ use Session;
 use API;
 use AccessRight;
 use App\TM_BLANKO;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 class BlankoController extends Controller
@@ -255,11 +257,15 @@ class BlankoController extends Controller
                 }
                 else
                 {
-                    $data_excel = explode(",",$v->FILE_UPLOAD);
-                    header('Content-type: application/vnd.ms-excel');
+                    
+                    $data_excel = trim($v->FILE_UPLOAD); // explode(",",$v->FILE_UPLOAD);
+                    // header('Content-type: application/vnd.ms-excel');
+                    header('Content-type: '.$v->JENIS_FILE.'"');
                     header('Content-Disposition: attachment; filename="'.$v->FILE_NAME.'"');
-                    print $data_excel[1];
+                    print $data_excel;
+                    // print $data_excel[1];
                     die();
+
                 }
             }
         }
