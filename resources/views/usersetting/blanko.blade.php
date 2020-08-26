@@ -63,6 +63,11 @@
 				<input type="hidden" name="_token" value="{{ csrf_token() }}">
                 
                 <div class="modal-body">
+                
+                <div class="callout callout-warning">
+                    <p>Upload Berkas Maximum 1 MB </p>
+                </div>
+
                     <div class="box-body">
                             <input type="hidden" class="form-control" name="id" id="edit_id">
                         <div class="col-xs-12">
