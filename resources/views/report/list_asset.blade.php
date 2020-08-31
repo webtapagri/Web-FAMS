@@ -27,6 +27,8 @@ html, body {
             $l .= "<table border=1 cellspacing=0 cellpadding=5 class='table tabel-responsive table-bordered'>";
             $l .= "<tr>
                 <th rowspan='2'>NO</th>
+                <th rowspan='2'>BA PT PEMILIK</th>
+                <th rowspan='2'>KODE ASET FAMS</th>
                 <th rowspan='2'>NAMA ASET</th>
                 <th rowspan='2'>QTY</th>
                 <th rowspan='2'>UOM</th>
@@ -44,6 +46,7 @@ html, body {
                 <th rowspan='2'>FOTO NO MESIN / IMEI</th>
                 <th rowspan='2'>HARGA PEROLEHAN</th>
                 <th rowspan='2'>NILAI BUKU SAAT INI</th>
+                <th colspan='2'>STATUS</th>
             </tr>
             <tr>
                 <th>NAMA</th>
@@ -51,6 +54,8 @@ html, body {
                 <th>B</th>
                 <th>BP</th>
                 <th>RTLP</th>
+                <th>DISPOSAL</th>
+                <th>MUTASI</th>
             </tr>";
             // $l .= "<tr>
             //     <th rowspan='2'>NO</th>
@@ -164,6 +169,8 @@ html, body {
                
                 $l .= "<tr> 
                     <td>$no</td>
+                    <td>".$v['BA_PEMILIK_ASSET']."</td>
+                    <td>".$v['KODE_ASSET_AMS']."</td>
                     <td>".$v['NAMA_ASSET']."</td>
                     <td>".$v['QUANTITY_ASSET_SAP']."</td>
                     <td>".$v['UOM_ASSET_SAP']."</td>
@@ -184,6 +191,8 @@ html, body {
                     <td>".$foto_mesin."</td>
                     <td>".number_format($v['HARGA_PEROLEHAN'],0,',','.')."</td>
                     <td>".number_format($v['NILAI_BUKU'],0,',','.')."</td>
+                    <td>".$dspa."</td>
+                    <td>".$mtsa."</td>
                 </tr>
                 ";
                
