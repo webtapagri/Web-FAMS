@@ -280,13 +280,26 @@ class BlankoController extends Controller
                     // <param name='MoveAfterReturnDirection' value='0'>
                     // <param name='RightToLeft' value='0'>
                     // </object>";
-                    $data_excel = trim($v->FILE_UPLOAD); // explode(",",$v->FILE_UPLOAD);
+                    // $data_excel = trim($v->FILE_UPLOAD); // explode(",",$v->FILE_UPLOAD);
                     // header('Content-type: application/vnd.ms-excel');
-                    header('Content-Type: '.$v->JENIS_FILE.'"');
-                    header('Content-Disposition: attachment; filename="'.$v->FILE_NAME.'"');
+                    // header('Content-Type: '.$v->JENIS_FILE.'"');
+                    // header('Content-Disposition: attachment; filename="'.$v->FILE_NAME.'"');
                     // dd($data_excel);
-                    print $data_excel[1];
-                    die();
+                    // print $data_excel[1];
+                    // die();
+					
+					header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+					header('Cache-Control: must-revalidate');
+					header('Expires: 0');
+					header('Pragma: public');
+					header('Content-Disposition: attachment; filename="' . $v->FILE_NAME . '"');
+
+					if (ob_get_contents() || ob_get_length()) {
+					  ob_end_clean(); //or ob_end_flush();
+					}
+					
+					echo  base64_decode($v->FILE_UPLOAD);
+					die;
 
                 }
             }
