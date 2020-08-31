@@ -143,8 +143,10 @@
 
     <div class="box-header with-border">
       <h3 class="box-title"><span class="direct-chat-text" style="margin-left:0%">KODE ASSET AMS : <b>{{ $data['id'] }}</b></span></h3>
+      
+      <?php if (strpos($data['content']->DISPOSAL_FLAG, 'DSPA') === true) { ?>
       <span class="xpull-right badge bg-green show_qrcode" OnClick="show_qrcode('{{$data['id']}}','{{@$data['content']->BA_PEMILIK_ASSET}}','{{@$data['content']->LOKASI_BA_CODE}}','{{@$data['content']->KODE_ASSET_CONTROLLER}}','{{@$data['content']->KODE_ASSET_AMS}}','<?php echo @$data['content']->BA_PEMILIK_ASSET_DESCRIPTION; ?>','<?php echo @$data['content']->LOKASI_BA_DESCRIPTION; ?>')"><i class="fa fa-fw fa-barcode"></i> SHOW QR CODE</span>
-
+      <?php  } ?>
       <div class="box-tools pull-right">
         
         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>

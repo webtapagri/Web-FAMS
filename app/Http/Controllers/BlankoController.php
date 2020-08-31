@@ -257,13 +257,35 @@ class BlankoController extends Controller
                 }
                 else
                 {
-                    
+                    // $l .= '<h1><u>'.$v->FILE_NAME.'</u></h1><br/><object classid = "CLSID:0002E510-0000-0000-C000-000000000046" data="data:application/vnd.ms-excel;base64,'.$v->FILE_UPLOAD.'" type="'.$v->JENIS_FILE.'" style="height:100%;width:100%"></object><br/>'. $v->FILE_NAME. '';
+               
+                    // $l .="<object 
+                    // width = 900
+                    // height = 500
+                    // id = 'excel'
+                    // classid = 'CLSID:0002E510-0000-0000-C000-000000000046' VIEWASTEXT>
+                    // <param name=DisplayTitleBar value=true >
+                    // <param name='DataType' value='.$v->FILE_UPLOAD.'>
+                    // <param name='AutoFit' value='0'>
+                    // <param name='DisplayColHeaders' value='1'>
+                    // <param name='DisplayGridlines' value='1'>
+                    // <param name='DisplayHorizontalScrollBar' value='1'>
+                    // <param name='DisplayRowHeaders' value='1'>
+                    // <param name='DisplayTitleBar' value='1'>
+                    // <param name='DisplayToolbar' value='1'>
+                    // <param name='DisplayVerticalScrollBar' value='1'>
+                    // <param name='EnableAutoCalculate' value='0'>
+                    // <param name='EnableEvents' value='0'>
+                    // <param name='MoveAfterReturn' value='1'>
+                    // <param name='MoveAfterReturnDirection' value='0'>
+                    // <param name='RightToLeft' value='0'>
+                    // </object>";
                     $data_excel = trim($v->FILE_UPLOAD); // explode(",",$v->FILE_UPLOAD);
                     // header('Content-type: application/vnd.ms-excel');
-                    header('Content-type: '.$v->JENIS_FILE.'"');
+                    header('Content-Type: '.$v->JENIS_FILE.'"');
                     header('Content-Disposition: attachment; filename="'.$v->FILE_NAME.'"');
-                    print $data_excel;
-                    // print $data_excel[1];
+                    // dd($data_excel);
+                    print $data_excel[1];
                     die();
 
                 }
