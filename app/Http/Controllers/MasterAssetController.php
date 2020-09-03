@@ -677,12 +677,70 @@ class MasterAssetController extends Controller
                     FROM TM_MSTR_ASSET a 
                         LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
                         LEFT JOIN TM_GENERAL_DATA c ON a.LOKASI_BA_CODE = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'plant' 
-                    WHERE a.KODE_ASSET_AMS BETWEEN $ori_a and $ori_b ";
+                    WHERE a.KODE_ASSET_AMS BETWEEN $ori_a and $ori_b and a.DISPOSAL_FLAG = ''";
 
         $getLup = DB::SELECT($sql);
         $data['qrdata'] = $getLup;
+        // dd(count($getLup)); 
+        if(count($getLup)!= 0) { 
+            if(Input::get('submit')== "Print"){
+                    foreach($getLup as $k=> $dt){
+                        // print_r($dt);
+                        $trg = base64_encode($dt->KODE_ASSET_AMS);
+                                    
+                        $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
+                        if( $data['content'] !="" ){
+                            
+                            if( $this->gen_png_img_nodesc($data) ){
+                            
+                                $qrcode = url('master-asset/show-data/'.$trg.'');
+                                // echo \QrCode::margin(0)->size(250)->generate(''.$qrcode.'').'<br/>'; 
+                                $os = PHP_OS; 
+                                if( $os != "WINNT" ){
+                                    $file_qrcode = '/app/qrcode_tempe.png';
+                                }else{
+                                    $file_qrcode = '\app\qrcode_tempe.png';
+                                }
+                                // $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
+                                $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(0)->size(300)->generate(''.$qrcode.'')); 
+                                $file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
+                                $file_img[] = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
+                                @list($type, $file_data) = explode(';', $file_data);                                                                                                                            
+                                @list(, $file_data) = explode(',', $file_data); 
+                                if($file_data!=""){ 
+                                    \Storage::disk('public')->put($file_name,base64_decode($file_data)); 
+                                }		
+                            }
+                        }
+                        
+                    }
 
-        if(Input::get('submit')== "Print"){
+                // //print from view
+                PDF::setOptions(['dpi' => 150]);
+                
+                $papersize = ($req->paper);
+                if($papersize == "reg"){
+                    $customPaper ='a8'; 
+                    $page_url = 'report.qrcode';
+                    $orien ='potrait';
+
+                }else{
+                    $customPaper = 'a9'; 
+                    $page_url = 'report.smallqrcode';
+                    $orien ='potrait';
+                }
+
+                $qr_data = PDF::loadView($page_url,["file_img" => $file_img, "data" => $data['qrdata']])->setPaper($customPaper,$orien);
+                
+
+                // $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a8','potrait');
+                return $qr_data->stream();
+
+                $response =  ['status' => true, "message" => 'Print is successfully '];
+
+                return response()->json($response);
+            }
+            else{
                 foreach($getLup as $k=> $dt){
                     // print_r($dt);
                     $trg = base64_encode($dt->KODE_ASSET_AMS);
@@ -690,7 +748,7 @@ class MasterAssetController extends Controller
                     $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
                     if( $data['content'] !="" ){
                         
-                        if( $this->gen_png_img_nodesc($data) ){
+                        if( $this->gen_png_img($data) ){
                         
                             $qrcode = url('master-asset/show-data/'.$trg.'');
                             // echo \QrCode::margin(0)->size(250)->generate(''.$qrcode.'').'<br/>'; 
@@ -700,10 +758,8 @@ class MasterAssetController extends Controller
                             }else{
                                 $file_qrcode = '\app\qrcode_tempe.png';
                             }
-                            // $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(450)->generate(''.$trg.'')); 
-                            $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(0)->size(300)->generate(''.$qrcode.'')); 
+                            $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(300)->generate(''.$qrcode.'')); 
                             $file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
-                            $file_img[] = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
                             @list($type, $file_data) = explode(';', $file_data);                                                                                                                            
                             @list(, $file_data) = explode(',', $file_data); 
                             if($file_data!=""){ 
@@ -713,72 +769,24 @@ class MasterAssetController extends Controller
                     }
                     
                 }
-
-            // //print from view
-            PDF::setOptions(['dpi' => 150]);
-            
-            $papersize = ($req->paper);
-            if($papersize == "reg"){
-                $customPaper ='a8'; 
-                $page_url = 'report.qrcode';
-                $orien ='potrait';
-
-            }else{
-                $customPaper = 'a9'; 
-                $page_url = 'report.smallqrcode';
-                $orien ='potrait';
+                $this->gen_zip();
+                
+                $headers = array(
+                    'Content-Type' => 'application/octet-stream',
+                );
+                $filetopath = storage_path("app/public/tmp_download/tmp_download.zip");
+                
+                if(file_exists($filetopath)){
+                    return response()->download($filetopath,'MASTERDATA_QR_'.date('YmdHis').'.zip',$headers);
+                    //\File::deleteDirectory( storage_path("app/public/tmp_download") );
+                }
             }
-
-            $qr_data = PDF::loadView($page_url,["file_img" => $file_img, "data" => $data['qrdata']])->setPaper($customPaper,$orien);
-            
-
-            // $qr_data = PDF::loadView('report.qrcode',["file_img" => $file_img, "data" => $data['qrdata']])->setPaper('a8','potrait');
-            return $qr_data->stream();
-
-            $response =  ['status' => true, "message" => 'Print is successfully '];
-
-            return response()->json($response);
         }
         else{
-            foreach($getLup as $k=> $dt){
-                // print_r($dt);
-                $trg = base64_encode($dt->KODE_ASSET_AMS);
-                            
-                $data['content'] = $this->get_master_asset_by_id($dt->KODE_ASSET_AMS);
-                if( $data['content'] !="" ){
-                    
-                    if( $this->gen_png_img($data) ){
-                    
-                        $qrcode = url('master-asset/show-data/'.$trg.'');
-                        // echo \QrCode::margin(0)->size(250)->generate(''.$qrcode.'').'<br/>'; 
-                        $os = PHP_OS; 
-                        if( $os != "WINNT" ){
-                            $file_qrcode = '/app/qrcode_tempe.png';
-                        }else{
-                            $file_qrcode = '\app\qrcode_tempe.png';
-                        }
-                        $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(300)->generate(''.$qrcode.'')); 
-                        $file_name = 'tmp_download/'.$dt->KODE_ASSET_AMS.'.png';
-                        @list($type, $file_data) = explode(';', $file_data);                                                                                                                            
-                        @list(, $file_data) = explode(',', $file_data); 
-                        if($file_data!=""){ 
-                            \Storage::disk('public')->put($file_name,base64_decode($file_data)); 
-                        }		
-                    }
-                }
-                
-            }
-            $this->gen_zip();
             
-            $headers = array(
-                'Content-Type' => 'application/octet-stream',
-            );
-            $filetopath = storage_path("app/public/tmp_download/tmp_download.zip");
-            
-            if(file_exists($filetopath)){
-                return response()->download($filetopath,'MASTERDATA_QR_'.date('YmdHis').'.zip',$headers);
-                //\File::deleteDirectory( storage_path("app/public/tmp_download") );
-            }
+			// Session::flash('alert-class', 'Kode Asset tidak ditemukan atau telah didisposal'); 
+            // return Redirect::to('/bulk-download');
+            return Redirect::back()->withErrors('Kode Asset tidak ditemukan atau telah didisposal');
         }
     }
     

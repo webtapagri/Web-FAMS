@@ -79,6 +79,8 @@ Route::post('/approval/update_kode_asset_controller','ApprovalController@update_
 Route::post('/approval/update_kode_asset_controller_mutasi','ApprovalController@update_kode_asset_controller_mutasi');
 Route::post('/approval/check_io_mutasi','ApprovalController@check_io_mutasi');
 Route::post('/approval/save_gi_number_year','ApprovalController@save_gi_number_year');
+Route::post('/approval/transfer_amount_mutasi','ApprovalController@transfer_amount_mutasi');
+Route::post('/approval/transfer_amount_disposal','ApprovalController@transfer_amount_disposal');
 //Route::get('grid-approval', ['as' => 'get.approval_grid', 'uses' => 'ApprovalController@dataGrid']);
 //Route::get('grid-approval-history', ['as' => 'get.approval_grid_history', 'uses' => 'ApprovalController@dataGridHistory']);
 Route::match(['get', 'post'], 'grid-approval', [

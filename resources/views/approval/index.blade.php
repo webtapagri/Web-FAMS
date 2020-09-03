@@ -393,6 +393,19 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">COST CENTER</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">POSTING DATE</label>
+                                    <div class="col-md-6">
+                                            <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date">
+                                    </div>
+                                </div> 
                                 
                                 
                             </div>
@@ -423,12 +436,18 @@
                 <?php if($user_role == 'AC'){ ?> 
                    <span id="create-button-sync-sap"></span>
                 <?php }  ?>
-                <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?> 
+                
+                <?php if($user_role == 'AMS'){ ?> 
+                   <span id="create-button-trasfer-disposal"></span>
+                <?php }  ?>
+
+                <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?>
                     <span id="button-approve">
-                        <button type="button" class="btn btn-flat label-danger" OnClick="changeStatusDisposal('A')" style="margin-right: 5px;">APPROVE</button>
+                    <button type="button" class="btn btn-flat label-danger button-approved" OnClick="changeStatusDisposal('A')" style="margin-right: 5px;">APPROVE</button>
                     </span>
                     <button type="button" class="btn btn-flat label-danger button-reject" OnClick="changeStatusDisposal('R')" style="margin-right: 5px;">REJECT</button>
-                <?php }} ?>
+                    <?php }
+                        } ?>
                 
             </div>
             </form>
@@ -476,6 +495,20 @@
                                     <label for="plant" class="col-md-4">REQUESTOR</label>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">COST CENTER</label>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">POSTING DATE</label>
+                                    <div class="col-md-6">
+                                            <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date" readonly>
                                     </div>
                                 </div> 
                             </div>
@@ -566,6 +599,12 @@
                                     <label for="plant" class="col-md-4">COST CENTER</label>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">POSTING DATE</label>
+                                    <div class="col-md-6">
+                                        <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -675,6 +714,12 @@
                                         <input type="hidden" class="form-control input-sm" value="" id="kode-asset-ams" name="kode-asset-ams" >
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="plant" class="col-md-4">POSTING DATE</label>
+                                    <div class="col-md-6">
+                                            <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date">
+                                    </div>
+                                </div>
                             </div>
                             
                         </div>  
@@ -704,12 +749,19 @@
                 <?php if($user_role == 'AC'){ ?> 
                    <span id="create-button-sync-sap-mutasi"></span>
                 <?php }  ?>
-                <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?> 
+                
+                <?php if($user_role == 'AMS'){ ?> 
+                   <span id="create-button-trasfer-mutasi"></span>
+                <?php }  ?>
+
+                <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?>
                     <span id="button-approve-mutasi">
-                        <button type="button" class="btn btn-flat label-danger" OnClick="changeStatusMutasi('A')" style="margin-right: 5px;">APPROVE</button>
+                        <button type="button" class="btn btn-flat label-danger button-approved-mutasi" OnClick="changeStatusMutasi('A')" style="margin-right: 5px;">APPROVE</button>
                     </span>
                     <button type="button" class="btn btn-flat label-danger button-reject-mutasi" OnClick="changeStatusMutasi('R')" style="margin-right: 5px;">REJECT</button>
-                <?php }} ?>
+                <?php }
+                    } 
+                ?>
                 
             </div>
             </form>
@@ -728,6 +780,7 @@
     var request_kode_aset_data = [];
     var request_check_gi = [];
     var txtasset = [];
+    var posting_date = "";
 
     $(document).ready(function() 
     {
@@ -1150,7 +1203,11 @@
         //     $("option:selected", $(this)).attr("selected", true);
         // })
 
-
+        $(".datepicker").datepicker({
+                format: 'yyyy-mm-dd',
+                autoclose: true,
+                todayHighlight: true,
+        });
     });
 
     function approval(id)
@@ -1187,6 +1244,7 @@
                     {
                         $("#create-button-sync-sap").show();
                         $("#create-button-sync-sap").html('<button type="button" class="btn btn-flat label-danger" OnClick="sinkronisasi()" style="margin-right: 5px;">SYNC SAP</button>');
+                        
                         
                         <?php if( $user_role == 'AC' ){ ?>
                             $("#button-approve").hide();
@@ -1598,10 +1656,22 @@
                 $("#request-form #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form #kode-vendor").val(data.kode_vendor);
                 $("#request-form #nama-vendor").val(data.nama_vendor);
+                $("#request-form #cost-center").val(data.cost_center);
 
                 $("#create-button-sync-sap").hide();
-                if(data.cek_reject==0){$("#button-approve").show();}
+                if(data.cek_reject==0){$(".button-approved").show();}
                 $(".button-reject").show(); 
+                // if(data.cek_reject==0){$("#button-approve").show();}
+                // $(".button-reject").show(); 
+
+                console.log(data.transfer);
+                    if(data.transfer !== 0)
+                    {
+                        $(".button-approved").hide();
+                        $(".button-reject").hide(); 
+                        $("#create-button-trasfer-disposal").show();
+                        $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
+                    }
                     
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
                 item += '<th>NO.</th>';
@@ -1612,6 +1682,7 @@
                 item += '<th>NAMA ASSET</th>';
                 item += '<th>HARGA PEROLEHAN (RP)</th>';
                 item += '<th>NILAI BUKU (RP)</th>';
+                item += '<th>NO FICO</th>';
                 item += '<th>VIEW DETAIL</th>';
                 if (data.item_detail.length > 0) 
                 {
@@ -1642,6 +1713,7 @@
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.harga_perolehan + "</td>";
                         item += "<td>" + val.nilai_buku + "</td>";
+                        item += "<td>" + val.no_fico + "</td>";
 
                         if( data.item_detail.length != 1 )
                         {
@@ -2744,6 +2816,7 @@
                 console.log('Current Value: ',$(this).val());
                 console.log('Old Value: ', inputVal);
                 inputVal = $(this).val();
+                posting_date = $(this).val();
         });
     }); 
     
@@ -2928,6 +3001,7 @@
     function changeStatusDisposal(status)
     {
         var getnoreg = $("#getnoreg").val();
+        var posting_date = $("#posting_date").val();
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var specification = $("#specification-disposal").val();
 
@@ -2967,7 +3041,7 @@
             $.ajax({
                 url: "{{ url('approval/update_status_disposal') }}/"+status+"/"+no_registrasi,
                 method: "POST",
-                data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi,
+                data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi+"&posting_date="+posting_date,
                 beforeSend: function() {
                     jQuery('.loading-event').fadeIn();
                 },
@@ -3005,6 +3079,8 @@
             });
         }
     }
+
+    
 
     function history(id)
     {
@@ -3995,6 +4071,7 @@
                 item += '<th>TUJUAN</th>';
                 item += '<th>KODE ASSET AMS TUJUAN</th>';
                 item += '<th>KODE SAP TUJUAN</th>';
+                item += '<th>NO FICO</th>';
                 item += '<th>VIEW DETAIL</th>';
                 if (data.item_detail.length > 0) 
                 {
@@ -4031,6 +4108,8 @@
                         else {
                             item += "<td width='70px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a>";
                         }
+                        item += "<td>" + val.no_fico +"</td>";
+                        
                         item += "</tr>";
                         no++;
                         
@@ -4106,16 +4185,28 @@
                     $("#create-button-sync-sap-mutasi").html('<button type="button" class="btn btn-flat label-danger" OnClick="sinkronisasi_mutasi()" style="margin-right: 5px;">SYNC SAP (MUTASI)</button>');
                     
                     <?php if( $user_role == 'AC' ){ ?>
-                        $("#button-approve-mutasi").hide();
+                        $(".button-approved-mutasi").hide();
                         $(".button-reject-mutasi").attr("disabled", false); 
                     <?php } ?>
                 }
                 else
                 {
+                    console.log(data.transfer);
+                    if(data.transfer !== 0)
+                    {
+                        $("#button-approve-mutasi").hide();
+                        $(".button-reject-mutasi").hide(); 
+                        $("#create-button-trasfer-mutasi").show();
+                        <?php if( $user_role == 'AMS' ){ ?>  
+                        $("#create-button-trasfer-mutasi").html('<button type="button" class="btn btn-flat label-danger" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
+                        <?php } ?>
+                    }
+                    // }else{
                     $("#create-button-sync-sap-mutasi").hide();
-                    if(data.cek_reject==0){$("#button-approve-mutasi").show();}
+                    if(data.cek_reject==0){$(".button-approved-mutasi").show();}
                     //$(".button-reject").attr("disabled", true); 
                     $(".button-reject-mutasi").hide(); 
+                    // }
                 }
 
                 /*
@@ -4159,6 +4250,7 @@
                         }
                         no++;
                     });
+                item += '<th>NO FICO</th>';
                 item += '<th>VIEW DETAIL</th>';
 
                 if (data.item_detail.length > 0) 
@@ -4238,6 +4330,9 @@
                             item += "<td><input type='text' class='form-control input-sm' name='penanggung_jawab[]' id='penanggung_jawab[]' value='"+ val.penanggung_jawab +"' required></td>";
                             item += "<td><input type='text' class='form-control input-sm' name='jabatan[]' id='jabatan[]' value='"+ val.jabatan +"' required></td>";
                         }
+                        
+                        item += "<td>" + val.no_fico +"</td>";
+                        
                         if(data.item_detail.length != 1)
                         {
                             item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a> </td>";
@@ -4247,9 +4342,8 @@
                         {
                             item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";
                         }
-                        
                         item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams[]' id='kode_asset_ams[]' value='"+ val.kode_asset_ams +"'>";
-                       
+                        
                         item += "</tr>";
 
                         // $('body').on('change', '#jenis_asset-'+no, function() {
@@ -4274,7 +4368,7 @@
                             if(i > 1){
                                 return false;
                             }
-                            item += "<tr><td colspan='16' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
+                            item += "<tr><td colspan='17' align='right'><div class='btn btn-warning btn-sm' value='Save' OnClick='update_pic()' style='margin-right:5px;xmargin-top:5px'><i class='fa fa-save'></i> SAVE</div></td></tr>"
                             
                         }
                         i++;
@@ -4283,7 +4377,7 @@
                 else
                 {
                     item += '<tr>';
-                    item += ' <td colspan="7" style="text-align:center">No item selected</td>';
+                    item += ' <td colspan="8" style="text-align:center">No item selected</td>';
                     item += '</tr>';
                 }
                 item += '</table>';
@@ -4404,6 +4498,7 @@
             var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
             var no_registrasi= getnoreg.replace(/\//g, '-');
             var specification = $("#specification-mutasi-approval").val();
+            var specification = $("#posting_date").val();
 
             if( status == 'A' ){ status_desc = 'approve'; }else
             if( status == 'R' )
@@ -4444,7 +4539,7 @@
                 $.ajax({
                     url: "{{ url('approval/update_status_mutasi') }}/"+status+"/"+no_registrasi,
                     method: "POST",
-                    data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi+"&ka_con="+kac+"&ka_sap="+ksap,
+                    data: param+"&parNote="+specification+"&request_ka="+request_ka+"&request_gi="+request_gi+"&ka_con="+kac+"&ka_sap="+ksap+"&posting_date="+posting_date,
                     beforeSend: function() {
                         jQuery('.loading-event').fadeIn();
                     },
@@ -4568,7 +4663,136 @@
                         });
 
                         $("#create-button-sync-sap-mutasi").hide();
-                        $("#button-approve-mutasi").show();
+                        $(".button-approved-mutasi").show();
+                        $(".button-reject-mutasi").attr("disabled", true); 
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }   
+                    
+                },
+                complete: function() {
+                    $('.loading-event').fadeOut();
+                }
+                
+            }); 
+
+        }
+    }
+
+    function transferAmountMutasi()
+    {
+        $("#box-detail-item").hide();
+        
+        if( $.trim(posting_date) == "" )
+            {
+                notify({
+                    type: 'warning',
+                    message: " Posting Date is required"
+                });
+                return false;
+            } 
+
+        if(confirm('Transfer Amount ?'))
+        {
+            var getnoreg = $("#getnoreg").val();
+            var no_registrasi= getnoreg.replace(/\//g, '-');
+            var kode_asset_ams = $("#kode-asset-ams").val();
+
+            var param = '';
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ url('approval/transfer_amount_mutasi') }}",
+                method: "POST",
+                // data: param+"&noreg="+getnoreg,
+                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams,
+                beforeSend: function() 
+                {
+                    $('.loading-event').fadeIn();
+                },
+                success: function(result) 
+                {
+                    if (result.status) 
+                    {
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+
+                        $("#create-button-transfer-mutasi").hide();
+                        $(".button-approved-mutasi").show();
+                        $(".button-reject-mutasi").attr("disabled", true); 
+                    } 
+                    else 
+                    {
+                        notify({
+                            type: 'warning',
+                            message: result.message
+                        });
+                    }   
+                    
+                },
+                complete: function() {
+                    $('.loading-event').fadeOut();
+                }
+                
+            }); 
+
+        }
+    }
+
+    function transferAmountDisposal()
+    {
+        $("#box-detail-item").hide();
+        if( $.trim(posting_date) == "" )
+            {
+                notify({
+                    type: 'warning',
+                    message: " Posting Date is required"
+                });
+                return false;
+            } 
+
+        if(confirm('Transfer Amount ?'))
+        {
+            var getnoreg = $("#getnoreg").val();
+            var no_registrasi= getnoreg.replace(/\//g, '-');
+            var kode_asset_ams = $("#kode-asset-ams").val();
+
+            var param = '';
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ url('approval/transfer_amount_disposal') }}",
+                method: "POST",
+                // data: param+"&noreg="+getnoreg,
+                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams,
+                beforeSend: function() 
+                {
+                    $('.loading-event').fadeIn();
+                },
+                success: function(result) 
+                {
+                    if (result.status) 
+                    {
+                        notify({
+                            type: 'success',
+                            message: result.message
+                        });
+
+                        $("#create-button-transfer-mutasi").hide();
+                        $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
                     else 
