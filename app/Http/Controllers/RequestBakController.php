@@ -45,21 +45,25 @@ class RequestController extends Controller
         $profile = AccessRight::profile();
         
         // dd($profile);
-        $data["ba_user"] = '';
-        $profile = AccessRight::profile();
         
         if($profile[0]->area_code)
         {
-            $areacode = explode(',',$profile[0]->area_code); 
-            if($areacode)
-            {
-                $ba_user = '';
-                foreach( $areacode as $k => $v )
+            if(($profile[0]->area_code)=='All'){
+                $ba_user = "'".$profile[0]->area_code."'";
+            }else{
+                $areacode = explode(',',$profile[0]->area_code);
+                if($areacode)
                 {
-                    $ba_user .= '"'.$v.'",' ;
+                    $ba_user = '';
+                    foreach( $areacode as $k => $v )
+                    {
+                        $ba_user .= '"'.$v.'",' ;
+                    }
+                
                 }
-                $data["ba_user"] .= ''.$ba_user.'';
-            }
+            }            
+            $data["ba_user"] .= ''.$ba_user.'';
+            // dd($data["ba_user"]);
         }
         
         if($request->type == "amp") {
