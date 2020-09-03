@@ -2460,7 +2460,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 LEFT JOIN TR_WORKFLOW_DETAIL d ON b.workflow_detail_code = d.workflow_detail_code 
                 where 
                 b.document_code = '{$noreg}' and d.workflow_group_name like '%Complete%' and b.execution_status = ''
-                and c.id_role = '{$role_id}' ";  //1-> ams transfer 0->access denied
+                and c.id_role = '{$role_id}' and b.seq < '10' ";  //1-> ams transfer 0->access denied
                     // 19 : Complete Disposal; 23: Complete Disposal Rusak; 27: Complet Disposal Penjualan
         $data = DB::SELECT($sql); 
         return $data[0]->JML;
