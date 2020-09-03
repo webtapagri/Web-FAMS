@@ -1671,6 +1671,8 @@
                         $(".button-reject").hide(); 
                         $("#create-button-trasfer-disposal").show();
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
+                    }else{
+                        $("#create-button-trasfer-disposal").hide();
                     }
                     
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
