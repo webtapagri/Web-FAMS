@@ -3343,7 +3343,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         $records = array();
 
-        $sql = " SELECT a.*, date_format(a.tanggal_reg,'%d-%m-%Y') AS TANGGAL_REG, b.description_code AS CODE_AREA, b.description AS NAME_AREA, c.name AS REQUESTOR , D.DESCRIPTION AS COST_CENTER, e.NO_FICO AS NO_FICO
+        $sql = " SELECT a.*, date_format(a.tanggal_reg,'%d-%m-%Y') AS TANGGAL_REG, b.description_code AS CODE_AREA, b.description AS NAME_AREA, c.name AS REQUESTOR , d.DESCRIPTION AS COST_CENTER, e.NO_FICO AS NO_FICO
                     FROM TR_DISPOSAL_ASSET a 
                         LEFT JOIN TM_GENERAL_DATA b ON a.business_area = b.description_code AND b.general_code = 'plant'
                         LEFT JOIN TR_DISPOSAL_ASSET_DETAIL e ON a.NO_REG = e.NO_REG  
