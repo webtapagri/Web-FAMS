@@ -1670,9 +1670,10 @@
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 
                         $("#create-button-trasfer-disposal").show();
-                        $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
+                        $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                     }else{
                         $("#create-button-trasfer-disposal").hide();
+                        $(".button-trasfer-disposal").hide(); 
                     }
                     
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
@@ -4200,15 +4201,16 @@
                         $(".button-reject-mutasi").hide(); 
                         $("#create-button-trasfer-mutasi").show();
                         <?php if( $user_role == 'AMS' ){ ?>  
-                        $("#create-button-trasfer-mutasi").html('<button type="button" class="btn btn-flat label-danger" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
+                        $("#create-button-trasfer-mutasi").html('<button type="button" class="btn btn-flat label-danger button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
                         <?php } ?>
                     }
-                    // }else{
+                    }else{
                     $("#create-button-sync-sap-mutasi").hide();
                     if(data.cek_reject==0){$(".button-approved-mutasi").show();}
                     //$(".button-reject").attr("disabled", true); 
                     $(".button-reject-mutasi").hide(); 
-                    // }
+                    $(".button-trasfer-mutasi").hide(); 
+                    }
                 }
 
                 /*
