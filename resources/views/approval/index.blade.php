@@ -4206,8 +4206,8 @@
                     }
                     else{
                     $("#create-button-sync-sap-mutasi").hide();
-                    if(data.cek_reject==0){$(".button-approved-mutasi").show();}
-                    //$(".button-reject").attr("disabled", true); 
+                    if(data.cek_reject==0){$("#button-approve-mutasi").show();$(".button-approved-mutasi").show();}
+                    $(".button-reject").attr("disabled", true); 
                     $(".button-reject-mutasi").hide(); 
                     $(".button-trasfer-mutasi").hide(); 
                     }
@@ -4667,6 +4667,7 @@
                         });
 
                         $("#create-button-sync-sap-mutasi").hide();
+                        $("#button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
@@ -4732,6 +4733,7 @@
                         });
 
                         $("#create-button-transfer-mutasi").hide();
+                        $("#button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
@@ -4796,6 +4798,7 @@
                         });
 
                         $("#create-button-transfer-mutasi").hide();
+                        $("#button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
