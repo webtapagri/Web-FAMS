@@ -1659,8 +1659,6 @@
                 $("#request-form #cost-center").val(data.cost_center);
 
                 $("#create-button-sync-sap").hide();
-                if(data.cek_reject==0){$(".button-approved").show();}
-                $(".button-reject").show(); 
                 // if(data.cek_reject==0){$("#button-approve").show();}
                 // $(".button-reject").show(); 
 
@@ -1673,7 +1671,9 @@
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                     }else{
                         $("#create-button-trasfer-disposal").hide();
-                        $(".button-trasfer-disposal").hide(); 
+                        $(".button-trasfer-disposal").hide();
+                        if(data.cek_reject==0){$(".button-approved").show();}
+                        $(".button-reject").show(); 
                     }
                     
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
