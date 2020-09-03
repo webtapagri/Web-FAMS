@@ -4204,7 +4204,7 @@
                         $("#create-button-trasfer-mutasi").html('<button type="button" class="btn btn-flat label-danger button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
                         <?php } ?>
                     }
-                    }else{
+                    else{
                     $("#create-button-sync-sap-mutasi").hide();
                     if(data.cek_reject==0){$(".button-approved-mutasi").show();}
                     //$(".button-reject").attr("disabled", true); 
