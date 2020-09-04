@@ -1671,7 +1671,8 @@
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" id="button-trasfer-disposal" style="visibility: visible" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                     }else{
                         // $("#create-button-trasfer-disposal").hide();
-                        document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
+                        $("#button-trasfer-disposal").hide();
+                        // document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
                         if(data.cek_reject==0){$(".button-approved").show();}
                         $(".button-reject").show(); 
                     }
@@ -4206,8 +4207,9 @@
                     }
                     else{
                         
-                    // $("#create-button-sync-sap-mutasi").hide();
-                    document.getElementById('button-trasfer-mutasi').style.visibility = 'hidden';
+                    $("#create-button-sync-sap-mutasi").hide();
+                    $("#button-trasfer-mutasi").hide();
+                    // document.getElementById('button-trasfer-mutasi').style.visibility = 'hidden';
                     if(data.cek_reject==0){$("#button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                     // $(".button-reject").attr("disabled", true); 
                     $(".button-reject-mutasi").hide(); 
