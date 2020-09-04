@@ -4107,6 +4107,7 @@
                         item += "<td>" + val.tujuan + "</td>";
                         item += "<td>" + val.kode_asset_ams_tujuan + "</td>";
                         item += "<td>" + val.kode_sap_tujuan + "</td>";
+                        item += "<td>" + val.no_fico +"</td>";
 
                         if(data.new_asset > 0) { 
                             item += "<td width='150px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i> Awal</a>";
@@ -4115,7 +4116,6 @@
                         else {
                             item += "<td width='70px'><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a>";
                         }
-                        item += "<td>" + val.no_fico +"</td>";
                         
                         item += "</tr>";
                         no++;
