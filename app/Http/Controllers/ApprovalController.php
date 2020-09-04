@@ -4618,7 +4618,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $service = API::exec(array(
             'request' => 'GET',
             'host' => 'ldap',
-            'method' => "disposal_asset?ANLA_BUKRS{$ANLA_BUKRS}&ANLA_ANLN1={$ANLN1}&ANLA_ANLN2={$ANLN2}&ANLP_AFABE=01&ANLC_GJAHR={$YEAR}&RAIFP1_BUDAT={$RAIFP1_BUDAT}&RAIFP2_MONAT={$RAIFP2_MONAT}&ANLZ_GSBER={$ANLZ_GSBER}&COBL_KOSTL={$COBL_KOSTL}&RAIFP2-SGTXT={$dt->NO_REG}", 
+            'method' => "disposal_asset?ANLA_BUKRS={$ANLA_BUKRS}&ANLA_ANLN1={$ANLN1}&ANLA_ANLN2={$ANLN2}&ANLP_AFABE=01&ANLC_GJAHR={$YEAR}&RAIFP1_BUDAT={$RAIFP1_BUDAT}&RAIFP2_MONAT={$RAIFP2_MONAT}&ANLZ_GSBER={$ANLZ_GSBER}&COBL_KOSTL={$COBL_KOSTL}&RAIFP2-SGTXT={$dt->NO_REG}", 
         ));
         
         $data = $service;
