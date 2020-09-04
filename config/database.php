@@ -57,25 +57,20 @@ return [
         ], */
 
         'mysql' => [
-            'read' => [
-                'host' => '127.0.0.1',
-            ],
-            'write' => [
-                'host' => '127.0.0.1'
-            ],
+			'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
             'strict' => false,
             'driver'    => 'mysql',
-            'database'  => 'ams',
-            'username'  => 'root',
-            'port'      => env('DB_PORT', '3306'),
-            'password'  => '',
+          /*  'database'  => 'app_ams', */
+            'database'  => 'AMS', 
+            'username'  => 'app_ams',
+            'password'  => '4msD3v4pp88!/.,',
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
-            'prefix'    => '',
-            //'unix_socket'    => '/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock', <=== for mysql port 3306
-            'strict'    => false,
+			'strict'    => false,
             'options'  => array(
                 PDO::ATTR_PERSISTENT => env('DB_PERSISTENT', false),
+                PDO::ATTR_EMULATE_PREPARES => true
             ),
         ],
 

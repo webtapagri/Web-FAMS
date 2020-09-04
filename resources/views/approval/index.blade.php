@@ -1663,18 +1663,21 @@
                 // $(".button-reject").show(); 
 
                 console.log(data.transfer);
-                    if(data.transfer !== 0)
+                    if(data.transfer == 0)
                     {
+                        $("#create-button-trasfer-disposal").hide();
+                        $("#button-trasfer-disposal").hide();
+                        if(document.getElementById('button-trasfer-disposal')){
+                            document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
+                        }
+                        if(data.cek_reject==0){$(".button-approved").show();}
+                        $(".button-reject").show();  
+                       }else{
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 
                         // $("#create-button-trasfer-disposal").show();
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" id="button-trasfer-disposal" style="visibility: visible" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
-                    }else{
-                        // $("#create-button-trasfer-disposal").hide();
-                        $("#button-trasfer-disposal").hide();
-                        // document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
-                        if(data.cek_reject==0){$(".button-approved").show();}
-                        $(".button-reject").show(); 
+                    
                     }
                     
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
@@ -4207,12 +4210,14 @@
                     }
                     else{
                         
-                    $("#create-button-sync-sap-mutasi").hide();
-                    $("#button-trasfer-mutasi").hide();
-                    // document.getElementById('button-trasfer-mutasi').style.visibility = 'hidden';
-                    if(data.cek_reject==0){$("#button-approve-mutasi").show();$(".button-approved-mutasi").show();}
-                    // $(".button-reject").attr("disabled", true); 
-                    $(".button-reject-mutasi").hide(); 
+                        $("#create-button-sync-sap-mutasi").hide();
+                        $("#button-trasfer-mutasi").hide();
+                        if(document.getElementById('button-trasfer-mutasi')){
+                            document.getElementById('button-trasfer-mutasi').style.visibility = 'hidden';
+                        }
+                        if(data.cek_reject==0){$("#button-approve-mutasi").show();$(".button-approved-mutasi").show();}
+                        // $(".button-reject").attr("disabled", true); 
+                        $(".button-reject-mutasi").hide(); 
                     }
                 }
 
