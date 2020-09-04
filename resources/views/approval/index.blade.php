@@ -1667,10 +1667,10 @@
                     {
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 
-                        $("#create-button-trasfer-disposal").show();
+                        // $("#create-button-trasfer-disposal").show();
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" id="button-trasfer-disposal" style="visibility: visible" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                     }else{
-                        $("#create-button-trasfer-disposal").hide();
+                        // $("#create-button-trasfer-disposal").hide();
                         document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
                         if(data.cek_reject==0){$(".button-approved").show();}
                         $(".button-reject").show(); 
@@ -4199,14 +4199,14 @@
                     {
                         $("#button-approve-mutasi").hide();
                         $(".button-reject-mutasi").hide(); 
-                        $("#create-button-trasfer-mutasi").show();
+                        // $("#create-button-trasfer-mutasi").show();
                         <?php if( $user_role == 'AMS' ){ ?>  
                         $("#create-button-trasfer-mutasi").html('<button type="button" style="visibility: visible" class="btn btn-flat label-danger" id="button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
                         <?php } ?>
                     }
                     else{
                         
-                    $("#create-button-sync-sap-mutasi").hide();
+                    // $("#create-button-sync-sap-mutasi").hide();
                     document.getElementById('button-trasfer-mutasi').style.visibility = 'hidden';
                     if(data.cek_reject==0){$("#button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                     // $(".button-reject").attr("disabled", true); 
