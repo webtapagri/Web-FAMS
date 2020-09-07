@@ -4350,7 +4350,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $no_reg = @$request->noreg;
         $kode_ams = @$request->kode_asset_ams;
         
-        $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.y');
+        $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.Y');
         $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
         // dd($no_reg);
 
@@ -4387,7 +4387,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $no_reg = @$request->noreg;
         $kode_ams = @$request->kode_asset_ams;
-        $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.y');
+        $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.Y');
         $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
         // dd($no_reg);
 
