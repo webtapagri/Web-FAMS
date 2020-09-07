@@ -3813,54 +3813,61 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         // $ka_con = $request->kode_asset_controller;
         // $ka_sap = $request->kode_asset_nilai;
-        for($i=0;$i<count($ka_sap);$i++){
-            $kac = $ka_con[$i];
-            $ksap = $ka_sap[$i];
-            try 
-            {   
-                $service = API::exec(array(
-                    'request' => 'GET',
-                    'host' => 'ldap',
-                    'method' => "check_io?AUFNR=$kac&AUFUSER3=$ksap", 
-                ));
-    
-                $data = $service;
-
-            }
-            catch (\Exception $e) 
-            {
-                return response()->json(['status' => false, "message" => $e->getMessage() ]);
-            }
-
-
-            if( $data->TYPE == 'S' )
-            //if($data==1)
-            {
-                if( $ksap == '' )
-                {
-                    return response()->json(['status' => false, "message" => ''.$kode_asset_label.' required! ' ]);
-                }
-
-                // SKIP VALIDASI CHECK IO SAP JIKA ASSET LAINNYA
-                DB::beginTransaction();
+        $validasi_input_all_io = $this->validasi_input_all_io_mutasi($request, $status, $noreg);
+                
+        if(!$validasi_input_all_io['status'])
+        {
+            for($i=0;$i<count($ka_sap);$i++){
+                $kac = $ka_con[$i];
+                $ksap = $ka_sap[$i];
                 try 
                 {   
-                    $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}',POSTING_DATE = '{$req['posting_date']}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
-                    //echo $sql; die();
-                    DB::UPDATE($sql);
-                    DB::commit();
+                    $service = API::exec(array(
+                        'request' => 'GET',
+                        'host' => 'ldap',
+                        'method' => "check_io?AUFNR=$kac&AUFUSER3=$ksap", 
+                    ));
+        
+                    $data = $service;
 
-                    // return response()->json(['status' => true, "message" =>  "Updated Success" ]);
                 }
                 catch (\Exception $e) 
                 {
-                    DB::rollback();
                     return response()->json(['status' => false, "message" => $e->getMessage() ]);
                 }
-            }
-            else
-            {
-                return response()->json(['status' => false, "message" =>  $data->MESSAGE.' (Kode Aset Controller:'.$kac.')' ]);
+
+
+                if( $data->TYPE == 'S' )
+                //if($data==1)
+                {
+                    if( $ksap == '' )
+                    {
+                        return response()->json(['status' => false, "message" => ''.$kode_asset_label.' required! ' ]);
+                    }
+
+                    // SKIP VALIDASI CHECK IO SAP JIKA ASSET LAINNYA
+                    DB::beginTransaction();
+                    try 
+                    {   
+                        $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}',POSTING_DATE = '{$req['posting_date']}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
+                        //echo $sql; die();
+                        DB::UPDATE($sql);
+                        DB::commit();
+
+                        // return response()->json(['status' => true, "message" =>  "Updated Success" ]);
+                    }
+                    catch (\Exception $e) 
+                    {
+                        DB::rollback();
+                        return response()->json(['status' => false, "message" => $e->getMessage() ]);
+                        die();
+                    }
+                }
+                else
+                {
+                    return response()->json(['status' => false, "message" =>  $data->MESSAGE.' (Kode Aset Controller:'.$kac.')' ]);
+                    die();
+                }
             }
         }
 
