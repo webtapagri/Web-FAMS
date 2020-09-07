@@ -755,9 +755,9 @@
                 <?php }  ?>
 
                 <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?>
-                    <span id="button-approve-mutasi">
+                    <!-- <span id="button-approve-mutasi"> -->
                         <button type="button" class="btn btn-flat label-danger button-approved-mutasi" OnClick="changeStatusMutasi('A')" style="margin-right: 5px;">APPROVE</button>
-                    </span>
+                    <!-- </span> -->
                     <button type="button" class="btn btn-flat label-danger button-reject-mutasi" OnClick="changeStatusMutasi('R')" style="margin-right: 5px;">REJECT</button>
                 <?php }
                     } 
@@ -4186,6 +4186,10 @@
 
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
+                
+                // if(data.cek_reject==0){$("#button-approve-mutasi").show();$(".button-approved-mutasi").show();}
+                //         // $(".button-reject").attr("disabled", true); 
+                //         $(".button-reject-mutasi").hide(); 
                 if(data.sync_sap != '')
                 {
                     $("#create-button-sync-sap-mutasi").show();
