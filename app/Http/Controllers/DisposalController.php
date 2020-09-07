@@ -820,7 +820,9 @@ class DisposalController extends Controller
     	}
     	else
     	{
-    		$ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
+			// $ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
+			$ANLN2 = str_pad($row->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);;
+			
     	}
 		
 		
@@ -850,6 +852,27 @@ class DisposalController extends Controller
 
     function get_anln1($kode)
     {
+    	$total = strlen($kode); //12 DIGIT
+
+    	if( $total == 8 )
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	elseif( $total == 7 )
+    	{
+    		$ksap = '00000'.$kode.'';
+    	}
+    	else
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	return $ksap;
+    }
+
+    function get_anln1_kode()
+    {
+		$request = new \Illuminate\Http\Request();
+		$kode =  $_GET['kode'];
     	$total = strlen($kode); //12 DIGIT
 
     	if( $total == 8 )

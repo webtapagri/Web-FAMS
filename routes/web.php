@@ -354,6 +354,7 @@ Route::post('/report/list-history-approval/download', 'ReportController@list_his
 Route::resource('/disposal-penjualan', 'DisposalController');
 Route::get('/disposal-penjualan/add/{id}/{pengajuan}', 'DisposalController@add');
 Route::get('/disposal-penjualan/delete/{kode_asset_ams}', 'DisposalController@remove');
+Route::get('/get_anln1_kode', 'DisposalController@get_anln1_kode');
 
 Route::get('/disposal-hilang', 'DisposalController@index_hilang');
 Route::get('/disposal-hilang/add_hilang/{id}/{pengajuan}', 'DisposalController@add_hilang');
