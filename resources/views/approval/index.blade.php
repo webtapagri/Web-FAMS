@@ -4731,7 +4731,7 @@
                 url: "{{ url('approval/transfer_amount_mutasi') }}",
                 method: "POST",
                 // data: param+"&noreg="+getnoreg,
-                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams,
+                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams+"&posting_date="+posting_date,
                 beforeSend: function() 
                 {
                     $('.loading-event').fadeIn();
@@ -4796,7 +4796,7 @@
                 url: "{{ url('approval/transfer_amount_disposal') }}",
                 method: "POST",
                 // data: param+"&noreg="+getnoreg,
-                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams,
+                data: param+"&noreg="+getnoreg+"&kode_asset_ams="+kode_asset_ams+"&posting_date="+posting_date,
                 beforeSend: function() 
                 {
                     $('.loading-event').fadeIn();

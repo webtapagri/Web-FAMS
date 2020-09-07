@@ -4349,6 +4349,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $no_reg = @$request->noreg;
         $kode_ams = @$request->kode_asset_ams;
+        
+        $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.y');
+        $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
         // dd($no_reg);
 
         $sql = " SELECT a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_DISPOSAL FROM TR_DISPOSAL_ASSET_DETAIL a 
@@ -4363,7 +4366,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         {
             foreach( $data as $k => $v )
             {   
-                $proses = $this->transfer_disposal_process($v);   
+                $proses = $this->transfer_disposal_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT);   
                 
                 if($proses['status']=='error')
                 {
@@ -4384,6 +4387,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $no_reg = @$request->noreg;
         $kode_ams = @$request->kode_asset_ams;
+        $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.y');
+        $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
         // dd($no_reg);
 
         $sql = " SELECT d.DESCRIPTION AS COST_CENTER_BARU,a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_MUTASI FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = a.TUJUAN and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' LEFT JOIN TM_MSTR_ASSET b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS WHERE a.NO_REG = '{$no_reg}' "; //echo $sql; die();
@@ -4413,13 +4418,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         }
     }
 
-    public function transfer_mutasi_process($dt) 
+    public function transfer_mutasi_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT) 
     {
 
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
-        $RAIFP1_BUDAT = date_format(date_create($dt->POSTING_DATE), 'd.m.y');
-        $RAIFP2_MONAT = date_format(date_create($dt->POSTING_DATE), 'm');
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
@@ -4600,12 +4603,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         }
     }
 
-    public function transfer_disposal_process($dt) 
+    public function transfer_disposal_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT) 
     {
+        
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
-        $RAIFP1_BUDAT = date_format(date_create($dt->POSTING_DATE), 'd.m.y');
-        $RAIFP2_MONAT = date_format(date_create($dt->POSTING_DATE), 'm');
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
         $COBL_KOSTL = $dt->COST_CENTER;
 
