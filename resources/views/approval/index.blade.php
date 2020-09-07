@@ -4205,7 +4205,8 @@
                     console.log(data.transfer);
                     if(data.transfer !== 0)
                     {
-                        $("#button-approve-mutasi").hide();
+                        // $("#button-approve-mutasi").hide();
+                        $(".button-approved-mutasi").hide();
                         $(".button-reject-mutasi").hide(); 
                         // $("#create-button-trasfer-mutasi").show();
                         <?php if( $user_role == 'AMS' ){ ?>  
