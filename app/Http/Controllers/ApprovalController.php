@@ -4354,7 +4354,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
         // dd($no_reg);
 
-        $sql = " SELECT a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_DISPOSAL FROM TR_DISPOSAL_ASSET_DETAIL a 
+        $sql = " SELECT a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_DISPOSAL,d.DESCRIPTION as COST_CENTER_GL FROM TR_DISPOSAL_ASSET_DETAIL a 
                     LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = a.BA_PEMILIK_ASSET  and d.GENERAL_CODE = 'ba_disposal_costcenter_gainloss'
                     LEFT JOIN TM_MSTR_ASSET b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS WHERE a.NO_REG =  '{$no_reg}' "; //echo $sql; die();
 
@@ -4609,7 +4609,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
-        $COBL_KOSTL = $dt->COST_CENTER;
+        $COBL_KOSTL = $dt->COST_CENTER_GL;
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
             
