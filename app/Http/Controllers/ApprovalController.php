@@ -3410,8 +3410,17 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
             $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
             
-            $ANLN2 = '0000';
-           
+            // $ANLN2 = '0000';
+            if($row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+			{
+				$ANLN2 = '0000';
+			}
+			else
+			{
+				// $ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
+				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
+				
+			}
             
 
             $service = API::exec(array(
@@ -4428,15 +4437,25 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
         $ANBZ_ZANLN1 = $dt->KODE_SAP_TUJUAN;
             
-            if( $dt->KODE_ASSET_SUBNO_SAP == '') 
-            {
-                $ANLN2 = '0000';
-            }
-            else
-            {
-                $ANLN2 = $dt->KODE_ASSET_SUBNO_SAP;
-            }
+            // if( $dt->KODE_ASSET_SUBNO_SAP == '') 
+            // {
+            //     $ANLN2 = '0000';
+            // }
+            // else
+            // {
+            //     $ANLN2 = $dt->KODE_ASSET_SUBNO_SAP;
+            // }
             
+        if($dt->KODE_ASSET_SUBNO_SAP == '') 
+        {
+            $ANLN2 = '0000';
+        }
+        else
+        {
+            // $ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
+            $ANLN2 = str_pad($dt->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
+            
+        }
             $YEAR = date('Y');
 
         $service = API::exec(array(
@@ -4619,7 +4638,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             }
             else
             {
-                $ANLN2 = $dt->KODE_ASSET_SUBNO_SAP;
+                $ANLN2 = str_pad($dt->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
             }
             
             $YEAR = date('Y');

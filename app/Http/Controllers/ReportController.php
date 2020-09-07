@@ -100,7 +100,8 @@ class ReportController extends Controller
             }
             else
             {
-                $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+                // $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+                $ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
             }
             
             
@@ -150,7 +151,8 @@ class ReportController extends Controller
             }
             else
             {
-                $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+                // $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+                $ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
             }
             
             

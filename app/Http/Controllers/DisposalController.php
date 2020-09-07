@@ -55,8 +55,17 @@ class DisposalController extends Controller
 
             $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
             
-            $ANLN2 = '0000';
-           
+            // $ANLN2 = '0000';
+			if($row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+			{
+				$ANLN2 = '0000';
+			}
+			else
+			{
+				// $ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
+				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);;
+				
+			}
             
 
             $service = API::exec(array(
@@ -821,7 +830,7 @@ class DisposalController extends Controller
     	else
     	{
 			// $ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
-			$ANLN2 = str_pad($row->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);;
+			$ANLN2 = str_pad($row->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
 			
     	}
 		
