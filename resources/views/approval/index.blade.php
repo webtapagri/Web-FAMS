@@ -4335,22 +4335,22 @@
                                             item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"'   autocomplete='off' ></td>";
                                             }
                                             else{
-                                            item += "<td>" + val.jenis_asset_tujuan +"<input type='hidden' class='form-control' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' value='"+val.jenis_asset_tujuan+"' ></td>";
-                                            item += "<td>" + val.group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"' value='"+val.group_tujuan+"' > </td>";
-                                            item += "<td>" + val.sub_group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' value='"+val.sub_group_tujuan+"'></td>";
+                                            item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                            item += "<td>" + val.group_tujuan + "</td>";
+                                            item += "<td>" + val.sub_group_tujuan + "</td>";
                                             }
                                         }
                                         else{
-                                            item += "<td>" + val.jenis_asset_tujuan +"<input type='hidden' class='form-control' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' value='"+val.jenis_asset_tujuan+"' ></td>";
-                                            item += "<td>" + val.group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"' value='"+val.group_tujuan+"' > </td>";
-                                            item += "<td>" + val.sub_group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' value='"+val.sub_group_tujuan+"'></td>";
+                                            item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                            item += "<td>" + val.group_tujuan + "</td>";
+                                            item += "<td>" + val.sub_group_tujuan + "</td>";
                                         }
                         <?php } else {?>
-                                        item += "<td>" + val.jenis_asset_tujuan +"<input type='hidden' class='form-control' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' value='"+val.jenis_asset_tujuan+"' ></td>";
-                                        item += "<td>" + val.group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"' value='"+val.group_tujuan+"' > </td>";
-                                        item += "<td>" + val.sub_group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' value='"+val.sub_group_tujuan+"'></td>";
-                                            
+                                    item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                    item += "<td>" + val.group_tujuan + "</td>";
+                                    item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
+                        item += "<input type='hidden' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
                         console.log(val.jenis_asset_tujuan);
                         
                         item += "<td>" + val.kode_asset_ams_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_asset_ams_tujuan-"+val.no_reg_item+"' id='kode_asset_ams_tujuan-"+val.no_reg_item+"' value='"+ val.kode_asset_ams_tujuan +"'></td>";
@@ -4484,7 +4484,8 @@
         var no_reg_item = [];    
         var po_type = [];    
         var kode_sap = [];    
-        var kode_ac = [];    
+        var kode_ac = []; 
+        var jenis_asset_tujuan = [];   
         for (var i = 0; i < input.length/2; i++) { 
             mandatory_ac.push(input[i+input.length/2].value); 
             no_reg_item.push(input2[i+input2.length/2].value); 
@@ -4496,6 +4497,8 @@
         for (var i = 0; i < input.length/2; i++) {             
             var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
             kode_ac.push(ka_con);
+            var jns_at = $("#jenis_asset_tujuan-"+no_reg_item[i]+"").val();
+            jenis_asset_tujuan.push(jns_at);
                 if(po_type[i] == 1)
                 {
                     // AMP & LAIN
@@ -4521,8 +4524,10 @@
         }
         
         <?php if( $user_role == 'AMS' ){ ?>
-                if(update_jenis_asset() ==  false ){
-                    return false
+                if(jenis_asset_tujuan.includes("")){
+                    if(update_jenis_asset() ==  false ){
+                        return false
+                    }
                 }
         <?php } ?>
             
