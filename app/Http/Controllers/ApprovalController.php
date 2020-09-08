@@ -4435,7 +4435,15 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
-        $ANBZ_ZANLN1 = $dt->KODE_SAP_TUJUAN;
+        if( $dt->KODE_SAP_TUJUAN == '') 
+        {
+            $ANBZ_ZANLN1 = '0000';
+        }
+        else
+        {
+            $ANBZ_ZANLN1 = str_pad($dt->KODE_SAP_TUJUAN, 12, '0', STR_PAD_LEFT);
+        }
+        
             
             // if( $dt->KODE_ASSET_SUBNO_SAP == '') 
             // {
