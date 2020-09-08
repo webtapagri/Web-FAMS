@@ -4811,10 +4811,11 @@
                             message: result.message
                         });
 
-                        $("#create-button-transfer-mutasi").hide();
-                        $(".button-approve-mutasi").show();
-                        $(".button-approved-mutasi").show();
-                        $(".button-reject-mutasi").attr("disabled", true); 
+                        $("#create-button-trasfer-disposal").hide();
+                        $("#button-trasfer-disposal").hide();
+                        $("#create-button-sync-sap").hide();
+                        $("#button-approve").show();
+                        $(".button-reject").attr("disabled", true); 
                     } 
                     else 
                     {
