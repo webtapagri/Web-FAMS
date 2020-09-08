@@ -4410,7 +4410,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         {
             foreach( $data as $k => $v )
             {   
-                $proses = $this->transfer_mutasi_process($v);   
+                $proses = $this->transfer_mutasi_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT);   
                 
                 if($proses['status']=='error')
                 {
