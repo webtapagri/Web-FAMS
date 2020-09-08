@@ -498,7 +498,7 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div>
-                                
+
                                 <?php if( $user_role == 'AMS' ){?>
 
                                 <div class="form-group">
@@ -4754,8 +4754,9 @@
                             type: 'success',
                             message: result.message
                         });
-
+                        
                         $("#create-button-transfer-mutasi").hide();
+                        $("#button-trasfer-mutasi").hide();
                         $(".button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
