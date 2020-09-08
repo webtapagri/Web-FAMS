@@ -4335,20 +4335,21 @@
                                             item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"'   autocomplete='off' ></td>";
                                             }
                                             else{
-                                            item += "<td>" + val.jenis_asset_tujuan + "</td>";
-                                            item += "<td>" + val.group_tujuan + "</td>";
-                                            item += "<td>" + val.sub_group_tujuan + "</td>";
+                                            item += "<td>" + val.jenis_asset_tujuan +"<input type='hidden' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' value='"+val.jenis_asset_tujuan+"' ></td>";
+                                            item += "<td>" + val.group_tujuan + ""<input type='hidden' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"' value='"+val.group_tujuan+"' > </td>";
+                                            item += "<td>" + val.sub_group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' value='"+val.sub_group_tujuan+"'></td>";
                                             }
                                         }
                                         else{
-                                            item += "<td>" + val.jenis_asset_tujuan + "</td>";
-                                            item += "<td>" + val.group_tujuan + "</td>";
-                                            item += "<td>" + val.sub_group_tujuan + "</td>";
+                                            item += "<td>" + val.jenis_asset_tujuan +"<input type='hidden' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' value='"+val.jenis_asset_tujuan+"' ></td>";
+                                            item += "<td>" + val.group_tujuan + ""<input type='hidden' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"' value='"+val.group_tujuan+"' > </td>";
+                                            item += "<td>" + val.sub_group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' value='"+val.sub_group_tujuan+"'></td>";
                                         }
                         <?php } else {?>
-                                    item += "<td>" + val.jenis_asset_tujuan + "</td>";
-                                    item += "<td>" + val.group_tujuan + "</td>";
-                                    item += "<td>" + val.sub_group_tujuan + "</td>";
+                                        item += "<td>" + val.jenis_asset_tujuan +"<input type='hidden' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' value='"+val.jenis_asset_tujuan+"' ></td>";
+                                        item += "<td>" + val.group_tujuan + ""<input type='hidden' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"' value='"+val.group_tujuan+"' > </td>";
+                                        item += "<td>" + val.sub_group_tujuan + "<input type='hidden' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' value='"+val.sub_group_tujuan+"'></td>";
+                                            
                         <?php  } ?>
                         console.log(val.jenis_asset_tujuan);
                         
@@ -4518,11 +4519,6 @@
                     }
                 } 
         }
-
-       
-        
-
-
         
         <?php if( $user_role == 'AMS' ){ ?>
                 if(update_jenis_asset() ==  false ){
