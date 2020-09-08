@@ -393,6 +393,7 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div>
+                                <?php if( $user_role == 'AMS' ){?>
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">COST CENTER</label>
                                     <div class="col-md-6">
@@ -406,7 +407,7 @@
                                             <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date">
                                     </div>
                                 </div> 
-                                
+                                <?php } ?>
                                 
                             </div>
                         </div>                        
@@ -497,6 +498,8 @@
                                         <input type="text" class="form-control input-sm" value="" id="requestor" name="requestor" readonly>
                                     </div>
                                 </div>
+                                
+                                <?php if( $user_role == 'AMS' ){?>
 
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">COST CENTER</label>
@@ -511,6 +514,7 @@
                                             <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date" readonly>
                                     </div>
                                 </div> 
+                                <?php } ?>
                             </div>
                         </div>
                         <div class="row">
@@ -601,12 +605,15 @@
                                         <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
                                     </div>
                                 </div>
+                                
+                                <?php if( $user_role == 'AMS' ){?>
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">POSTING DATE</label>
                                     <div class="col-md-6">
                                         <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date" readonly>
                                     </div>
                                 </div>
+                                <?php } ?>
                             </div>
                             
                         </div>
@@ -714,12 +721,14 @@
                                         <input type="hidden" class="form-control input-sm" value="" id="kode-asset-ams" name="kode-asset-ams" >
                                     </div>
                                 </div>
+                                <?php if( $user_role == 'AMS' ){?>
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">POSTING DATE</label>
                                     <div class="col-md-6">
                                             <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date">
                                     </div>
                                 </div>
+                                <?php } ?>
                             </div>
                             
                         </div>  
