@@ -4397,7 +4397,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $no_reg = @$request->noreg;
         $kode_ams = @$request->kode_asset_ams;
         $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.Y');
-        $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
+        $RAIFP2_MONAT = date_format(date_create(@$request->posting_date), 'm');
         // dd($no_reg);
 
         $sql = " SELECT d.DESCRIPTION AS COST_CENTER_BARU,a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_MUTASI FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_GENERAL_DATA d ON d.DESCRIPTION_CODE = a.TUJUAN and d.GENERAL_CODE = 'ba_mutasi_tujuan_costcenter' LEFT JOIN TM_MSTR_ASSET b ON a.KODE_ASSET_AMS = b.KODE_ASSET_AMS WHERE a.NO_REG = '{$no_reg}' "; //echo $sql; die();
@@ -4411,7 +4411,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             foreach( $data as $k => $v )
             {   
                 $proses = $this->transfer_mutasi_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT);   
-                
+                // return response()->json(['status' => false, "message" =>$proses]);
+                // die();
                 if($proses['status']=='error')
                 {
                     return response()->json(['status' => false, "message" => $proses['message']]);
@@ -4469,11 +4470,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $service = API::exec(array(
             'request' => 'GET',
             'host' => 'ldap',
-            'method' => "mutasi_asset?ANLA_BUKRS={$ANLA_BUKRS}&ANLA_ANLN1={$ANLN1}&ANLA_ANLN2={$ANLN2}&RAIFP1_BUDAT={$RAIFP1_BUDAT}&RAIFP2-SGTXT={$dt->NO_REG}&ANBZ-ZANLN1={$ANBZ_ZANLN1}&ANBZ-ZANLN2=0000&RAIFP2_MONAT={$RAIFP2_MONAT}", 
+            'method' => "mutasi_asset?ANLA_BUKRS={$ANLA_BUKRS}&ANLA_ANLN1={$ANLN1}&ANLA_ANLN2={$ANLN2}&RAIFP1_BUDAT={$RAIFP1_BUDAT}&RAIFP2-SGTXT={$dt->NO_REG_MUTASI}&ANBZ_ZANLN1={$ANBZ_ZANLN1}&ANBZ_ZANLN2=0000&RAIFP2_MONAT={$RAIFP2_MONAT}", 
         ));
         
         $data = $service;
         
+
         if( !empty($data->item->TYPE) )
         {
             #2
