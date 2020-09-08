@@ -1561,6 +1561,12 @@
                 jenis_asset_group = $('input[name="jenis_asset_group-'+noreg+'"]').select2('data')[0].id;
                 jenis_asset_subgroup = $('input[name="jenis_asset_subgroup-'+noreg+'"]').select2('data')[0].id;
             }
+
+            // var jenis_asset = $("#jenis_asset-"+noreg+"").val();
+            // var jenis_asset_group = $("#jenis_asset_group-"+noreg+"").val();
+            // var jenis_asset_subgroup = $("#jenis_asset_subgroup-"+noreg+"").val();
+
+            console.log(jenis_asset);
             jns_asset.push(jenis_asset);
             group.push(jenis_asset_group);
             subgroup.push(jenis_asset_subgroup);
@@ -4196,9 +4202,9 @@
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
                 
-                if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
-                        // $(".button-reject").attr("disabled", true); 
-                        $(".button-reject-mutasi").hide(); 
+                // if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
+                //         // $(".button-reject").attr("disabled", true); 
+                //         $(".button-reject-mutasi").hide(); 
                 if(data.sync_sap != '')
                 {
                     $("#create-button-sync-sap-mutasi").show();
@@ -4324,9 +4330,9 @@
                         <?php if( $user_role == 'AMS' ){ ?>
                                         if(val.kode_asset_ams_tujuan === "") { 
                                             if(val.jenis_asset_tujuan === "" || val.group_tujuan === "" || val.sub_group_tujuan === ""){
-                                            item += "<td width='10%'><input type='text' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"' autocomplete='off' onChange='get_group("+val.no_reg_item+")' ><input type='hidden' name='noreg-"+no+"' id='noreg-"+no+"' value='"+val.no_reg_item+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
-                                            item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.group_tujuan+"' id='' autocomplete='off' onChange='get_subgroup("+val.no_reg_item+")'></td>";
-                                            item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"' id='' autocomplete='off' ></td>";
+                                            item += "<td width='10%'><input type='text' class='form-control input-sm select-jenis-aset' name='jenis_asset-"+val.no_reg_item+"' id='jenis_asset-"+val.no_reg_item+"'  autocomplete='off' onChange='get_group("+val.no_reg_item+")' ><input type='hidden' name='noreg-"+no+"' id='noreg-"+no+"' value='"+val.no_reg_item+"'><input type='hidden' class='form-control input-sm' name='asset_class[]' id='asset_class[]' value='"+ val.kode_asset_class +"'></td>";
+                                            item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_group-"+val.no_reg_item+"' name='jenis_asset_group-"+val.no_reg_item+"'   autocomplete='off' onChange='get_subgroup("+val.no_reg_item+")'></td>";
+                                            item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"'   autocomplete='off' ></td>";
                                             }
                                             else{
                                             item += "<td>" + val.jenis_asset_tujuan + "</td>";
