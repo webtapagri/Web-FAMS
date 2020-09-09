@@ -661,7 +661,7 @@ class ApprovalController extends Controller
        
         DB::beginTransaction();
 
-        if($jenis_asset != null or $jenis_asset != ""){
+        if(count($jenis_asset) != 0){
             try 
             {   
                 $updated_at = date("Y-m-d H:i:s");  
