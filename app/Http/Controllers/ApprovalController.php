@@ -2450,7 +2450,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
     function validasi_transfer_mutasi($noreg)
     {
-        $sql = " SELECT COUNT(*) AS JML FROM TR_MUTASI_ASSET_DETAIL WHERE NO_REG = '{$noreg}' AND KODE_SAP_TUJUAN != '' ";
+        $sql = " SELECT COUNT(*) AS JML FROM TR_MUTASI_ASSET_DETAIL WHERE NO_REG = '{$noreg}' AND KODE_SAP_TUJUAN != '' and NO_FICO != '' ";
         $data = DB::SELECT($sql); 
         return $data[0]->JML;
     }

@@ -764,9 +764,9 @@
                 <?php }  ?>
 
                 <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?>
-                    <span class="button-approve-mutasi">
+                    <!-- <span class="button-approve-mutasi"> -->
                         <button type="button" class="btn btn-flat label-danger button-approved-mutasi" OnClick="changeStatusMutasi('A')" style="margin-right: 5px;">APPROVE</button>
-                    </span>
+                    <!-- </span> -->
                     <button type="button" class="btn btn-flat label-danger button-reject-mutasi" OnClick="changeStatusMutasi('R')" style="margin-right: 5px;">REJECT</button>
                 <?php }
                     } 
@@ -4221,27 +4221,27 @@
                 else
                 {
                     console.log(data.transfer);
-                    if(data.transfer !== 0)
+                    if(data.transfer == 0)
                     {
-                        // $(".button-approve-mutasi").hide();
                         $(".button-approved-mutasi").hide();
                         $(".button-reject-mutasi").hide(); 
-                        // $("#create-button-trasfer-mutasi").show();
+                        $(".button-approved-mutasi").attr("disabled", true); 
+                        $("#create-button-trasfer-mutasi").show();
                         <?php if( $user_role == 'AMS' ){ ?>  
-                        $("#create-button-trasfer-mutasi").html('<button type="button" style="visibility: visible" class="btn btn-flat label-danger" id="button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
+                        $("#create-button-trasfer-mutasi").html('<button type="button"  class="btn btn-flat label-danger button-trasfer-mutasi" id="button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
                         <?php } ?>
+                        
                     }
                     else{
-                        
                         $("#create-button-sync-sap-mutasi").hide();
-                        $("#button-trasfer-mutasi").hide();
-                        if(document.getElementById('button-trasfer-mutasi')){
-                            document.getElementById('button-trasfer-mutasi').style.visibility = 'hidden';
-                        }
+                        $("#create-button-trasfer-mutasi").hide();
+                        $(".button-trasfer-mutasi").hide();
+                        $(".button-approved-mutasi").attr("disabled", false); 
+                        $(".button-approved-mutasi").show();
                     }
                 }
                 
-                if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
+                if(data.cek_reject==0){$(".button-approved-mutasi").show();}
                         // $(".button-reject").attr("disabled", true); 
                         $(".button-reject-mutasi").hide(); 
 
@@ -4708,7 +4708,7 @@
                         });
 
                         $("#create-button-sync-sap-mutasi").hide();
-                        $(".button-approve-mutasi").show();
+                        // $(".button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
@@ -4774,8 +4774,8 @@
                         });
                         
                         $("#create-button-transfer-mutasi").hide();
-                        $("#button-trasfer-mutasi").hide();
-                        $(".button-approve-mutasi").show();
+                        $(".button-trasfer-mutasi").hide();
+                        // $(".button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
