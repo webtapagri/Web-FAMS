@@ -4509,6 +4509,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             }
             else 
             {
+                $user_id = Session::get('user_id');
                 DB::beginTransaction();
 
                 try 
