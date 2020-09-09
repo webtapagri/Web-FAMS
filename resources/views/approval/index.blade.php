@@ -765,7 +765,7 @@
 
                 <?php if($user_role != 'Super Administrator'){ if($data['outstanding'] != 0 ){ ?>
                     <!-- <span class="button-approve-mutasi"> -->
-                        <button type="button" class="btn btn-flat label-danger button-approved-mutasi" OnClick="changeStatusMutasi('A')" style="margin-right: 5px;">APPROVE</button>
+                        <button type="button" class="btn btn-flat label-danger button-approved-mutasi" id="button-approved-mutasi" OnClick="changeStatusMutasi('A')" style="margin-right: 5px;">APPROVE</button>
                     <!-- </span> -->
                     <button type="button" class="btn btn-flat label-danger button-reject-mutasi" OnClick="changeStatusMutasi('R')" style="margin-right: 5px;">REJECT</button>
                 <?php }
@@ -4205,9 +4205,9 @@
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
                 
-                // if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
-                //         // $(".button-reject").attr("disabled", true); 
-                //         $(".button-reject-mutasi").hide(); 
+                if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
+                        // $(".button-reject").attr("disabled", true); 
+                        $(".button-reject-mutasi").hide(); 
                 if(data.sync_sap != '')
                 {
                     $("#create-button-sync-sap-mutasi").show();
@@ -4215,6 +4215,7 @@
                     
                     <?php if( $user_role == 'AC' ){ ?>
                         $(".button-approved-mutasi").hide();
+                        $(".button-approved-mutasi").attr("disabled", true); 
                         $(".button-reject-mutasi").attr("disabled", false); 
                     <?php } ?>
                 }
@@ -4223,13 +4224,14 @@
                     console.log(data.transfer);
                     if(data.transfer == 0)
                     {
-                        $(".button-approved-mutasi").hide();
                         $(".button-reject-mutasi").hide(); 
-                        $(".button-approved-mutasi").attr("disabled", true); 
                         $("#create-button-trasfer-mutasi").show();
                         <?php if( $user_role == 'AMS' ){ ?>  
                         $("#create-button-trasfer-mutasi").html('<button type="button"  class="btn btn-flat label-danger button-trasfer-mutasi" id="button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
                         <?php } ?>
+                        
+                        $(".button-approved-mutasi").hide();
+                        $(".button-approved-mutasi").attr("disabled", true); 
                         
                     }
                     else{
@@ -4241,10 +4243,10 @@
                     }
                 }
                 
-                if(data.cek_reject==0){$(".button-approved-mutasi").show();
-                        $(".button-approved-mutasi").attr("disabled", false); }
-                        // $(".button-reject").attr("disabled", true); 
-                        $(".button-reject-mutasi").hide(); 
+                // if(data.cek_reject==0){$(".button-approved-mutasi").show();
+                //         $(".button-approved-mutasi").attr("disabled", false); }
+                //         // $(".button-reject").attr("disabled", true); 
+                //         $(".button-reject-mutasi").hide(); 
 
                 /*
                 $("#create-button-sync-sap").hide();
