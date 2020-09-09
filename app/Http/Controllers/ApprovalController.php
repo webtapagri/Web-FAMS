@@ -846,9 +846,10 @@ class ApprovalController extends Controller
         {
             foreach($dt as $k => $v)
             {
-                $list_kode_asset .= $v->KODE_ASSET_SAP.",";
+                // $list_kode_asset .= $v->KODE_ASSET_SAP.",";
+                $list_kode_asset .= $v->KODE_ASSET_AMS.",";
             }
-            $result = array('status'=>false,'message'=> 'Kode Aset Controller (KODE ASET SAP : '.rtrim($list_kode_asset,',').') belum diisi');
+            $result = array('status'=>false,'message'=> 'Kode Aset Controller (KODE ASET : '.rtrim($list_kode_asset,',').') belum diisi');
         }
         else
         {
