@@ -3720,7 +3720,7 @@
             // SAP
             var kode_asset_nilai = $("#request-form #kode_sap_tujuan-"+no_reg_item+"").val();
         }
-        
+        console.log("error");
 
         var param = '';
 
@@ -4186,6 +4186,9 @@
                 <?php // }?>
                 var costcenter = data.cost_center;
                 var po_type = data.po_type;
+                if(po_type == ""){
+                    po_type = 0;
+                }
                 $("#request-form #no-reg").val(data.no_reg);
                 $("#request-form #type-transaksi").val(data.type_transaksi);
                 $("#request-form #po-type").val(data.po_type);
