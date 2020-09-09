@@ -511,7 +511,7 @@
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">POSTING DATE</label>
                                     <div class="col-md-6">
-                                            <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date" readonly>
+                                            <input id="posting_date" placeholder="posting date" type="text" class="form-control" name="posting_date" readonly>
                                     </div>
                                 </div> 
                                 <?php } ?>
@@ -610,7 +610,7 @@
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">POSTING DATE</label>
                                     <div class="col-md-6">
-                                        <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date" readonly>
+                                        <input id="posting_date" placeholder="posting date" type="text" class="form-control" name="posting_date" readonly>
                                     </div>
                                 </div>
                                 <?php } ?>
@@ -1672,6 +1672,7 @@
                 $("#request-form #kode-vendor").val(data.kode_vendor);
                 $("#request-form #nama-vendor").val(data.nama_vendor);
                 $("#request-form #cost-center").val(data.cost_center);
+                $("#request-form #posting_date").val(data.posting_date);
 
                 $("#create-button-sync-sap").hide();
                 if(data.cek_reject==0){$("#button-approve").show();}
@@ -3207,6 +3208,7 @@
                 $("#request-form-history #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form-history #kode-vendor").val(data.kode_vendor);
                 $("#request-form-history #nama-vendor").val(data.nama_vendor);
+                $("#request-form-history #posting_date").val(data.posting_date);
 
                 var item = '<table class="table xtable-condensed table-responsive table-striped" id="request-item-table" style="font-size:13px">';
                 item += '<th>NO.</th>';
@@ -4083,6 +4085,7 @@
                 $("#request-form-history #nama-vendor").val(data.nama_vendor);
                 $("#request-form-history #ba-tujuan").val(data.ba_tujuan);
                 $("#request-form-history #cost-center").val(costcenter);
+                $("#request-form-history #posting_date").val(data.posting_date);
 
                 var item = '<table class="table xtable-condensed table-responsive table-striped" id="request-item-table" style="font-size:13px">';
                 item += '<th>NO.</th>';
@@ -4201,6 +4204,7 @@
                 $("#request-form #cost-center-old").val(data.cost_center);
                 $("#request-form #ba-tujuan").val(data.ba_tujuan);
                 $("#request-form #kode-asset-ams").val(data.kode_asset_ams);
+                $("#request-form #posting_date").val(data.posting_date);
 
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
@@ -4529,12 +4533,14 @@
                 } 
         }
         
-                if(jenis_asset_tujuan.includes("")){
-                    if(update_jenis_asset() ==  false ){
-                        return false
-                    }
+        <?php if($user_role == 'AMS'){ ?> 
+            if(jenis_asset_tujuan.includes("")){
+                if(update_jenis_asset() ==  false ){
+                    return false
                 }
-            
+            }
+        <?php } ?>    
+
             if(area_code.includes(tujuan)){
                 if(update_pic() ==  false ){
                     return false;

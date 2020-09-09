@@ -661,29 +661,34 @@ class ApprovalController extends Controller
        
         DB::beginTransaction();
 
-        try 
-        {   
-            $updated_at = date("Y-m-d H:i:s");  
-            
-        $case_jenis_asset = "";  
-        $sql ="";      
-            for($i=0;$i<count($kode_asset_ams);$i++){
-                $case_jenis_asset .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$jenis_asset[$i]' ";
-                $case_asset_group .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$group[$i]' ";
-                $case_asset_subgroup .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$subgroup[$i]' ";
-            }
-            $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL 
-                        SET jenis_asset_tujuan = (case $case_jenis_asset end) ,
-                        group_tujuan = (case $case_asset_group end) ,
-                        sub_group_tujuan = (case $case_asset_subgroup end)
-                        WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
+        if($jenis_asset != null or $jenis_asset != ""){
+            try 
+            {   
+                $updated_at = date("Y-m-d H:i:s");  
+                
+            $case_jenis_asset = "";  
+            $sql ="";      
+                for($i=0;$i<count($kode_asset_ams);$i++){
+                    $case_jenis_asset .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$jenis_asset[$i]' ";
+                    $case_asset_group .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$group[$i]' ";
+                    $case_asset_subgroup .= " when kode_asset_ams = '$kode_asset_ams[$i]' then '$subgroup[$i]' ";
+                }
+                $sql .= " UPDATE TR_MUTASI_ASSET_DETAIL 
+                            SET jenis_asset_tujuan = (case $case_jenis_asset end) ,
+                            group_tujuan = (case $case_asset_group end) ,
+                            sub_group_tujuan = (case $case_asset_subgroup end)
+                            WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
 
-            DB::UPDATE($sql);
-            DB::commit();
-            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($jenis_asset ? 'updated' : 'update')]);
-        } catch (\Exception $e) {
-            DB::rollback();
-            return response()->json(['status' => false, "message" => $e->getMessage()]);
+                DB::UPDATE($sql);
+                DB::commit();
+                return response()->json(['status' => true, "message" => 'Data is successfully ' . ($jenis_asset ? 'updated' : 'update')]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response()->json(['status' => false, "message" => $e->getMessage()]);
+            }
+        }else{
+            return response()->json(['status' => true, "message" => '']);
+
         }
     }
 
@@ -3345,7 +3350,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         $records = array();
 
-        $sql = " SELECT a.*, date_format(a.tanggal_reg,'%d-%m-%Y') AS TANGGAL_REG, b.description_code AS CODE_AREA, b.description AS NAME_AREA, c.name AS REQUESTOR , d.DESCRIPTION AS COST_CENTER, e.NO_FICO AS NO_FICO
+        $sql = " SELECT a.*, date_format(a.tanggal_reg,'%d-%m-%Y') AS TANGGAL_REG, b.description_code AS CODE_AREA, b.description AS NAME_AREA, c.name AS REQUESTOR , d.DESCRIPTION AS COST_CENTER, e.NO_FICO AS NO_FICO, e.POSTING_DATE AS POSTING_DATE
                     FROM TR_DISPOSAL_ASSET a 
                         LEFT JOIN TM_GENERAL_DATA b ON a.business_area = b.description_code AND b.general_code = 'plant'
                         LEFT JOIN TR_DISPOSAL_ASSET_DETAIL e ON a.NO_REG = e.NO_REG  
@@ -3387,6 +3392,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'transfer' => $this->validasi_transfer($noreg,$role_id),
                     'cost_center' => trim($v->COST_CENTER),
+                    'posting_date' => DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d'), 
                     'no_fico' => trim($v->NO_FICO),
                 );
 
@@ -3661,7 +3667,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $role_id = Session::get('role_id');
 
         $records = array();
-        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,
+        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,h.POSTING_DATE AS POSTING_DATE,
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
        SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET ,f.PO_TYPE
                             FROM TR_MUTASI_ASSET a
@@ -3708,6 +3714,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'kode_vendor' => '', //trim($v->KODE_VENDOR),
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'cost_center' => $v->COST_CENTER, 
+                    'posting_date' => DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d'), 
                     'kode_asset_ams' => $v->KODE_ASSET_AMS, 
                     'ba_tujuan' => $v->BA_TUJUAN, 
                     'new_asset' => $this->get_new_asset($noreg),
