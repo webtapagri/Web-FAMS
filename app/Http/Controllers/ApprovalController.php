@@ -4487,7 +4487,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {   
-                    //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
+                    //1. UPDATE NO FICO  TR_REG_ASSET 
                     $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                     //2. INSERT LOG
@@ -4512,7 +4512,10 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
 
                 try 
-                {    
+                {    //1. UPDATE NO FICO  TR_REG_ASSET 
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    DB::UPDATE($sql_1);
+                   
                     $create_date = date("Y-m-d H:i:s");
                     $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_MUTASI}','','{$dt->NO_REG_ITEM}','".$data->item->TYPE."','".$data->item->ID."','".$data->item->NUMBER."','".$data->item->MESSAGE."','".$data->item->MESSAGE_V1."','".$data->item->MESSAGE_V2."','".$data->item->MESSAGE_V3."','".$data->item->MESSAGE_V4."','".$create_date."') ";
                     
