@@ -4241,7 +4241,8 @@
                     }
                 }
                 
-                if(data.cek_reject==0){$(".button-approved-mutasi").show();}
+                if(data.cek_reject==0){$(".button-approved-mutasi").show();
+                        $(".button-approved-mutasi").attr("disabled", false); }
                         // $(".button-reject").attr("disabled", true); 
                         $(".button-reject-mutasi").hide(); 
 
@@ -4710,6 +4711,7 @@
                         $("#create-button-sync-sap-mutasi").hide();
                         // $(".button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
+                        $(".button-approved-mutasi").attr("disabled", false); 
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
                     else 
@@ -4777,6 +4779,7 @@
                         $(".button-trasfer-mutasi").hide();
                         // $(".button-approve-mutasi").show();
                         $(".button-approved-mutasi").show();
+                        $(".button-approved-mutasi").attr("disabled", false); 
                         $(".button-reject-mutasi").attr("disabled", true); 
                     } 
                     else 
