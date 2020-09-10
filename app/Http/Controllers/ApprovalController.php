@@ -3100,7 +3100,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $role_name = Session::get('role'); //get role id user
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
         
-        $posting_date = DATE_FORMAT(date_create($req['posting_date']), 'Y-m-d');
+        $posting_date = DATE_FORMAT(date_create($request->posting_date), 'Y-m-d');
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
         // $last_email_approve = $this->get_last_email_approve($no_registrasi);
@@ -3803,8 +3803,6 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $req = $request->all();
         $jenis_dokumen = $req['po-type'];
-        
-        $posting_date = DATE_FORMAT(date_create($req['posting_date']), 'Y-m-d');
 
         $rolename = Session::get('role');
         $asset_type = "";
@@ -3883,7 +3881,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     try 
                     {   
                         
-                        $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}',POSTING_DATE = '{$posting_date}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
+                        $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
                         //echo $sql; die();
                         DB::UPDATE($sql);
                         DB::commit();
