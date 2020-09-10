@@ -4557,7 +4557,7 @@
             var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
             var no_registrasi= getnoreg.replace(/\//g, '-');
             var specification = $("#specification-mutasi-approval").val();
-            var specification = $("#posting_date").val();
+            var posting_date = $("#posting_date").val();
 
             if( status == 'A' ){ status_desc = 'approve'; }else
             if( status == 'R' )
