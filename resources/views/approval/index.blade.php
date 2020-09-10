@@ -1566,11 +1566,10 @@
             // var jenis_asset_group = $("#jenis_asset_group-"+noreg+"").val();
             // var jenis_asset_subgroup = $("#jenis_asset_subgroup-"+noreg+"").val();
 
-            console.log(jenis_asset);
             jns_asset.push(jenis_asset);
             group.push(jenis_asset_group);
             subgroup.push(jenis_asset_subgroup);
-            console.log(jenis_asset);
+
             if( $.trim(jenis_asset) == "" )
             {
                 notify({
@@ -1598,6 +1597,13 @@
             }                
             no++;
         } 
+
+        // notify({
+        //             type: 'warning',
+        //             message: jenis_asset
+        //         });
+        // return false; //debug
+
         var input3 = document.getElementsByName('kode_asset_ams[]'); 
         var kode_asset_ams = [];
     
@@ -4214,7 +4220,6 @@
                 if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                         // $(".button-reject").attr("disabled", true); 
                         $(".button-reject-mutasi").hide(); 
-                        console.log("sync="+data.sync_sap);
                 if(data.sync_sap != '')
                 {
                     $("#create-button-sync-sap-mutasi").show();
@@ -4541,9 +4546,9 @@
         }
         
         <?php if($user_role == 'AMS'){ ?> 
-            if(jenis_asset_tujuan.includes("")){
+            if(!jenis_asset_tujuan.includes("")){
                 if(update_jenis_asset() ==  false ){
-                    return false
+                    return false;
                 }
             }
         <?php } ?>    
