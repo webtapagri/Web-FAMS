@@ -4868,6 +4868,7 @@
                         $("#button-trasfer-disposal").hide();
                         $("#create-button-sync-sap").hide();
                         $("#button-approve").show();
+                        $(".button-reject").hide();
                         // $(".button-reject").attr("disabled", true); 
                     } 
                     else 
