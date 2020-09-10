@@ -3375,7 +3375,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
             foreach ($data as $k => $v) 
             {
-               if($v->POSTING_DATE != null or $v->POSTING_DATE == ""){
+               if($v->POSTING_DATE != null or $v->POSTING_DATE != ""){
                     $posting_date = DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d');
                } 
                 $records[] = array(
@@ -3700,7 +3700,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             
             foreach ($data as $k => $v) 
             {
-                if($v->POSTING_DATE != null or $v->POSTING_DATE == ""){
+                if($v->POSTING_DATE != null or $v->POSTING_DATE != ""){
                     $posting_date = DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d');
                 } 
                 $records[] = array(
