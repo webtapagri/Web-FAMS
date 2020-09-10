@@ -1689,7 +1689,7 @@
                     if(data.transfer == 0)
                     {
                         $(".button-approved").hide();
-                        $(".button-reject").hide(); 
+                        $(".button-reject").show(); 
                         // $("#create-button-trasfer-disposal").show();
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" id="button-trasfer-disposal" style="visibility: visible" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                     
