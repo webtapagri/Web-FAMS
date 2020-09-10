@@ -3348,6 +3348,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $role_id = Session::get('role_id');
 
         $records = array();
+        $posting_date = "";
 
         $sql = " SELECT a.*, date_format(a.tanggal_reg,'%d-%m-%Y') AS TANGGAL_REG, b.description_code AS CODE_AREA, b.description AS NAME_AREA, c.name AS REQUESTOR , d.DESCRIPTION AS COST_CENTER, e.NO_FICO AS NO_FICO, e.POSTING_DATE AS POSTING_DATE
                     FROM TR_DISPOSAL_ASSET a 
@@ -3374,6 +3375,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
             foreach ($data as $k => $v) 
             {
+               if($v->POSTING_DATE != null or $v->POSTING_DATE == ""){
+                    $posting_date = DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d');
+               } 
                 $records[] = array(
                     'no_reg' => trim($v->NO_REG),
                     'type_transaksi' => '',//trim($type_transaksi[$v->TYPE_TRANSAKSI]),
@@ -3391,7 +3395,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'transfer' => $this->validasi_transfer($noreg,$role_id),
                     'cost_center' => trim($v->COST_CENTER),
-                    'posting_date' => DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d'), 
+                    'posting_date' => $posting_date, 
                     'no_fico' => trim($v->NO_FICO),
                 );
 
@@ -3664,7 +3668,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         //echo "<pre>"; print_r($id);die();
         $noreg = str_replace("-", "/", $id);
         $role_id = Session::get('role_id');
-
+        $posting_date = "";
         $records = array();
         $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,h.POSTING_DATE AS POSTING_DATE,
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
@@ -3696,6 +3700,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             
             foreach ($data as $k => $v) 
             {
+                if($v->POSTING_DATE != null or $v->POSTING_DATE == ""){
+                    $posting_date = DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d');
+                } 
                 $records[] = array(
                     'no_reg' => trim($v->NO_REG),
                     'type_transaksi' => trim($type_transaksi[$v->TYPE_TRANSAKSI]),
@@ -3713,7 +3720,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'kode_vendor' => '', //trim($v->KODE_VENDOR),
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'cost_center' => $v->COST_CENTER, 
-                    'posting_date' => DATE_FORMAT(date_create($v->POSTING_DATE), 'Y-m-d'), 
+                    'posting_date' => $posting_date, 
                     'kode_asset_ams' => $v->KODE_ASSET_AMS, 
                     'ba_tujuan' => $v->BA_TUJUAN, 
                     'new_asset' => $this->get_new_asset($noreg),
