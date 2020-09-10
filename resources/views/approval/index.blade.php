@@ -1685,23 +1685,26 @@
                 $(".button-reject").show(); 
 
                 console.log(data.transfer);
+                <?php if( $user_role == 'AMS'){?>
                     if(data.transfer == 0)
                     {
-                        $("#create-button-trasfer-disposal").hide();
-                        $("#button-trasfer-disposal").hide();
-                        if(document.getElementById('button-trasfer-disposal')){
-                            document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
-                        }
-                        if(data.cek_reject==0){$(".button-approved").show();}
-                        $(".button-reject").show();  
-                       }else{
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 
                         // $("#create-button-trasfer-disposal").show();
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" id="button-trasfer-disposal" style="visibility: visible" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                     
+                     
+                    }else{
+                        $("#create-button-trasfer-disposal").hide();
+                        $("#button-trasfer-disposal").hide();
+                        if(document.getElementById('button-trasfer-disposal')){
+                            document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
+                        }
+                        // if(data.cek_reject==0){$(".button-approved").show();}
+                        // $(".button-reject").show(); 
                     }
-                    
+                <?php } ?>
+
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
                 item += '<th>NO.</th>';
                 item += '<th>KODE ASSET AMS</th>';

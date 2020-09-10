@@ -2463,12 +2463,11 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
     function validasi_transfer($noreg,$role_id)
     {
         $sql = " SELECT COUNT(*) AS JML FROM TR_APPROVAL b LEFT JOIN TR_WORKFLOW_JOB c ON b.workflow_detail_code = c.workflow_detail_code
-                LEFT JOIN TR_WORKFLOW_DETAIL d ON b.workflow_detail_code = d.workflow_detail_code 
-                LEFT JOIN v_history e ON b.document_code = e.document_code
-                where 
-                b.document_code = '{$noreg}' and d.workflow_group_name like '%Complete%' and b.execution_status = ''
-                and c.id_role = '{$role_id}' and e.status_approval != 'Ajukan' ";  //1-> ams transfer 0->access denied
-                    // 19 : Complete Disposal; 23: Complete Disposal Rusak; 27: Complet Disposal Penjualan
+        LEFT JOIN TR_WORKFLOW_DETAIL d ON b.workflow_detail_code = d.workflow_detail_code 
+        LEFT JOIN v_history e ON b.document_code = e.document_code
+                        LEFT JOIN TR_DISPOSAL_ASSET_DETAIL f ON f.NO_REG= e.document_code
+        where 
+        b.document_code = '{$noreg}' and d.workflow_group_name like '%Complete%' and b.execution_status = '' and f.NO_FICO = '' ";
         $data = DB::SELECT($sql); 
         return $data[0]->JML;
     }
