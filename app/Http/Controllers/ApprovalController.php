@@ -2467,7 +2467,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         LEFT JOIN v_history e ON b.document_code = e.document_code
                         LEFT JOIN TR_DISPOSAL_ASSET_DETAIL f ON f.NO_REG= e.document_code
         where 
-        b.document_code = '{$noreg}' and d.workflow_group_name like '%Complete%' and b.execution_status = '' and f.NO_FICO = '' ";
+        b.document_code = '{$noreg}' and d.workflow_group_name like '%Complete%' and b.execution_status = '' and f.NO_FICO = '' and e.status_approval != 'Ajukan' ";
         $data = DB::SELECT($sql); 
         return $data[0]->JML;
     }
