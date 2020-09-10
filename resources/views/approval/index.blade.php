@@ -1682,7 +1682,7 @@
 
                 $("#create-button-sync-sap").hide();
                 if(data.cek_reject==0){$("#button-approve").show();}
-                $(".button-reject").show(); 
+                // $(".button-reject").show(); 
 
                 console.log(data.transfer);
                 <?php if( $user_role == 'AMS'){?>
