@@ -4212,6 +4212,7 @@
                 if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                         // $(".button-reject").attr("disabled", true); 
                         $(".button-reject-mutasi").hide(); 
+                        console.log("sync="+data.sync_sap);
                 if(data.sync_sap != '')
                 {
                     $("#create-button-sync-sap-mutasi").show();
@@ -4236,6 +4237,11 @@
                         
                         $(".button-approved-mutasi").hide();
                         $(".button-approved-mutasi").attr("disabled", true); 
+                        <?php if( $user_role == 'AC' ){ ?>
+                            $(".button-approved-mutasi").show();
+                            $(".button-approved-mutasi").attr("disabled", false); 
+                            $(".button-reject-mutasi").attr("disabled", false); 
+                        <?php } ?>
                         
                     }
                     else{
