@@ -1690,16 +1690,15 @@
                     {
                         $(".button-approved").hide();
                         $(".button-reject").show(); 
-                        // $("#create-button-trasfer-disposal").show();
-                        $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger" id="button-trasfer-disposal" style="visibility: visible" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
-                    
+                        $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" id="button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
+                        $("#create-button-trasfer-disposal").show();
+                        $(".button-trasfer-disposal").show(); 
                      
                     }else{
                         $("#create-button-trasfer-disposal").hide();
-                        $("#button-trasfer-disposal").hide();
-                        if(document.getElementById('button-trasfer-disposal')){
-                            document.getElementById('button-trasfer-disposal').style.visibility = 'hidden';
-                        }
+                        $(".button-trasfer-disposal").hide(); 
+                        if(data.cek_reject==0){$(".button-approved").show();}
+                        $(".button-reject").show(); 
                         // if(data.cek_reject==0){$(".button-approved").show();}
                         // $(".button-reject").show(); 
                     }
@@ -4869,7 +4868,7 @@
                         $("#button-trasfer-disposal").hide();
                         $("#create-button-sync-sap").hide();
                         $("#button-approve").show();
-                        $(".button-reject").attr("disabled", true); 
+                        // $(".button-reject").attr("disabled", true); 
                     } 
                     else 
                     {
