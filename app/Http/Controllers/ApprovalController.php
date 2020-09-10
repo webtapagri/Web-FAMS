@@ -3099,6 +3099,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $role_id = Session::get('role_id');
         $role_name = Session::get('role'); //get role id user
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
+        
+        $posting_date = DATE_FORMAT(date_create($req['posting_date']), 'Y-m-d');
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
         // $last_email_approve = $this->get_last_email_approve($no_registrasi);
@@ -3150,7 +3152,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {
-                    DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET POSTING_DATE = '{$req['posting_date']}' WHERE NO_REG = '".$no_registrasi."' "); 
+                    DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET POSTING_DATE = '{$posting_date}' WHERE NO_REG = '".$no_registrasi."' "); 
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$user_id.'")');
                     DB::commit();
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
@@ -3801,6 +3803,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     {
         $req = $request->all();
         $jenis_dokumen = $req['po-type'];
+        
+        $posting_date = DATE_FORMAT(date_create($req['posting_date']), 'Y-m-d');
 
         $rolename = Session::get('role');
         $asset_type = "";
@@ -3878,7 +3882,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::beginTransaction();
                     try 
                     {   
-                        $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}',POSTING_DATE = '{$req['posting_date']}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
+                        
+                        $sql = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_ASSET_CONTROLLER = '{$kac}',POSTING_DATE = '{$posting_date}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$noreg}' AND $kode_asset = '{$ksap}' ";
                         //echo $sql; die();
                         DB::UPDATE($sql);
                         DB::commit();
@@ -4454,6 +4459,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
+        
+        $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
         if( $dt->KODE_SAP_TUJUAN == '') 
@@ -4507,7 +4514,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. UPDATE NO FICO  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                     //2. INSERT LOG
                     $create_date = date("Y-m-d H:i:s");
@@ -4533,7 +4540,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 try 
                 {    //1. UPDATE NO FICO  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                    
                     $create_date = date("Y-m-d H:i:s");
@@ -4611,7 +4618,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."',POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                     DB::UPDATE($sql_1);
 
                     //2. INSERT LOG
@@ -4638,7 +4645,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 try 
                 {     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                     DB::UPDATE($sql_1);
 
                     $create_date = date("Y-m-d H:i:s");
@@ -4667,6 +4674,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
         $COBL_KOSTL = $dt->COST_CENTER_GL;
+        
+        $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
             
@@ -4700,7 +4709,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                     //2. INSERT LOG
                     $create_date = date("Y-m-d H:i:s");
@@ -4800,7 +4809,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                     DB::UPDATE($sql_1);
  
                     //2. INSERT LOG
