@@ -3763,6 +3763,8 @@
                             message: result.message
                         });
                         //setTimeout(reload_page, 1000); 
+                        $('#approve-mutasi-modal').modal('show');
+                        // $("#approve-mutasi-modal").load(" #approve-mutasi-modal");
                     } 
                     else 
                     {
@@ -4233,10 +4235,9 @@
                         $("#create-button-trasfer-mutasi").show();
                         <?php if( $user_role == 'AMS' ){ ?>  
                         $("#create-button-trasfer-mutasi").html('<button type="button"  class="btn btn-flat label-danger button-trasfer-mutasi" id="button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
-                        <?php } ?>
-                        
                         $(".button-approved-mutasi").hide();
                         $(".button-approved-mutasi").attr("disabled", true); 
+                        <?php } ?>
                         <?php if( $user_role == 'AC' ){ ?>
                             $(".button-approved-mutasi").show();
                             $(".button-approved-mutasi").attr("disabled", false); 
@@ -4786,7 +4787,8 @@
                             type: 'success',
                             message: result.message
                         });
-                        
+                        $('#approve-mutasi-modal').modal('show');
+                        // $("#approve-mutasi-modal").load(" #approve-mutasi-modal");
                         $("#create-button-transfer-mutasi").hide();
                         $(".button-trasfer-mutasi").hide();
                         // $(".button-approve-mutasi").show();
@@ -4853,7 +4855,8 @@
                             type: 'success',
                             message: result.message
                         });
-
+                        $('#approve-disposal-modal').modal('show');
+                        // $("#approve-disposal-modal").load(" #approve-disposal-modal");
                         $("#create-button-trasfer-disposal").hide();
                         $("#button-trasfer-disposal").hide();
                         $("#create-button-sync-sap").hide();
