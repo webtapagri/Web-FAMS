@@ -3112,7 +3112,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         //     }
         // }
 
-        if( $validasi_last_approve == 0 )
+        // if( $validasi_last_approve == 0 )
+        if( $validasi_last_approve <> 0 )
         {
             DB::beginTransaction();
             
@@ -3186,7 +3187,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
         //echo "2<pre>"; print_r($validasi_last_approve); die();
 
-        if( $validasi_last_approve == 0 )
+        if( $validasi_last_approve <> 0 )
+        // if( $validasi_last_approve == 0 )
         {
             DB::beginTransaction();
             
