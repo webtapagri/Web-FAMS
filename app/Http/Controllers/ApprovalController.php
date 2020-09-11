@@ -3096,7 +3096,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $role_name = Session::get('role'); //get role id user
         $asset_controller = $this->get_ac($no_registrasi); //get asset controller 
         
-        $posting_date = DATE_FORMAT(date_create($request->posting_date), 'Y-m-d');
+        // $posting_date = DATE_FORMAT(date_create($request->posting_date), 'Y-m-d');
     
         $validasi_last_approve = $this->get_validasi_last_approve($no_registrasi);
         // $last_email_approve = $this->get_last_email_approve($no_registrasi);
@@ -3148,7 +3148,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {
-                    DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET POSTING_DATE = '{$posting_date}' WHERE NO_REG = '".$no_registrasi."' "); 
+                    // DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET POSTING_DATE = '{$posting_date}' WHERE NO_REG = '".$no_registrasi."' "); 
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$user_id.'")');
                     DB::commit();
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
