@@ -1708,6 +1708,8 @@
                         $(".button-reject").hide(); 
                     }
                     else{
+                        $("#create-button-trasfer-disposal").hide();
+                        $(".button-trasfer-disposal").hide(); 
                         if(data.cek_reject==0){$(".button-approved").show();}
                         $(".button-reject").show(); 
                     }
