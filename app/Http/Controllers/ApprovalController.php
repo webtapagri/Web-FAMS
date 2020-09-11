@@ -661,7 +661,6 @@ class ApprovalController extends Controller
        
         DB::beginTransaction();
 
-        if($req->jenis_asset == "" or $req->jenis_asset == null){
             try 
             {   
                 $updated_at = date("Y-m-d H:i:s");  
@@ -678,8 +677,6 @@ class ApprovalController extends Controller
                             group_tujuan = (case $case_asset_group end) ,
                             sub_group_tujuan = (case $case_asset_subgroup end)
                             WHERE kode_asset_ams in ('$kode_ams') AND no_reg = '$no_registrasi' ";
-                
-                return response()->json(['status' => false, "message" => $sql]);
         
                 DB::UPDATE($sql);
                 DB::commit();
@@ -688,10 +685,6 @@ class ApprovalController extends Controller
                 DB::rollback();
                 return response()->json(['status' => false, "message" => $e->getMessage()]);
             }
-        }else{
-            return response()->json(['status' => true, "message" => '']);
-
-        }
     }
 
 

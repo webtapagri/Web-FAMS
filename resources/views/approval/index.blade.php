@@ -1612,9 +1612,9 @@
         }   
 
 
-        console.log(jns_asset);
-        console.log(group);
-        console.log(subgroup);
+        // console.log(jns_asset);
+        // console.log(group);
+        // console.log(subgroup);
         // return false;
        
         if(confirm('Confirm Jenis Asset ?'))
