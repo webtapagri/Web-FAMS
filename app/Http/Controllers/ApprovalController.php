@@ -4381,7 +4381,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $kode_ams = @$request->kode_asset_ams;
         
         $RAIFP1_BUDAT = date_format(date_create(@$request->posting_date), 'd.m.Y');
-        $RAIFP2_MONAT = date_format(date_create(@$request->posting_d), 'm');
+        $RAIFP2_MONAT = date_format(date_create(@$request->posting_date), 'm');
         // dd($no_reg);
 
         $sql = " SELECT a.*, date_format(a.CREATED_AT,'%d.%m.%Y') AS CREATED_AT, date_format(a.UPDATED_AT,'%d.%m.%Y') AS UPDATED_AT, b.*, a.NO_REG AS NO_REG_DISPOSAL,d.DESCRIPTION as COST_CENTER_GL FROM TR_DISPOSAL_ASSET_DETAIL a 
@@ -4689,7 +4689,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $service = API::exec(array(
             'request' => 'GET',
             'host' => 'ldap',
-            'method' => "disposal_asset?ANLA_BUKRS={$ANLA_BUKRS}&ANLA_ANLN1={$ANLN1}&ANLA_ANLN2={$ANLN2}&ANLP_AFABE=01&ANLC_GJAHR={$YEAR}&RAIFP1_BUDAT={$RAIFP1_BUDAT}&RAIFP2_MONAT={$RAIFP2_MONAT}&ANLZ_GSBER={$ANLZ_GSBER}&COBL_KOSTL={$COBL_KOSTL}&RAIFP2_SGTXT={$dt->NO_REG}", 
+            'method' => "disposal_asset?ANLA_BUKRS={$ANLA_BUKRS}&ANLA_ANLN1={$ANLN1}&ANLA_ANLN2={$ANLN2}&ANLP_AFABE=01&ANLC_GJAHR={$YEAR}&RAIFP1_BUDAT={$RAIFP1_BUDAT}&RAIFP2_MONAT={$RAIFP2_MONAT}&ANLZ_GSBER={$ANLZ_GSBER}&COBL_KOSTL={$COBL_KOSTL}&RAIFP2_SGTXT={$dt->NO_REG_DISPOSAL}", 
         ));
 
         $data = $service;
