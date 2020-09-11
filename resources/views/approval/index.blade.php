@@ -1610,6 +1610,12 @@
         for (var i = 0; i < input3.length/2; i++) { 
             kode_asset_ams.push(input3[i+input3.length/2].value); 
         }   
+
+
+        console.log(jns_asset);
+        console.log(group);
+        console.log(subgroup);
+        // return false;
        
         if(confirm('Confirm Jenis Asset ?'))
         {
@@ -1682,11 +1688,12 @@
 
                 $("#create-button-sync-sap").hide();
                 if(data.cek_reject==0){$("#button-approve").show();}
-                // $(".button-reject").show(); 
+                $(".button-reject").show(); 
 
                 console.log(data.transfer);
                 <?php if( $user_role == 'AMS'){?>
-                    if(data.transfer == 0)
+                console.log(data.transfer);
+                    if(data.transfer == 1)
                     {
                         $(".button-approved").hide();
                         $(".button-reject").show(); 
@@ -1694,13 +1701,15 @@
                         $("#create-button-trasfer-disposal").show();
                         $(".button-trasfer-disposal").show(); 
                      
-                    }else{
+                    }else if(data.transfer == 0){
                         $("#create-button-trasfer-disposal").hide();
                         $(".button-trasfer-disposal").hide(); 
                         if(data.cek_reject==0){$(".button-approved").show();}
                         $(".button-reject").hide(); 
-                        // if(data.cek_reject==0){$(".button-approved").show();}
-                        // $(".button-reject").show(); 
+                    }
+                    else{
+                        if(data.cek_reject==0){$(".button-approved").show();}
+                        $(".button-reject").show(); 
                     }
                 <?php } ?>
 
@@ -4377,14 +4386,10 @@
                                     item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
                         item += "<input type='hidden' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
-                        console.log(val.jenis_asset_tujuan);
                         
                         item += "<td>" + val.kode_asset_ams_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_asset_ams_tujuan-"+val.no_reg_item+"' id='kode_asset_ams_tujuan-"+val.no_reg_item+"' value='"+ val.kode_asset_ams_tujuan +"'></td>";
                         item += "<td>" + val.kode_sap_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_sap_tujuan-"+val.no_reg_item+"' id='kode_sap_tujuan-"+val.no_reg_item+"' value='"+ val.kode_sap_tujuan +"'></td>";
-                        // item += "<td>" + val.group + "</td>";
-                        // item += "<td>" + val.sub_group + "</td>";
-                        console.log(val.group_tujuan);
-                        console.log(val.sub_group_tujuan);
+                        
                         item += "<td>" + val.asset_controller + "</td>";
                         <?php if( $user_role == 'AC' ){ ?>
         
