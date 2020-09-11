@@ -2467,7 +2467,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         $sql = "SELECT count(*) AS JML FROM TR_APPROVAL a LEFT JOIN TR_APPROVAL_DETAIL b ON a.approval_code = b.approval_code
                 left join TR_WORKFLOW_DETAIL c ON c.workflow_detail_code = a.workflow_detail_code and c.workflow_group_name like '%Complete%' 
                 left join TR_WORKFLOW_JOB e ON c.workflow_detail_code = e.workflow_detail_code and a.seq = e.seq and e.id_role = b.role_id
-                left join TR_DISPOSAL_ASSET_DETAIL d ON d.NO_REG = a.document_code 
+                left join TR_DISPOSAL_ASSET_DETAIL d ON d.NO_REG = a.document_code and d.NO_FICO = ''
                 where a.document_code = '{$noreg}' and b.role_id = '{$role_id}' 
                 and b.user_id = '{$user_id}' and a.execution_status = '' ";
         $data = DB::SELECT($sql); 
