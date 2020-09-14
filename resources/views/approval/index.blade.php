@@ -1693,26 +1693,22 @@
                 console.log(data.transfer);
                 <?php if( $user_role == 'AMS'){?>
                 console.log(data.transfer);
+                if(data.no_fico == ''){
                     if(data.transfer == 1)
                     {
                         $(".button-approved").hide();
-                        $(".button-reject").show(); 
+                        $(".button-reject").hide(); 
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" id="button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                         $("#create-button-trasfer-disposal").show();
                         $(".button-trasfer-disposal").show(); 
                      
-                    }else if(data.transfer == 0){
+                    }
+                }else{
                         $("#create-button-trasfer-disposal").hide();
                         $(".button-trasfer-disposal").hide(); 
                         if(data.cek_reject==0){$(".button-approved").show();}
                         $(".button-reject").hide(); 
-                    }
-                    else{
-                        $("#create-button-trasfer-disposal").hide();
-                        $(".button-trasfer-disposal").hide(); 
-                        if(data.cek_reject==0){$(".button-approved").show();}
-                        $(".button-reject").show(); 
-                    }
+                }
                 <?php } ?>
 
                 var item = '<table class="table table-responsive table-striped" id="request-item-table" style="font-size:13px">';
