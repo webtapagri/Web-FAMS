@@ -400,13 +400,14 @@
                                         <input type="text" class="form-control input-sm" value="" id="cost-center" name="cost-center" readonly >
                                     </div>
                                 </div>
-                                
+                                <span id="posting_date_ams">
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">POSTING DATE</label>
                                     <div class="col-md-6">
                                             <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date">
                                     </div>
                                 </div> 
+                                </span>
                                 <?php } ?>
                                 
                             </div>
@@ -1698,12 +1699,15 @@
                     {
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 
+                        $("#posting_date_ams").show(); 
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" id="button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                         $("#create-button-trasfer-disposal").show();
                         $(".button-trasfer-disposal").show(); 
-                     
+                    }else{
+                        $("#posting_date_ams").hide(); 
                     }
                 }else{
+                        $("#posting_date_ams").show(); 
                         $("#create-button-trasfer-disposal").hide();
                         $(".button-trasfer-disposal").hide(); 
                         if(data.cek_reject==0){$(".button-approved").show();}
