@@ -4454,6 +4454,10 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
     public function transfer_mutasi_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT) 
     {
 
+        
+        $result = array('status'=>'error','message'=>$dt);
+        return $result;
+
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
@@ -4521,7 +4525,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                     DB::commit();
                   
-                    DB::STATEMENT($sql_3);
+                    // DB::STATEMENT($sql_3);
 
                     return true;
                 }
@@ -4547,8 +4551,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::INSERT($sql); 
                     DB::commit();
                     
-                    $result = array('status'=>'error','message'=> ''.$data->item->MESSAGE.' (No Reg Item: '.$dt->NO_REG_ITEM.')');
-                    return $result;                 
+                    if(strlen($data->item->MESSAGE_V2) == 10){
+                        return true;
+                    }else{
+                        $result = array('status'=>'error','message'=> ''.$data->item->MESSAGE.' (No Reg Item: '.$dt->NO_REG_ITEM.')');
+                        return $result;
+                    }               
                 }
                 catch (\Exception $e) 
                 {
@@ -4624,7 +4632,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_MUTASI}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
                     DB::INSERT($sql_2);
                     
-                    DB::STATEMENT($sql_3);
+                    // DB::STATEMENT($sql_3);
                     DB::commit();
 
                     return true;
@@ -4652,8 +4660,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     DB::INSERT($sql); 
                     DB::commit();
                     
-                    $result = array('status'=>'error','message'=> ''.$result['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
-                    return $result;                 
+                    
+                    if(strlen($result['MESSAGE_V2']) == 10){
+                        return true;
+                    }else{
+                        $result = array('status'=>'error','message'=> ''.$result['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
+                        return $result;
+                    }  
+                
                 }
                 catch (\Exception $e) 
                 {
