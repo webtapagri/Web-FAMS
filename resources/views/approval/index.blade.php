@@ -4255,6 +4255,17 @@
 
                 //VALIDASI SYNC VIEW SAP
                 //alert(data.sync_sap); 
+                var nofico = 0;
+                var totalfico = 0;
+                $.each(data.item_detail, function(key, val) 
+                {
+                    if(val.no_fico !== ''){
+                       nofico++;                        
+                    }
+                    totalfico++;
+                });
+                        console.log(totalfico); 
+                        console.log(nofico); 
                 
                 if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                         // $(".button-reject").attr("disabled", true); 
@@ -4277,7 +4288,7 @@
                 }
                 else
                 {
-                    console.log(data.transfer);                    
+                    console.log(data.transfer);                   
                     if(data.transfer == 0)
                     {
                         $(".button-reject-mutasi").hide(); 
@@ -4295,11 +4306,23 @@
                         
                     }
                     else{
-                        $("#create-button-sync-sap-mutasi").hide();
-                        $("#create-button-trasfer-mutasi").hide();
-                        $(".button-trasfer-mutasi").hide();
-                        $(".button-approved-mutasi").attr("disabled", false); 
-                        $(".button-approved-mutasi").show();
+                        if(nofico < totalfico)
+                        {
+                            $(".button-reject-mutasi").hide(); 
+                            $("#create-button-trasfer-mutasi").show();
+                            <?php if( $user_role == 'AMS' ){ ?>  
+                            $("#create-button-trasfer-mutasi").html('<button type="button"  class="btn btn-flat label-danger button-trasfer-mutasi" id="button-trasfer-mutasi" OnClick="transferAmountMutasi()" style="margin-right: 5px;">TRANSFER AMOUNT (MUTASI)</button>');
+                            $(".button-approved-mutasi").hide();
+                            $(".button-approved-mutasi").attr("disabled", true); 
+                            <?php } ?>
+                        }
+                        else{
+                            $("#create-button-sync-sap-mutasi").hide();
+                            $("#create-button-trasfer-mutasi").hide();
+                            $(".button-trasfer-mutasi").hide();
+                            $(".button-approved-mutasi").attr("disabled", false); 
+                            $(".button-approved-mutasi").show();
+                        }
                     }
                 }
                 

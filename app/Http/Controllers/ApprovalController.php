@@ -4453,10 +4453,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
     public function transfer_mutasi_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT) 
     {
-
-        
-        $result = array('status'=>'error','message'=>$dt);
-        return $result;
+        if($dt->NO_FICO != ''){
+            return true;
+        }
 
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
