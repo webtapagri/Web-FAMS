@@ -4269,7 +4269,7 @@
                 
                 if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                         // $(".button-reject").attr("disabled", true); 
-                        $(".button-reject-mutasi").hide(); 
+                    $(".button-reject-mutasi").show(); 
                 if(data.kode_asset_ams_tujuan == null || data.kode_asset_ams_tujuan == '' ){
                     $("#posting_date_ams_mutasi").hide(); 
                 }else{
@@ -4288,6 +4288,7 @@
                 }
                 else
                 {
+                    
                     console.log(data.transfer);                   
                     if(data.transfer == 0)
                     {
