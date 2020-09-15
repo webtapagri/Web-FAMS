@@ -723,12 +723,14 @@
                                     </div>
                                 </div>
                                 <?php if( $user_role == 'AMS' ){?>
+                                <span id="posting_date_ams_mutasi">
                                 <div class="form-group">
                                     <label for="plant" class="col-md-4">POSTING DATE</label>
                                     <div class="col-md-6">
                                             <input id="posting_date" placeholder="posting date" type="text" class="form-control datepicker" name="posting_date">
                                     </div>
                                 </div>
+                                </span>
                                 <?php } ?>
                             </div>
                             
@@ -4257,6 +4259,11 @@
                 if(data.cek_reject==0){$(".button-approve-mutasi").show();$(".button-approved-mutasi").show();}
                         // $(".button-reject").attr("disabled", true); 
                         $(".button-reject-mutasi").hide(); 
+                if(data.kode_asset_ams_tujuan == null || data.kode_asset_ams_tujuan == '' ){
+                    $("#posting_date_ams_mutasi").hide(); 
+                }else{
+                    $("#posting_date_ams_mutasi").show(); 
+                }
                 if(data.sync_sap != '')
                 {
                     $("#create-button-sync-sap-mutasi").show();
@@ -4270,7 +4277,7 @@
                 }
                 else
                 {
-                    console.log(data.transfer);
+                    console.log(data.transfer);                    
                     if(data.transfer == 0)
                     {
                         $(".button-reject-mutasi").hide(); 

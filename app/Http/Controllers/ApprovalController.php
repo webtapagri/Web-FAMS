@@ -3677,7 +3677,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $role_id = Session::get('role_id');
         $posting_date = "";
         $records = array();
-        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,h.POSTING_DATE AS POSTING_DATE,
+        $sql = " SELECT a.ID,a.NO_REG,a.TYPE_TRANSAKSI,b.JENIS_PENGAJUAN,a.CREATED_BY,a.CREATED_AT,a.UPDATED_BY,a.UPDATED_AT,d.DESCRIPTION AS COST_CENTER,group_concat(b.KODE_ASSET_AMS) as KODE_ASSET_AMS, date_format(a.created_at,'%d-%m-%Y') AS TANGGAL_REG, c.name AS REQUESTOR, b.TUJUAN AS BA_TUJUAN,h.POSTING_DATE AS POSTING_DATE, h.KODE_ASSET_AMS_TUJUAN AS KODE_ASSET_AMS_TUJUAN,
         (SELECT BA_PEMILIK_ASSET FROM TM_MSTR_ASSET WHERE KODE_ASSET_AMS = (
        SELECT KODE_ASSET_AMS FROM TR_MUTASI_ASSET_DETAIL a WHERE NO_REG = '$noreg' LIMIT 1)) AS BA_PEMILIK_ASSET ,f.PO_TYPE
                             FROM TR_MUTASI_ASSET a
@@ -3727,6 +3727,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'kode_vendor' => '', //trim($v->KODE_VENDOR),
                     'nama_vendor' => '', //trim($v->NAMA_VENDOR),
                     'cost_center' => $v->COST_CENTER, 
+                    'kode_asset_ams_tujuan' => $v->KODE_ASSET_AMS_TUJUAN, 
                     'posting_date' => $posting_date, 
                     'kode_asset_ams' => $v->KODE_ASSET_AMS, 
                     'ba_tujuan' => $v->BA_TUJUAN, 
