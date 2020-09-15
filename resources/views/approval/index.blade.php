@@ -3605,11 +3605,20 @@
 
     function get_group(no)
     {
-        var jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').val();
+        // var jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').val();
         //alert(jenis_asset_code);
-        if(jenis_asset_code == ''){
-            jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
-        }
+        var input = document.getElementsByName('jenis_asset-'+no); 
+
+            if (typeof input[input.length/2] !== 'undefined'){
+                jenis_asset_code = (input[input.length/2].value);
+            }else{
+                jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
+            }
+
+        // console.log(jenis_asset_code);
+        // if(jenis_asset_code == ''){
+        //     jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
+        // }
         var assetgroup = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.assetgroup") !!}?type='+jenis_asset_code )));
         $('input[name="jenis_asset_group-'+no+'"]').empty().select2({
             data: assetgroup,
@@ -3627,15 +3636,28 @@
 
     function get_subgroup(no)
     {
-        var jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').val();
-        if(jenis_asset_code == ''){
-            jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
-        }
+        
+        var input = document.getElementsByName('jenis_asset-'+no); 
+        // var jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').val();
+        if (typeof input[input.length/2] !== 'undefined'){
+                jenis_asset_code = (input[input.length/2].value);
+            }else{
+                jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
+            }
+        // if(jenis_asset_code == ''){
+        //     jenis_asset_code = $('input[name="jenis_asset-'+no+'"]').select2('data')[0].id;
+        // }
 
-        var group = $('input[name="jenis_asset_group-'+no+'"]').val();
-        if(group == ''){
-            group = $('input[name="jenis_asset_group-'+no+'"]').select2('data')[0].id;
-        }
+        var input2 = document.getElementsByName('jenis_asset_group-'+no); 
+        // var group = $('input[name="jenis_asset_group-'+no+'"]').val();
+        if (typeof input2[input2.length/2] !== 'undefined'){
+                group = (input2[input2.length/2].value);
+            }else{
+                group = $('input[name="jenis_asset_group-'+no+'"]').select2('data')[0].id;
+            }
+        // if(group == ''){
+        //     group = $('input[name="jenis_asset_group-'+no+'"]').select2('data')[0].id;
+        // }
         var assetsubgroup = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.assetsubgroup") !!}?group='+group+'&jenis_asset_code='+jenis_asset_code )));
             $('input[name="jenis_asset_subgroup-'+no+'"]').empty().select2({
                 data: assetsubgroup,
