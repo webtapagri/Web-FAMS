@@ -190,6 +190,16 @@ Route::match(['get', 'post'], 'grid-accessright', [
     'uses' => 'AccessRightController@dataGrid'
 ]);
 
+Route::resource('/editfield', 'EditFieldController');
+Route::post('/editfield/post', 'EditFieldController@store');
+// Route::get('/accessright/edit/', 'EditFieldController@show');
+Route::post('/editfield/inactive', 'EditFieldController@inactive');
+Route::post('/editfield/active', 'EditFieldController@active');
+Route::match(['get', 'post'], 'grid-editfield', [
+    'as' => 'get.editfield_grid',
+    'uses' => 'EditFieldController@dataGrid'
+]);
+
 
 Route::resource('/blanko', 'BlankoController');
 Route::get('/blanko/berkas/{id}', 'BlankoController@berkas');
@@ -221,6 +231,8 @@ Route::get( 'get-outstandingdetailitemfile', ['as' => 'get.outstandingdetailitem
 Route::get('get-select_module', ['as' => 'get.select_module', 'uses' => 'ModuleController@select2']);
 Route::get('get-select_menu', ['as' => 'get.select_menu', 'uses' => 'MenuController@select2']);
 Route::get('get-select_role', ['as' => 'get.select_role', 'uses' => 'RolesController@select2']);
+Route::get('get-select_tablename', ['as' => 'get.select_tablename', 'uses' => 'EditFieldController@select_tablename']);
+Route::get('get-select_fieldname', ['as' => 'get.select_fieldname', 'uses' => 'EditFieldController@select_fieldname']);
 Route::get('get-generaldataplant', ['as' => 'get.generaldataplant', 'uses' => 'Select2Controller@generaldataplant']);
 Route::get('get-databusinessarea', ['as' => 'get.databusinessarea', 'uses' => 'Select2Controller@businessarea']);
 Route::get('get-assetgroup', ['as' => 'get.assetgroup', 'uses' => 'Select2Controller@assetgroup']);

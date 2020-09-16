@@ -1248,6 +1248,8 @@
                 $("#request-form #tanggal-reg").val(data.tanggal_reg);
                 $("#request-form #kode-vendor").val(data.kode_vendor);
                 $("#request-form #nama-vendor").val(data.nama_vendor);
+                
+                // var no_registrasi= btoa(data.no_reg);
 
                 if(data.po_type == 'SAP')
                 {
@@ -1341,7 +1343,7 @@
                         item += "<td>" + val.qty + "</td>";
                         item += "<td>" + val.kode + "</td>";
                         item += "<td>" + val.nama + "</td>";
-                        item += "<td><i class='fa fa-eye' OnClick='getDetailItem(\"" + noreg + "\","+val.id+",1,"+no+")'></i></td>";
+                        item += "<td><i class='fa fa-eye' OnClick='getDetailItem(\"" + noreg + "\","+val.id+",1,"+no+")'></i></td>";        
                         item += "</tr>";
                         no++;
                     });
