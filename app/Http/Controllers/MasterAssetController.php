@@ -18,6 +18,7 @@ use App\TR_WORKFLOW_JOB;
 use App\TM_GENERAL_DATA;
 use App\TM_MSTR_ASSET;
 use App\TR_REG_ASSET_DETAIL;
+use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MasterAssetExport;
 
@@ -206,6 +207,29 @@ class MasterAssetController extends Controller
         }
     }
 
+
+    public function update(Request $request)
+    {
+        
+        $request = $request->all();
+        // $param =  $_REQUEST;
+        // $result = response()->json(['status'=>false,"message" => $request]);
+        // // print_r($request);
+        // return $result;
+        // // dd($request);
+        // die();
+        try 
+        {
+                $data = TM_MSTR_ASSET::firstOrNew( ['KODE_ASSET_AMS'=>$request['kode_asset_ams']],$request->all()+Arr::except(['foto_asset','foto_seri', 'foto_imei']) );
+                $data->updated_by = \Session::get('user_id');
+                $data->save();
+
+            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->kode_asset_ams ? 'updated' : 'added')]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, "message" => $e->getMessage()]);
+        }
+    }
+
     /*
     public function show1()
     {
@@ -231,6 +255,26 @@ class MasterAssetController extends Controller
         $data['file'] = $this->get_master_asset_file_by_id($id);
 
         return view('masterdata.master_asset_edit')->with(compact('data'));
+    }
+
+    public function edit_asset($id)
+    {
+        $id = base64_decode($id);
+        $table = (new TM_MSTR_ASSET)->getTable();
+        $role_id = Session::get('role_id');
+        //echo $id; die();
+        if (empty(Session::get('authenticated')))
+            return redirect('/login');
+
+        $data['page_title'] = 'View - Master Asset';
+        $data['ctree_mod'] = 'Master Data';
+        $data['ctree'] = 'master-asset';
+        $data['id'] = $id;
+        $data['content'] = $this->get_master_asset_by_id($id);
+        $data['editable'] = $this->get_editable_field($role_id,$table);
+        $data['file'] = $this->get_master_asset_file_by_id($id);
+
+        return view('masterdata.master_asset_edit_data')->with(compact('data'));
     }
 
     public function show_asset($id)
@@ -365,6 +409,26 @@ class MasterAssetController extends Controller
 
             )
         */
+    }
+
+    function get_editable_field($role_id,$table)
+    {
+        $sql = " SELECT DISTINCT UPPER(b.COLUMN_NAME) AS fieldname, a.editable FROM INFORMATION_SCHEMA.COLUMNS b
+                    LEFT JOIN TBM_EDITFIELD a ON a.fieldname =  b.COLUMN_NAME AND a.role_id = '".$role_id."'
+                    WHERE b.TABLE_NAME ='".$table."' ";
+
+        $data = DB::SELECT($sql);
+
+        if(!empty($data))
+        {
+            foreach($data as $k => $v)
+            {
+                //echo "1<pre>"; print_r($v);
+                $result[$v->fieldname]= $v->editable;
+            }
+        }
+
+        return $result;
     }
 
     public function inactive(Request $request)

@@ -326,6 +326,8 @@ Route::get('/outstanding_email','FamsEmailController@kirim_email');
 Route::post('/request/email_create_po','FamsEmailController@index');
 
 /* MASTER ASSET */
+
+Route::post('/asset/update', 'MasterAssetController@update');
 Route::resource('/master-asset', 'MasterAssetController');
 Route::match(['get', 'post'], 'grid-master-asset', [
     'as' => 'get.grid_master_asset',
@@ -333,6 +335,7 @@ Route::match(['get', 'post'], 'grid-master-asset', [
 ]);
 //Route::get('/master-asset/edit/', 'MasterAssetController@show');
 Route::get('/master-asset/show-data/{id}', 'MasterAssetController@show_edit');
+Route::get('/master-asset/edit-data/{id}', 'MasterAssetController@edit_asset');
 Route::get('/master-asset/show/{id}', 'MasterAssetController@show_asset');
 Route::get('/master-asset/show_qrcode/{ams}', 'MasterAssetController@show_qrcode')->name('ams');
 Route::get('/test_qrcode', 'MasterAssetController@test_qrcode');
