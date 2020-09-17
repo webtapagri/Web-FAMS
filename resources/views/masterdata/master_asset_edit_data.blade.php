@@ -180,7 +180,7 @@
             <div class="form-group">
               <label for="" class="col-sm-4 control-label">Kode Material</label>
               <div class="col-sm-8">
-                <input type="hidden" class="form-control" name="kode_asset_ams" id="kode_asset_ams" placeholder="Kode Material" value="{{$data['content']->KODE_ASSET_AMS}}">
+                <input type="hidden" class="form-control" name="kode_asset_ams" id="kode_asset_ams" value="{{$data['content']->KODE_ASSET_AMS}}">
                 <input type="text" class="form-control" name="kode_material" id="kode_material" placeholder="Kode Material" value="{{@$data['content']->KODE_MATERIAL}}" @if($data['editable']['KODE_MATERIAL'] != 1) readonly="1" @endif>
               </div>
             </div>
@@ -1101,11 +1101,13 @@ function save()
         //         tahun_asset: asset_year,
         //         informasi: informasi,
         // });
-
-
        
         var param = $("#request-form").serialize();
-        // console.log(param);
+        // var postData = $("#request-form").serialize()
+        // var post = $.post("{{ url('asset/update') }}", postData);
+        // post.done(function(d){alert(d)});
+
+        console.log(param);
         // console.log(param2);
         // var formData = new FormData($('#request-form')); 
           $.ajaxSetup({
@@ -1124,6 +1126,8 @@ function save()
                     url: "{{ url('asset/update') }}",
                     type: "POST",
                     data: param,
+                    // processData: false,
+                    // contentType: false,
                     /*  contentType: false,
                     processData: false,
                     cache: false, */
@@ -1150,10 +1154,10 @@ function save()
                                 message: result.message
                             });
                         }
+                    },
+                    complete: function() {
+                        jQuery('.loading-event').fadeOut();
                     }
-                    // complete: function() {
-                    //     jQuery('.loading-event').fadeOut();
-                    // }
                 });
             }
         }
