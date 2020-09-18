@@ -416,8 +416,8 @@ class MasterAssetController extends Controller
            
             
 
-            // $data->save();
-            // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->file_name ? 'updated' : 'added')]);
+            $data->save();
+            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->file_name ? 'updated' : 'added')]);
             
        } catch (\Exception $e) {
             return response()->json(['status' => false, "message" => $e->getMessage()]);
