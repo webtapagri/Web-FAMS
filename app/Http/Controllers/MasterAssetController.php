@@ -17,6 +17,7 @@ use App\TR_WORKFLOW_DETAIL;
 use App\TR_WORKFLOW_JOB;
 use App\TM_GENERAL_DATA;
 use App\TM_MSTR_ASSET;
+use App\TR_LOG_MSTR_ASSET;
 use App\TR_REG_ASSET_DETAIL;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
@@ -218,6 +219,7 @@ class MasterAssetController extends Controller
             // // // $data = TM_MSTR_ASSET::firstOrNew( ['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->except(['foto_asset','foto_seri','foto_imei']));
             // $data->updated_by = \Session::get('user_id');
             // $data->save();
+            
             DB::beginTransaction();
             $sql = " UPDATE TM_MSTR_ASSET SET ";
             $parts = array();
@@ -229,6 +231,14 @@ class MasterAssetController extends Controller
             $sql = $sql . implode(",", $parts) . " , updated_by ='$user_id'  WHERE KODE_ASSET_AMS = '$request->kode_asset_ams'";
             
             Debugbar::info($sql);
+
+            
+                $update_data = TM_MSTR_ASSET::where('KODE_ASSET_AMS', $request->kode_asset_ams)->first();
+                $update_data->UPDATED_AT = date("Y-m-d H:i:s");
+                $update_data->UPDATED_BY = \Session::get('user_id');
+                $dt = json_decode(json_encode($update_data,true),true);
+                TR_LOG_MSTR_ASSET::create($dt);
+
 
             DB::UPDATE($sql);    
             DB::commit();
