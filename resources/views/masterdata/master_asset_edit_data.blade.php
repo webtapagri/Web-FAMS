@@ -137,7 +137,7 @@
 
 <section class="content">
 
-<form class="form-horizontal request-form" id="request-form" enctype="multipart/form-data">
+<form class="form-horizontal request-form" id="request-form">
 
 <div class="box box-default">
 
@@ -166,7 +166,7 @@
               <label for="" class="col-sm-4 control-label">Document Code</label>
 
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="no_reg" placeholder="Document Code" value="{{@$data['content']->NO_REG}}" readonly="1">
+                <input type="text" class="form-control" name="no_reg" id="no_reg" placeholder="Document Code" value="{{@$data['content']->NO_REG}}"  @if($data['editable']['NO_REG'] != 1) readonly="1" @endif>
               </div>
             </div>
 
@@ -188,7 +188,7 @@
             <div class="form-group">
               <label for="" class="col-sm-4 control-label">Lokasi BA Code</label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" name="lokasi_ba_code" id="lokasi_ba_code" placeholder="Lokasi BA Code" value="{{@$data['content']->LOKASI_BA_CODE}}" @if($data['editable']['KODE_MATERIAL'] != 1) readonly="1" @endif>
+                <input type="text" class="form-control" name="lokasi_ba_code" id="lokasi_ba_code" placeholder="Lokasi BA Code" value="{{@$data['content']->LOKASI_BA_CODE}}" @if($data['editable']['LOKASI_BA_CODE'] != 1) readonly="1" @endif>
               </div>
             </div>
 
@@ -234,6 +234,16 @@
 
       </div>
       <!-- /.row -->
+     <?php
+          //  if($data['editable']['NO_REG'] != 1 || $data['editable']['NO_PO'] != 1 || $data['editable']['KODE_MATERIAL'] != 1 || $data['editable']['LOKASI_BA_CODE'] != 1 || $data['editable']['NAMA_MATERIAL'] != 1){
+          //   $disable = "";
+          // }
+          // else{
+          //   $disable = "disabled";
+          // };
+      ?>
+    <button type="button" id="btnsave" onClick="save()"  class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit</button>
+
     </div><!-- /.box-body -->
 </div><!-- /.box default -->
 
@@ -374,13 +384,18 @@
         </div>
         <!-- /.col -->
 
-
-
       </div>
       <!-- /.row -->
+
+    <button type="button" id="btnsave" onClick="save()"  class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit</button>
+
+
     </div><!-- /.box-body -->
+
+    
 </div><!-- /.box danger -->
 
+<!-- <form id="image-form" enctype="multipart/form-data"> -->
 <div class="box box-primary">
 
     <div class="box-header with-border">
@@ -545,7 +560,9 @@
 
       </div>
       <!-- /.row -->
+     
     </div><!-- /.box-body -->
+    
 </div><!-- /.box default -->
 
 <div class="box box-default">
@@ -583,7 +600,7 @@
                 $file_category_asset .= 'asset';
       					$l .= "<div class='col-xs-4' align='center'>";
       					$l .= "<span class='username'><b>".$v->JENIS_FOTO."</b></span>";
-                $l .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='display:none'/> ";
+                $l .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
                 $l .= "<div class='image-group'>";
                 $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-asset-remove hide' OnClick=removeImage('asset')><i class='fa fa-trash'></i></button>";
                 $l .= "<img src='".$v->FILE_UPLOAD."' title='Click to change image' id='fotoasset' class='img img-responsive'/>";
@@ -599,7 +616,7 @@
                 $file_category_noseri .= 'no seri';
       					$l .= "<div class='col-xs-4' align='center'>";
       					$l .= "<span class='username'><b>".$v->JENIS_FOTO."</b></span>";
-                $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='display:none'/> ";
+                $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
       					$l .= "<div class='image-group'>";
                 $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-seri-remove hide' OnClick=removeImage('seri')><i class='fa fa-trash'></i></button>";
                 $l .= "<img src='".$v->FILE_UPLOAD."' title='Click to change image' id='fotoseri' class='img img-responsive'/>";
@@ -614,7 +631,7 @@
                   $file_category_imei .= 'imei';
         					$l .= "<div class='col-xs-4' align='center'>";
         					$l .= "<span class='username'><b>".$v->JENIS_FOTO."</b></span>";
-        					$l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='display:none'/> ";
+        					$l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
                   $l .= "<div class='image-group'>";
                   $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-mesin-remove hide' OnClick=removeImage('mesin')><i class='fa fa-trash'></i></button>";
                   $l .= "<img src='".$v->FILE_UPLOAD."' title='Click to change image' id='fotoimei' class='img img-responsive'/>";
@@ -629,7 +646,7 @@
           {
               $m .= "<div class='col-xs-4' align='center'>";
               $m .= "<span class='username'>Foto asset</span>";
-              $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='display:none'/> ";
+              $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
               $m .= "<div class='image-group'>";
               $m .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-asset-remove hide' OnClick=removeImage('asset')><i class='fa fa-trash'></i></button>";
               $m .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoasset' class='img img-responsive'/>";
@@ -642,7 +659,7 @@
           {
                $l .= "<div class='col-xs-4' align='center'>";
                $l .= "<span class='username'>Foto no. seri / no rangka</span>";
-               $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='display:none'/> ";
+               $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
                $l .= "<div class='image-group'>";
                $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-seri-remove hide' OnClick=removeImage('seri')><i class='fa fa-trash'></i></button>";
                $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoseri' class='img img-responsive'/>";
@@ -655,7 +672,7 @@
           {
               $l .= "<div class='col-xs-4' align='center'>";
               $l .= "<span class='username'>Foto No msin / IMEI</span>";
-              $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='display:none'/> ";
+              $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
               $l .= "<div class='image-group'>";
               $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-mesin-remove hide' OnClick=removeImage('mesin')><i class='fa fa-trash'></i></button>";
               $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoimei' class='img img-responsive'/>";
@@ -670,7 +687,7 @@
             {
                 $m .= "<div class='col-xs-4' align='center'>";
                 $m .= "<span class='username'>Foto asset</span>";
-                $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='display:none'/> ";
+                $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
                 $m .= "<div class='image-group'>";
                 $m .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-asset-remove hide' OnClick=removeImage('asset')><i class='fa fa-trash'></i></button>";
                 $m .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoasset' class='img img-responsive'/>";
@@ -683,7 +700,7 @@
             {
                  $l .= "<div class='col-xs-4' align='center'>";
                  $l .= "<span class='username'>Foto no. seri / no rangka</span>";
-                 $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='display:none'/> ";
+                 $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
                  $l .= "<div class='image-group'>";
                  $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-seri-remove hide' OnClick=removeImage('seri ')><i class='fa fa-trash'></i></button>";
                  $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoseri' class='img img-responsive'/>";
@@ -696,7 +713,7 @@
             {
                 $l .= "<div class='col-xs-4' align='center'>";
                 $l .= "<span class='username'>Foto No msin / IMEI</span>";
-                $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='display:none'/> ";
+                $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
                 $l .= "<div class='image-group'>";
                 $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-mesin-remove hide' OnClick=removeImage('mesin')><i class='fa fa-trash'></i></button>";
                 $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoimei' class='img img-responsive'/>";
@@ -721,12 +738,13 @@
 		<!-- /.col -->
 		</div><!-- /.row -->
 		*/ ?>
-    
+      
+      <button type="submit" id="btnsaveImage" class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit Image</button>
+
     </div><!-- /.box-body -->
 </div><!-- /.box default -->
 
 
-<button type="button" id="btnsave" onClick="save()"  class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit</button>
 <br>
 <br>
 <br>
@@ -1064,7 +1082,7 @@ function save()
                     url: "{{ url('asset/update') }}",
                     type: "POST",
                     data: param,
-                    // data: param+"&formData="+fd,
+                    // data: param+"&formData="+fd, 
                     // dataType: 'json',
                     // processData: false,
                     // contentType: false,
@@ -1284,6 +1302,51 @@ function validateSave()
 
     return valid;
 }
+
+
+
+jQuery('#request-form').on('submit', function(e) {
+
+    e.preventDefault();
+    jQuery.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var param = new FormData(this);
+    jQuery.ajax({
+        url: "{{ url('asset/upload_image') }}",
+        type: "POST",
+        data: param,
+        contentType: false,
+        processData: false,
+        cache: false,
+        beforeSend: function() {
+            jQuery('.loading-event').fadeIn();
+        },
+        success: function(result) {
+            if (result.status) 
+            {
+                notify({
+                    type: 'success',
+                    message: result.message
+                });
+                
+                // setTimeout(reload_page, 2000);
+
+            } else {
+                notify({
+                    type: 'warning',
+                    message: result.message
+                });
+            }
+        },
+        complete: function() {
+            jQuery('.loading-event').fadeOut();
+        }
+    });
+})
 
 </script>
 @stop

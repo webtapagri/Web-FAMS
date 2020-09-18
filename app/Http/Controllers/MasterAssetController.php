@@ -241,6 +241,190 @@ class MasterAssetController extends Controller
         }
     }
 
+
+    public function upload_image(Request $request)
+    {
+        // $check = $_FILES['foto_seri']['name'];
+        // return $request->foto_imei ;
+       try {
+            if( !empty($request->foto_asset) )
+            {
+                $file_name = str_replace(" ", "_", $_FILES['foto_asset']['name']);
+                $user_id = Session::get('user_id');
+                $file_category = 'asset';//no seri, imei
+                $file_category_label = "foto asset";
+
+                // #1 VALIDASI SIZE DOC MAX 500Kb
+                $max_docsize = 500000;
+                if( $_FILES['foto_asset']['size'] != 0 )
+                {
+                    if( $_FILES['foto_asset']['size'] > $max_docsize )
+                    {
+                        return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file maksimal 500KB']);
+                    }
+                }
+                else
+                {                        
+                    return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file 0 MB']);
+            
+                }
+
+                $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_asset']['tmp_name'])));
+                $date = date("Y-m-d H:i:s");
+                 
+                $sql = " INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
+                        VALUES (
+                            KODE_ASSET = '{$request->kode_asset_ams}',
+                            NO_REG = '{$request->NO_REG}',
+                            JENIS_FOTO = '{$file_category_label}',
+                            `FILENAME`= '{$file_name}',
+                            DOC_SIZE = '".$_FILES['foto_asset']['size']."',
+                            FILE_CATEGORY= '{$file_category}',
+                            FILE_UPLOAD = '{$file_upload}',
+                            UPDATED_BY = '{$user_id}',
+                            UPDATED_AT = '{$date}')
+                        ON DUPLICATE KEY UPDATE    
+                        KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
+               
+                DB::beginTransaction();
+
+                try 
+                {
+                    DB::insert($sql);
+                    DB::commit();
+                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_asset ? 'updated' : 'added')]);
+
+                } 
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    return response()->json(['status' => false, "message" => 'Failed to update Foto Asset']);
+                }
+            }
+
+            if( !empty($request->foto_seri) )
+
+            {
+                $file_name = str_replace(" ", "_", $_FILES['foto_seri']['name']);
+                $user_id = Session::get('user_id');
+                $file_category = 'no seri';//no seri, imei
+                $file_category_label = "Foto no. seri / no rangka";
+
+                // #1 VALIDASI SIZE DOC MAX 500Kb
+                $max_docsize = 500000;
+                if( $_FILES['foto_seri']['size'] != 0 )
+                {
+                    if( $_FILES['foto_seri']['size'] > $max_docsize )
+                    {
+                        return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file maksimal 500KB']);
+                    }
+                }
+                else
+                {                        
+                    return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file 0 MB']);
+            
+                }
+
+                $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_seri']['tmp_name'])));
+                $date = date("Y-m-d H:i:s");
+                
+                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
+                        VALUES (
+                            KODE_ASSET = '{$request->kode_asset_ams}',
+                            NO_REG = '{$request->no_reg}',
+                            JENIS_FOTO = '{$file_category_label}',
+                            `FILENAME`= '{$file_name}',
+                            DOC_SIZE = '".$_FILES['foto_seri']['size']."',
+                            FILE_CATEGORY= '{$file_category}',
+                            FILE_UPLOAD = '{$file_upload}',
+                            UPDATED_BY = '{$user_id}',
+                            UPDATED_AT = '{$date}' )
+                        ON DUPLICATE KEY UPDATE    
+                        KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
+                DB::beginTransaction();
+
+                try 
+                {
+                    DB::insert($sql);
+                    Debugbar::info(DB::insert($sql));
+                    DB::commit();
+                    
+                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
+
+                } 
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    return response()->json(['status' => false, "message" => 'Failed to update Foto Seri']);
+                }
+            }
+
+            if( !empty($request->foto_imei) )
+            {
+                $file_name = str_replace(" ", "_", $_FILES['foto_imei']['name']);
+                $user_id = Session::get('user_id');
+                $file_category = 'imei';//no seri, imei
+                $file_category_label = "Foto No msin / IMEI";
+
+                // #1 VALIDASI SIZE DOC MAX 500Kb
+                $max_docsize = 500000;
+                if( $_FILES['foto_imei']['size'] != 0 )
+                {
+                    if( $_FILES['foto_imei']['size'] > $max_docsize )
+                    {
+                        return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file maksimal 500KB']);
+                    }
+                }
+                else
+                {                        
+                    return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file 0 MB']);
+            
+                }
+
+                $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_imei']['tmp_name'])));
+                $date = date("Y-m-d H:i:s");
+                
+                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
+                        VALUES (
+                            KODE_ASSET = '{$request->kode_asset_ams}',
+                            NO_REG = '{$request->NO_REG}',
+                            JENIS_FOTO = = '{$file_category_label}',
+                            `FILENAME`= '{$file_name}',
+                            DOC_SIZE = '".$_FILES['foto_imei']['size']."',
+                            FILE_CATEGORY= '{$file_category}',
+                            FILE_UPLOAD = '{$file_upload}',
+                            UPDATED_BY = '{$user_id}',
+                            UPDATED_AT = '{$date}' )
+                        ON DUPLICATE KEY UPDATE    
+                        KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
+               
+                DB::beginTransaction();
+
+                try 
+                {
+                    DB::insert($sql);
+                    DB::commit();
+                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
+
+                } 
+                catch (\Exception $e) 
+                {
+                    DB::rollback();
+                    return response()->json(['status' => false, "message" => 'Failed to update Foto Mesin']);
+                }
+            }
+           
+            
+
+            // $data->save();
+            // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->file_name ? 'updated' : 'added')]);
+            
+       } catch (\Exception $e) {
+            return response()->json(['status' => false, "message" => $e->getMessage()]);
+       }
+
+
+    }
     /*
     public function show1()
     {

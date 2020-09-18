@@ -328,6 +328,7 @@ Route::post('/request/email_create_po','FamsEmailController@index');
 /* MASTER ASSET */
 
 Route::post('/asset/update', 'MasterAssetController@update');
+Route::post('asset/upload_image', 'MasterAssetController@upload_image');
 Route::resource('/master-asset', 'MasterAssetController');
 Route::match(['get', 'post'], 'grid-master-asset', [
     'as' => 'get.grid_master_asset',
