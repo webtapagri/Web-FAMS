@@ -21,6 +21,7 @@ use App\TR_REG_ASSET_DETAIL;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MasterAssetExport;
+use Debugbar;
 
 
 class MasterAssetController extends Controller
@@ -213,12 +214,29 @@ class MasterAssetController extends Controller
         // return $request->all();
         try 
         {
-            $data =  TM_MSTR_ASSET::updateOrCreate(['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->all());
-            // // $data = TM_MSTR_ASSET::firstOrNew( ['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->except(['foto_asset','foto_seri','foto_imei']));
-            $data->updated_by = \Session::get('user_id');
-            $data->save();
+            // $data =  TM_MSTR_ASSET::updateOrCreate(['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->all());
+            // // // $data = TM_MSTR_ASSET::firstOrNew( ['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->except(['foto_asset','foto_seri','foto_imei']));
+            // $data->updated_by = \Session::get('user_id');
+            // $data->save();
+            DB::beginTransaction();
+            $sql = " UPDATE TM_MSTR_ASSET SET ";
+            $parts = array();
+            foreach ($request->all() as $key => $value) {
+                $parts[] = "`" . $key . "` = '".$value."'";
+            }
+            $user_id = \Session::get('user_id');
+
+            $sql = $sql . implode(",", $parts) . " , updated_by ='$user_id'  WHERE KODE_ASSET_AMS = '$request->kode_asset_ams'";
+            
+            Debugbar::info($sql);
+
+            DB::UPDATE($sql);    
+            DB::commit();
+            
+
             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->kode_asset_ams ? 'updated' : 'added')]);
         } catch (\Exception $e) {
+            DB::rollback();
             return response()->json(['status' => false, "message" => $e->getMessage()]);
         }
     }
