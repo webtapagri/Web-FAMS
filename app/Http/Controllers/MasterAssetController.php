@@ -210,17 +210,14 @@ class MasterAssetController extends Controller
 
     public function update(Request $request)
     {
-        $request = (array) $request;
+        // return $request->all();
         try 
         {
-            
-            // return response()->json(['status' => false, "message" => $request]);
-                $data['updated_by'] = \Session::get('user_id');
-                $req = array_push($request,$data);
-                DB::table('TM_MSTR_ASSET')->where('KODE_ASSET_AMS', $request['kode_asset_ams'])->update($req);
-                // $data->save();
-
-            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request['kode_asset_ams'] ? 'updated' : 'added')]);
+            $data =  TM_MSTR_ASSET::updateOrCreate(['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->all());
+            // // $data = TM_MSTR_ASSET::firstOrNew( ['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->except(['foto_asset','foto_seri','foto_imei']));
+            $data->updated_by = \Session::get('user_id');
+            $data->save();
+            return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->kode_asset_ams ? 'updated' : 'added')]);
         } catch (\Exception $e) {
             return response()->json(['status' => false, "message" => $e->getMessage()]);
         }

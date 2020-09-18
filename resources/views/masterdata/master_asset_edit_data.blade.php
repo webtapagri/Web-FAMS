@@ -726,7 +726,7 @@
 </div><!-- /.box default -->
 
 
-<button type="submit" onClick='save()' class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit</button>
+<button type="button" id="btnsave" onClick="save()"  class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit</button>
 <br>
 <br>
 <br>
@@ -1032,84 +1032,22 @@ function removeImage(code) {
 function save() 
     {
       
-      // jQuery('#request-form').on('submit', function(e) {
-        //   var no_po = document.getElementById("no_po").value;
-        //   var kode_material = document.getElementById("kode_material").value;
-        //   var nama_material = document.getElementById("nama_material").value;
-        //   var merk = document.getElementById("merk").value;
-        //   var no_polisi = document.getElementById("no_polisi").value;
-        //   var ba_pemilik_asset = document.getElementById("ba_pemilik_asset").value;
-        //   var nama_asset = document.getElementById("nama_asset").value;
-        //   var informasi = document.getElementById("informasi").value;
-        //   var foto_asset = document.getElementById("imgupload_asset").value;
-        //   var foto_seri = document.getElementById("imgupload_seri").value;
-        //   var foto_imei = document.getElementById("imgupload_imei").value;
-        //   var asset_class = document.getElementById("asset_class").value;
-        //   var asset_condition = document.getElementById("kondisi_asset").value;
-        //   var asset_year = document.getElementById("tahun_asset").value;
-        //   var asset_serie_no = document.getElementById("no_rangka_or_no_seri").value;
-        //   var asset_imei = document.getElementById("no_mesin_or_imei").value;
-        //   var asset_pic_name = document.getElementById("nama_penanggung_jawab_asset").value;
-        //   var asset_pic_level = document.getElementById("jabatan_penanggung_jawab_asset").value;
-
-        //   if(readonly_ba !== '1'){
-        //     var asset_location = $('input[name="lokasi_ba_code"]').val();
-        //   }else{
-        //     var asset_location = document.getElementById("lokasi_ba_code").value;
-        //   }
-
-        //   if(readonly_jenis_asset !== '1'){
-        //     var asset_type = $('input[name="jenis_asset"]').val();
-        //   }else{
-        //     var asset_type = document.getElementById("jenis_asset").value;
-        //   }
-
-        //   if(readonly_group !== '1'){
-        //     var asset_group = $('input[name="group"]').val();
-        //   }else{
-        //     var asset_group = document.getElementById("group").value;
-        //   }
-
-        //   if(readonly_subgroup !== '1'){
-        //     var asset_sub_group = $('input[name="sub_group"]').val();
-        //   }else{
-        //     var asset_sub_group = document.getElementById("sub_group").value;
-        //   }
-
-        // var param = [];
-        // param.push({
-        //         no_po: no_po,
-        //         kode_material: kode_material,
-        //         nama_material: nama_material,
-        //         merk: merk,
-        //         no_polisi: no_polisi,
-        //         asset_class: asset_class,
-        //         jenis_asset: asset_type,
-        //         group: asset_group,
-        //         sub_group: asset_sub_group,
-        //         lokasi_ba_code: asset_location,
-        //         ba_pemilik_asset: ba_pemilik_asset,
-        //         nama_asset: nama_asset,
-        //         foto_asset: foto_asset,
-        //         foto_seri: foto_seri,
-        //         foto_imei: foto_imei,
-        //         kondisi_asset: asset_condition,
-        //         no_rangka_or_no_seri: asset_serie_no,
-        //         no_mesin_or_imei: asset_imei,
-        //         nama_penanggung_jawab_asset: asset_pic_name,
-        //         jabatan_penanggung_jawab_asset: asset_pic_level,
-        //         tahun_asset: asset_year,
-        //         informasi: informasi,
-        // });
-       
+      // jQuery('#btnsave').on('click', function(e) {       
         var param = $("#request-form").serialize();
-        // var postData = $("#request-form").serialize()
-        // var post = $.post("{{ url('asset/update') }}", postData);
-        // post.done(function(d){alert(d)});
+        // var file_foto_asset = $("#imgupload_asset")[0].files;
+        // var file_foto_seri = $("#imgupload_seri")[0].files;
+        // var file_foto_imei = $("#imgupload_imei")[0].files;
+        // var text_foto_asset = $('#imgupload_asset').val();
+        // var text_foto_seri = $('#imgupload_seri').val();
+        // var text_foto_imei = $('#imgupload_imei').val();
+        // var fd = new FormData();
+        // fd.append('file_foto_asset', file_foto_asset);
+        // fd.append('file_foto_seri', file_foto_seri);
+        // fd.append('file_foto_imei', file_foto_imei);
+        // fd.append('text_foto_asset',text_foto_asset);
+        // fd.append('text_foto_seri',text_foto_seri);
+        // fd.append('text_foto_imei',text_foto_imei);
 
-        console.log(param);
-        // console.log(param2);
-        // var formData = new FormData($('#request-form')); 
           $.ajaxSetup({
               headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -1126,6 +1064,8 @@ function save()
                     url: "{{ url('asset/update') }}",
                     type: "POST",
                     data: param,
+                    // data: param+"&formData="+fd,
+                    // dataType: 'json',
                     // processData: false,
                     // contentType: false,
                     /*  contentType: false,
