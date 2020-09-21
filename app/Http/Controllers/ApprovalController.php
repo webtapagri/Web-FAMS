@@ -2441,12 +2441,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
     function validasi_outstanding($noreg,$role_id)
     {
-        // $sql = " SELECT COUNT(*) AS JML FROM v_outstanding WHERE document_code = '{$noreg}' AND role_id = $role_id ";
-        $sql = " SELECT COUNT(*) AS JML FROM v_outstanding a
-        LEFT JOIN TR_WORKFLOW_JOB b ON a.role_id = b.id_role AND a.seq = b.seq AND a.workflow_detail_code = b.workflow_detail_code 
-        LEFT JOIN TR_WORKFLOW_DETAIL c ON c.workflow_detail_code = a.workflow_detail_code
-        WHERE a.document_code = '{$noreg}' AND a.role_id = '{$role_id}'
-        and c.workflow_group_name like 'Complete%' ";
+        $sql = " SELECT COUNT(*) AS JML FROM v_outstanding WHERE document_code = '{$noreg}' AND role_id = $role_id ";
         //echo $sql; die();
         $data = DB::SELECT($sql); 
         //echo "4<pre>"; print_r($data);die(); 
@@ -2469,13 +2464,18 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         //         where 
         //         b.document_code = '{$noreg}' and d.workflow_group_name like '%Complete%' and f.NO_FICO != '' ";
         $user_id = Session::get('user_id');
-        $sql = "SELECT COUNT(*) AS JML  FROM TR_APPROVAL a LEFT JOIN TR_APPROVAL_DETAIL b ON a.approval_code = b.approval_code
-                left join TR_WORKFLOW_DETAIL c ON c.workflow_detail_code = a.workflow_detail_code and c.workflow_group_name like '%Complete%' 
-                left join TR_WORKFLOW_JOB e ON c.workflow_detail_code = e.workflow_detail_code and a.seq = e.seq and e.id_role = b.role_id
-                left join TR_DISPOSAL_ASSET_DETAIL d ON d.NO_REG = a.document_code 
-                where a.document_code = '{$noreg}' and b.role_id = '{$role_id}' 
-                and b.user_id = '{$user_id}' 
-                and a.execution_status = '' ";
+        // $sql = "SELECT COUNT(*) AS JML  FROM TR_APPROVAL a LEFT JOIN TR_APPROVAL_DETAIL b ON a.approval_code = b.approval_code
+        //         left join TR_WORKFLOW_DETAIL c ON c.workflow_detail_code = a.workflow_detail_code and c.workflow_group_name like '%Complete%' 
+        //         left join TR_WORKFLOW_JOB e ON c.workflow_detail_code = e.workflow_detail_code and a.seq = e.seq and e.id_role = b.role_id
+        //         left join TR_DISPOSAL_ASSET_DETAIL d ON d.NO_REG = a.document_code 
+        //         where a.document_code = '{$noreg}' and b.role_id = '{$role_id}' 
+        //         and b.user_id = '{$user_id}' 
+        //         and a.execution_status = '' ";
+        $sql = " SELECT COUNT(*) AS JML FROM v_outstanding a
+        LEFT JOIN TR_WORKFLOW_JOB b ON a.role_id = b.id_role AND a.seq = b.seq AND a.workflow_detail_code = b.workflow_detail_code 
+        LEFT JOIN TR_WORKFLOW_DETAIL c ON c.workflow_detail_code = a.workflow_detail_code
+        WHERE a.document_code = '{$noreg}' AND a.role_id = '{$role_id}'
+        and c.workflow_group_name like 'Complete%' ";
         $data = DB::SELECT($sql); 
         return $data[0]->JML;
     }
