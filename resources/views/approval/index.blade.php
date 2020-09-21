@@ -1699,7 +1699,7 @@
                 <?php if( $user_role == 'AMS'){?>
                 console.log(data.transfer);
                 if(data.no_fico == ''){
-                    if(data.transfer == 1)
+                    if(data.transfer != 0)
                     {
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 

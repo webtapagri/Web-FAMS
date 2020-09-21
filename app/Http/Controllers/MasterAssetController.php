@@ -282,9 +282,10 @@ class MasterAssetController extends Controller
                 $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_asset']['tmp_name'])));
                 $date = date("Y-m-d H:i:s");
                  
-                $sql = " INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
+                $sql = " INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`,`NO_REG_ITEM_FILE`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
                         VALUES (
                             KODE_ASSET = '{$request->kode_asset_ams}',
+                            NO_REG_ITEM_FILE = '{$request->no_reg_item}',
                             NO_REG = '{$request->NO_REG}',
                             JENIS_FOTO = '{$file_category_label}',
                             `FILENAME`= '{$file_name}',
@@ -338,9 +339,10 @@ class MasterAssetController extends Controller
                 $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_seri']['tmp_name'])));
                 $date = date("Y-m-d H:i:s");
                 
-                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
+                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG_ITEM_FILE`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
                         VALUES (
                             KODE_ASSET = '{$request->kode_asset_ams}',
+                            NO_REG_ITEM_FILE = '{$request->no_reg_item}',
                             NO_REG = '{$request->no_reg}',
                             JENIS_FOTO = '{$file_category_label}',
                             `FILENAME`= '{$file_name}',
@@ -351,6 +353,8 @@ class MasterAssetController extends Controller
                             UPDATED_AT = '{$date}' )
                         ON DUPLICATE KEY UPDATE    
                         KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
+                        
+                Debugbar::info($sql);
                 DB::beginTransaction();
 
                 try 
@@ -394,9 +398,10 @@ class MasterAssetController extends Controller
                 $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_imei']['tmp_name'])));
                 $date = date("Y-m-d H:i:s");
                 
-                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
+                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG_ITEM_FILE`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
                         VALUES (
                             KODE_ASSET = '{$request->kode_asset_ams}',
+                            NO_REG_ITEM_FILE = '{$request->no_reg_item}',
                             NO_REG = '{$request->NO_REG}',
                             JENIS_FOTO = = '{$file_category_label}',
                             `FILENAME`= '{$file_name}',

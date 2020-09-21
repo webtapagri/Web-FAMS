@@ -181,6 +181,7 @@
               <label for="" class="col-sm-4 control-label">Kode Material</label>
               <div class="col-sm-8">
                 <input type="hidden" class="form-control" name="kode_asset_ams" id="kode_asset_ams" value="{{$data['content']->KODE_ASSET_AMS}}">
+                <input type="hidden" class="form-control" name="no_reg_item" id="no_reg_item" value="{{$data['content']->NO_REG_ITEM}}">
                 <input type="text" class="form-control" name="kode_material" id="kode_material" placeholder="Kode Material" value="{{@$data['content']->KODE_MATERIAL}}" @if($data['editable']['KODE_MATERIAL'] != 1) readonly="1" @endif>
               </div>
             </div>
