@@ -1699,7 +1699,7 @@
                 <?php if( $user_role == 'AMS'){?>
                 console.log(data.transfer);
                 if(data.no_fico == ''){
-                    if(data.transfer != 0)
+                    if(data.transfer !== 0)
                     {
                         $(".button-approved").hide();
                         $(".button-reject").hide(); 
@@ -4820,6 +4820,8 @@
     {
         $("#box-detail-item").hide();
         
+        var posting_date = $("#posting_date").val();
+        
         if( $.trim(posting_date) == "" )
             {
                 notify({
@@ -4888,6 +4890,8 @@
     function transferAmountDisposal()
     {
         $("#box-detail-item").hide();
+        
+        var posting_date = $("#posting_date").val();
         if( $.trim(posting_date) == "" )
             {
                 notify({
@@ -4895,7 +4899,7 @@
                     message: " Posting Date is required"
                 });
                 return false;
-            } 
+            }  
 
         if(confirm('Transfer Amount ?'))
         {

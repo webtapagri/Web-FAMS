@@ -17,7 +17,9 @@ use App\TR_WORKFLOW_DETAIL;
 use App\TR_WORKFLOW_JOB;
 use App\TM_GENERAL_DATA;
 use App\TM_MSTR_ASSET;
+use App\TM_MSTR_ASSET_FILE;
 use App\TR_LOG_MSTR_ASSET;
+use App\TR_LOG_MSTR_ASSET_FILE;
 use App\TR_REG_ASSET_DETAIL;
 use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
@@ -219,7 +221,7 @@ class MasterAssetController extends Controller
             // // // $data = TM_MSTR_ASSET::firstOrNew( ['KODE_ASSET_AMS'=>$request->kode_asset_ams],$request->except(['foto_asset','foto_seri','foto_imei']));
             // $data->updated_by = \Session::get('user_id');
             // $data->save();
-            
+            $date = date("Y-m-d H:i:s");
             DB::beginTransaction();
             $sql = " UPDATE TM_MSTR_ASSET SET ";
             $parts = array();
@@ -228,13 +230,13 @@ class MasterAssetController extends Controller
             }
             $user_id = \Session::get('user_id');
 
-            $sql = $sql . implode(",", $parts) . " , updated_by ='$user_id'  WHERE KODE_ASSET_AMS = '$request->kode_asset_ams'";
+            $sql = $sql . implode(",", $parts) . " , updated_by ='$user_id', updated_at ='$date'  WHERE KODE_ASSET_AMS = '$request->kode_asset_ams'";
             
             Debugbar::info($sql);
 
             
                 $update_data = TM_MSTR_ASSET::where('KODE_ASSET_AMS', $request->kode_asset_ams)->first();
-                $update_data->UPDATED_AT = date("Y-m-d H:i:s");
+                $update_data->UPDATED_AT = $date;
                 $update_data->UPDATED_BY = \Session::get('user_id');
                 $dt = json_decode(json_encode($update_data,true),true);
                 TR_LOG_MSTR_ASSET::create($dt);
@@ -256,8 +258,9 @@ class MasterAssetController extends Controller
     {
         // $check = $_FILES['foto_seri']['name'];
         // return $request->foto_imei ;
-       try {
-            if( !empty($request->foto_asset) )
+        $date = date("Y-m-d H:i:s");
+        try {
+            if( !empty($_FILES['foto_asset']['name']) )
             {
                 $file_name = str_replace(" ", "_", $_FILES['foto_asset']['name']);
                 $user_id = Session::get('user_id');
@@ -278,42 +281,48 @@ class MasterAssetController extends Controller
                     return response()->json(['status' => true, "message" => 'Gagal upload '.$file_name.' ('.$file_category_label.'), ukuran file 0 MB']);
             
                 }
+                
 
-                $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_asset']['tmp_name'])));
-                $date = date("Y-m-d H:i:s");
-                 
-                $sql = " INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`,`NO_REG_ITEM_FILE`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
-                        VALUES (
-                            KODE_ASSET = '{$request->kode_asset_ams}',
-                            NO_REG_ITEM_FILE = '{$request->no_reg_item}',
-                            NO_REG = '{$request->NO_REG}',
-                            JENIS_FOTO = '{$file_category_label}',
-                            `FILENAME`= '{$file_name}',
-                            DOC_SIZE = '".$_FILES['foto_asset']['size']."',
-                            FILE_CATEGORY= '{$file_category}',
-                            FILE_UPLOAD = '{$file_upload}',
-                            UPDATED_BY = '{$user_id}',
-                            UPDATED_AT = '{$date}')
-                        ON DUPLICATE KEY UPDATE    
-                        KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
-               
-                DB::beginTransaction();
+                $file_upload = 'data:' . $_FILES['foto_asset']['type'] . ';base64,'. base64_encode(file_get_contents(addslashes($_FILES['foto_asset']['tmp_name'])));
+                
+                // DB::beginTransaction();
+                $data_upload =  array(
+                    'KODE_ASSET'=> $request->kode_asset_ams,
+                    'NO_REG_ITEM_FILE'=> $request->no_reg_item,
+                    'NO_REG' => $request->no_reg,
+                    'JENIS_FOTO' => $file_category_label,
+                    'FILENAME' => $file_name,
+                    'DOC_SIZE' => $_FILES['foto_asset']['size'],
+                    'FILE_CATEGORY' => $file_category,
+                    'FILE_UPLOAD' => $file_upload,
+                    'UPDATED_BY' => $user_id,
+                    'UPDATED_AT' => $date
+                );
 
                 try 
                 {
-                    DB::insert($sql);
-                    DB::commit();
+                    $data = TM_MSTR_ASSET_FILE::updateOrCreate( ['KODE_ASSET'=>$request->kode_asset_ams,'FILE_CATEGORY'=>$file_category,'NO_REG'=>$request->no_reg,'NO_REG_ITEM_FILE'=>$request->no_reg_item],$data_upload );
+                    $data->save();
+
+                    $update_data = TM_MSTR_ASSET_FILE::where('KODE_ASSET', $request->kode_asset_ams)->first();
+                    $update_data->UPDATED_AT = $date;
+                    $update_data->UPDATED_BY = \Session::get('user_id');
+                    $dt = json_decode(json_encode($update_data,true),true);
+                    TR_LOG_MSTR_ASSET_FILE::create($dt);
+
+                    // DB::insert($sql);
+                    // DB::commit();
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_asset ? 'updated' : 'added')]);
 
                 } 
                 catch (\Exception $e) 
                 {
-                    DB::rollback();
+                    // DB::rollback();
                     return response()->json(['status' => false, "message" => 'Failed to update Foto Asset']);
                 }
             }
 
-            if( !empty($request->foto_seri) )
+            if( !empty($_FILES['foto_seri']['name']) )
 
             {
                 $file_name = str_replace(" ", "_", $_FILES['foto_seri']['name']);
@@ -336,44 +345,52 @@ class MasterAssetController extends Controller
             
                 }
 
-                $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_seri']['tmp_name'])));
-                $date = date("Y-m-d H:i:s");
                 
-                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG_ITEM_FILE`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
-                        VALUES (
-                            KODE_ASSET = '{$request->kode_asset_ams}',
-                            NO_REG_ITEM_FILE = '{$request->no_reg_item}',
-                            NO_REG = '{$request->no_reg}',
-                            JENIS_FOTO = '{$file_category_label}',
-                            `FILENAME`= '{$file_name}',
-                            DOC_SIZE = '".$_FILES['foto_seri']['size']."',
-                            FILE_CATEGORY= '{$file_category}',
-                            FILE_UPLOAD = '{$file_upload}',
-                            UPDATED_BY = '{$user_id}',
-                            UPDATED_AT = '{$date}' )
-                        ON DUPLICATE KEY UPDATE    
-                        KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
+                $file_upload = 'data:' . $_FILES['foto_seri']['type'] . ';base64,'. base64_encode(file_get_contents(addslashes($_FILES['foto_seri']['tmp_name'])));
+                
+                $data_upload =  array(
+                                    'KODE_ASSET'=> $request->kode_asset_ams,
+                                    'NO_REG_ITEM_FILE'=> $request->no_reg_item,
+                                    'NO_REG' => $request->no_reg,
+                                    'JENIS_FOTO' => $file_category_label,
+                                    'FILENAME' => $file_name,
+                                    'DOC_SIZE' => $_FILES['foto_seri']['size'],
+                                    'FILE_CATEGORY' => $file_category,
+                                    'FILE_UPLOAD' => $file_upload,
+                                    'UPDATED_BY' => $user_id,
+                                    'UPDATED_AT' => $date
+                                );
                         
-                Debugbar::info($sql);
-                DB::beginTransaction();
+
+                // Debugbar::info($sql);
+                // DB::beginTransaction();
 
                 try 
                 {
-                    DB::insert($sql);
-                    Debugbar::info(DB::insert($sql));
-                    DB::commit();
+
+                    $data = TM_MSTR_ASSET_FILE::updateOrCreate( ['KODE_ASSET'=>$request->kode_asset_ams,'FILE_CATEGORY'=>$file_category,'NO_REG'=>$request->no_reg,'NO_REG_ITEM_FILE'=>$request->no_reg_item],$data_upload );
+                    $data->save();
+
+                    $update_data = TM_MSTR_ASSET_FILE::where('KODE_ASSET', $request->kode_asset_ams)->first();
+                    $update_data->UPDATED_AT = $date;
+                    $update_data->UPDATED_BY = \Session::get('user_id');
+                    $dt = json_decode(json_encode($update_data,true),true);
+                    TR_LOG_MSTR_ASSET_FILE::create($dt);
+
+                    // DB::insert($sql);
+                    // DB::commit();
                     
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
 
                 } 
                 catch (\Exception $e) 
                 {
-                    DB::rollback();
+                    // DB::rollback();
                     return response()->json(['status' => false, "message" => 'Failed to update Foto Seri']);
                 }
             }
 
-            if( !empty($request->foto_imei) )
+            if( !empty($_FILES['foto_imei']['name']) )
             {
                 $file_name = str_replace(" ", "_", $_FILES['foto_imei']['name']);
                 $user_id = Session::get('user_id');
@@ -395,36 +412,41 @@ class MasterAssetController extends Controller
             
                 }
 
-                $file_upload = base64_encode(file_get_contents(addslashes($_FILES['foto_imei']['tmp_name'])));
-                $date = date("Y-m-d H:i:s");
-                
-                $sql = "INSERT INTO TM_MSTR_ASSET_FILE ( `KODE_ASSET`, `NO_REG_ITEM_FILE`, `NO_REG`, `JENIS_FOTO`, `FILENAME`, `DOC_SIZE`, `FILE_CATEGORY`, `FILE_UPLOAD`, `UPDATED_BY`, `UPDATED_AT` ) 
-                        VALUES (
-                            KODE_ASSET = '{$request->kode_asset_ams}',
-                            NO_REG_ITEM_FILE = '{$request->no_reg_item}',
-                            NO_REG = '{$request->NO_REG}',
-                            JENIS_FOTO = = '{$file_category_label}',
-                            `FILENAME`= '{$file_name}',
-                            DOC_SIZE = '".$_FILES['foto_imei']['size']."',
-                            FILE_CATEGORY= '{$file_category}',
-                            FILE_UPLOAD = '{$file_upload}',
-                            UPDATED_BY = '{$user_id}',
-                            UPDATED_AT = '{$date}' )
-                        ON DUPLICATE KEY UPDATE    
-                        KODE_ASSET = '{$request->kode_asset_ams}', FILE_CATEGORY='{$file_category}'";
-               
-                DB::beginTransaction();
+                $file_upload = 'data:' . $_FILES['foto_imei']['type'] . ';base64,'. base64_encode(file_get_contents(addslashes($_FILES['foto_imei']['tmp_name'])));
+                // DB::beginTransaction();
+                $data_upload =  array(
+                    'KODE_ASSET'=> $request->kode_asset_ams,
+                    'NO_REG_ITEM_FILE'=> $request->no_reg_item,
+                    'NO_REG' => $request->no_reg,
+                    'JENIS_FOTO' => $file_category_label,
+                    'FILENAME' => $file_name,
+                    'DOC_SIZE' => $_FILES['foto_imei']['size'],
+                    'FILE_CATEGORY' => $file_category,
+                    'FILE_UPLOAD' => $file_upload,
+                    'UPDATED_BY' => $user_id,
+                    'UPDATED_AT' => $date
+                );
 
                 try 
                 {
-                    DB::insert($sql);
-                    DB::commit();
+
+                    $data = TM_MSTR_ASSET_FILE::updateOrCreate( ['KODE_ASSET'=>$request->kode_asset_ams,'FILE_CATEGORY'=>$file_category,'NO_REG'=>$request->no_reg,'NO_REG_ITEM_FILE'=>$request->no_reg_item],$data_upload );
+                    $data->save();
+
+                    $update_data = TM_MSTR_ASSET_FILE::where('KODE_ASSET', $request->kode_asset_ams)->first();
+                    $update_data->UPDATED_AT = $date;
+                    $update_data->UPDATED_BY = \Session::get('user_id');
+                    $dt = json_decode(json_encode($update_data,true),true);
+                    TR_LOG_MSTR_ASSET_FILE::create($dt);
+
+                    // DB::insert($sql);
+                    // DB::commit();
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
 
                 } 
                 catch (\Exception $e) 
                 {
-                    DB::rollback();
+                    // DB::rollback();
                     return response()->json(['status' => false, "message" => 'Failed to update Foto Mesin']);
                 }
             }
