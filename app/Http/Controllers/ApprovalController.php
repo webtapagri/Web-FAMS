@@ -2441,7 +2441,12 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
     function validasi_outstanding($noreg,$role_id)
     {
-        $sql = " SELECT COUNT(*) AS JML FROM v_outstanding WHERE document_code = '{$noreg}' AND role_id = $role_id ";
+        // $sql = " SELECT COUNT(*) AS JML FROM v_outstanding WHERE document_code = '{$noreg}' AND role_id = $role_id ";
+        $sql = " SELECT COUNT(*) AS JML FROM v_outstanding a
+        LEFT JOIN TR_WORKFLOW_JOB b ON a.role_id = b.id_role AND a.seq = b.seq AND a.workflow_detail_code = b.workflow_detail_code 
+        LEFT JOIN TR_WORKFLOW_DETAIL c ON c.workflow_detail_code = a.workflow_detail_code
+        WHERE a.document_code = '{$noreg}' AND a.role_id = '{$role_id}'
+        and c.workflow_group_name like 'Complete%' ";
         //echo $sql; die();
         $data = DB::SELECT($sql); 
         //echo "4<pre>"; print_r($data);die(); 
