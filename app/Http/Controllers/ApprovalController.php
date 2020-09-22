@@ -4814,7 +4814,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         'MESSAGE_V1' => $v->MESSAGE_V1,
                         'MESSAGE_V2' => $v->MESSAGE_V2,
                         'MESSAGE_V3' => $v->MESSAGE_V3,
-                        'MESSAGE_V4' => $v->MESSAGE_V4
+                        'MESSAGE_V4' => $v->MESSAGE_V4,
+                        'nilaibuku' => $NILAI_BUKU[$k]
                     );
                 }
                 else
@@ -4830,7 +4831,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         'MESSAGE_V1' => $v->MESSAGE_V1,
                         'MESSAGE_V2' => $v->MESSAGE_V2,
                         'MESSAGE_V3' => $v->MESSAGE_V3,
-                        'MESSAGE_V4' => $v->MESSAGE_V4
+                        'MESSAGE_V4' => $v->MESSAGE_V4,
+                        'nilaibuku' => $NILAI_BUKU[$k]
                     );
                 }
                 
@@ -4845,9 +4847,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {   
-                    $nilaibuku = $NILAI_BUKU[$k];
                     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '{$nilaibuku}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '".$result['nilaibuku']."' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                     DB::UPDATE($sql_1);
  
                     //2. INSERT LOG
