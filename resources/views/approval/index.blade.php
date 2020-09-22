@@ -1758,7 +1758,11 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.harga_perolehan + "</td>";
-                        item += "<td>" + val.nilai_buku + "</td>";
+                        if(val.no_fico === ''){
+                            item += "<td>" + val.nilai_buku + "</td>";
+                        }else{
+                            item += "<td>" + val.nilai_buku2 + "</td>";
+                        }
                         item += "<td>" + val.no_fico + "</td>";
 
                         if( data.item_detail.length != 1 )
@@ -3272,7 +3276,11 @@
                         item += "<td>" + val.lokasi_ba_description + "</td>";
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.harga_perolehan + "</td>";
-                        item += "<td>" + val.nilai_buku + "</td>";
+                        if(val.no_fico === ''){
+                            item += "<td>" + val.nilai_buku + "</td>";
+                        }else{
+                            item += "<td>" + val.nilai_buku2 + "</td>";
+                        }
                         item += "<td>" + val.no_fico + "</td>";
 
                         item += "<td><a href='<?php {{ echo url("/master-asset/show-data"); }} ?>/"+kode_fams+"' target='_blank'><i class='fa fa-eye'></i></a></td>";

@@ -3427,6 +3427,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         for($i=0;$i<count($row);$i++){
             $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+            $NO_FICO = $row[$i]->NO_FICO;
 
             $YEAR = date('Y');
 
@@ -3453,14 +3454,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             
             $data = $service;
 
-            if(!empty($data))
-            {
-                $nilai[] = $data*100;
-            }
-            else
-            {
-                $nilai[] = 0;
-            }
+                if(!empty($data))
+                {
+                    $nilai[] = $data*100;
+                }
+                else
+                {
+                    $nilai[] = 0;
+                }
         }
 
         return $nilai;
@@ -3524,6 +3525,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     'nama_asset_1' => trim($v->NAMA_ASSET_1),
                     'harga_perolehan' => number_format(trim($v->HARGA_PEROLEHAN),0,',','.'),
                     'nilai_buku' => number_format(trim($NILAI_BUKU[$k]),0,',','.'),
+                    'nilai_buku2' => number_format($v->NILAI_BUKU,0,',','.'),
                     'jenis_pengajuan' => trim($v->JENIS_PENGAJUAN),
                     'created_by' => trim($v->CREATED_BY),
                     'created_at' => trim($v->CREATED_AT),
@@ -4405,13 +4407,18 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         $data = DB::SELECT($sql); 
 
+        $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                     ->where('NO_REG','LIKE','%'.$noreg.'%')
+                     ->get();
+        $NILAI_BUKU = $this->get_nilai_buku($row);
+
         $params = array();
 
         if(!empty($data))
         {
             foreach( $data as $k => $v )
             {   
-                $proses = $this->transfer_disposal_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT);   
+                $proses = $this->transfer_disposal_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT,$NILAI_BUKU[$k]);   
                 
                 if($proses['status']=='error')
                 {
@@ -4691,7 +4698,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         }
     }
 
-    public function transfer_disposal_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT) 
+    public function transfer_disposal_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT,$NILAI_BUKU) 
     {
         
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
@@ -4737,7 +4744,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', NILAI_BUKU = '{$NILAI_BUKU}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                     //2. INSERT LOG
                     $create_date = date("Y-m-d H:i:s");
