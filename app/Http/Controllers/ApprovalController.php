@@ -4797,11 +4797,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             foreach($data->item as $k => $v)
             {
                 
-                $jml = count($NILAI_BUKU);
-                $item = count($data->item);
-                if($jml == 1 && $k == $jml) { //return SAP selalu array lebih dr 1 row; 
-                    break;
-                }
+                // $jml = count($NILAI_BUKU);
+                // $item = count($data->item);
+                // if($jml == 1 && $k == $jml) { //return SAP selalu array lebih dr 1 row; 
+                //     break;
+                // }
 
                 //echo "20<pre>"; print_r($v);                
                 if( $v->TYPE == 'S' && $v->ID == 'AA' && $v->NUMBER == 228 )
