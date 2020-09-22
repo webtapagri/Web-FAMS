@@ -4407,18 +4407,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         $data = DB::SELECT($sql); 
 
-        $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
-                     ->where('NO_REG','LIKE','%'.$noreg.'%')
-                     ->get();
-        $NILAI_BUKU = $this->get_nilai_buku($row);
-
         $params = array();
 
         if(!empty($data))
         {
             foreach( $data as $k => $v )
             {   
-                $proses = $this->transfer_disposal_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT,$NILAI_BUKU[$k]);   
+                $proses = $this->transfer_disposal_process($v,$RAIFP1_BUDAT,$RAIFP2_MONAT);   
                 
                 if($proses['status']=='error')
                 {
@@ -4698,7 +4693,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         }
     }
 
-    public function transfer_disposal_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT,$NILAI_BUKU) 
+    public function transfer_disposal_process($dt,$RAIFP1_BUDAT,$RAIFP2_MONAT) 
     {
         
         $ANLA_BUKRS = substr($dt->BA_PEMILIK_ASSET,0,2);
@@ -4707,6 +4702,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $COBL_KOSTL = $dt->COST_CENTER_GL;
         
         $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
+        
+        $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                     ->where('NO_REG','LIKE','%'.$noreg.'%')
+                     ->get();
+        $NILAI_BUKU = $this->get_nilai_buku($row);
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
             
@@ -4743,8 +4743,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {   
+                    $nilaibuku =  $NILAI_BUKU[0];
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', NILAI_BUKU = '{$NILAI_BUKU}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', NILAI_BUKU = '{$nilaibuku}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                     //2. INSERT LOG
                     $create_date = date("Y-m-d H:i:s");
@@ -4843,8 +4844,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {   
+                    $nilaibuku = $NILAI_BUKU[$k];
                     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '{$nilaibuku}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                     DB::UPDATE($sql_1);
  
                     //2. INSERT LOG
