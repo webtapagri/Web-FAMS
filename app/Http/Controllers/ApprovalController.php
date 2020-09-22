@@ -3457,7 +3457,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 if(!empty($data))
                 {
                     $nilai[] = $data*100;
-                }
+                } 
                 else
                 {
                     $nilai[] = 0;
@@ -4700,7 +4700,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
         $COBL_KOSTL = $dt->COST_CENTER_GL;
-        $noreg = $dt->NO_REG;
+        $noreg = $dt->NO_REG_DISPOSAL;
         
         $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
         
@@ -4794,13 +4794,16 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             //RETURN ARRAY LEBIH DARI 1 ROW
             $result = array();
             $message = '';
-
-            //echo "20<pre>"; count($data); die();
-
             foreach($data->item as $k => $v)
             {
-                //echo "20<pre>"; print_r($v);
                 
+                $jml = count($NILAI_BUKU);
+                Debugbar::info(count($NILAI_BUKU));
+                if($k == $jml) { //return SAP selalu array lebih dr 1 row; 
+                    break;
+                }
+
+                //echo "20<pre>"; print_r($v);                
                 if( $v->TYPE == 'S' && $v->ID == 'AA' && $v->NUMBER == 228 )
                 {
                     $message .= $v->MESSAGE.',';
