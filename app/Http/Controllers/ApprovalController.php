@@ -4700,6 +4700,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $ANLA_LIFNR = $this->get_kode_vendor($dt->NO_REG);
         $ANLZ_GSBER = $dt->BA_PEMILIK_ASSET;
         $COBL_KOSTL = $dt->COST_CENTER_GL;
+        $noreg = $dt->NO_REG;
         
         $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
         
