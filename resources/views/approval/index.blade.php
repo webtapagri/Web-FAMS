@@ -4828,7 +4828,7 @@
     {
         $("#box-detail-item").hide();
         
-        var posting_date = $("#posting_date").val();
+        // var posting_date = $("#request-form #posting_date").val();
         
         if( $.trim(posting_date) == "" )
             {

@@ -4798,8 +4798,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             {
                 
                 $jml = count($NILAI_BUKU);
-                Debugbar::info(count($NILAI_BUKU));
-                if($k == $jml) { //return SAP selalu array lebih dr 1 row; 
+                $item = count($data->item);
+                if($jml == 1 && $k == $jml) { //return SAP selalu array lebih dr 1 row; 
                     break;
                 }
 
