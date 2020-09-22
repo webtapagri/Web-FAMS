@@ -4807,7 +4807,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 if( $v->TYPE == 'S' && $v->ID == 'AA' && $v->NUMBER == 228 )
                 {
                     $message .= $v->MESSAGE.',';
-                    $result = array(
+                    $result[] = array(
                         'TYPE' => 'S',
                         'ID' => $v->ID,
                         'NUMBER' => $v->NUMBER,
@@ -4824,7 +4824,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 else
                 {
                     $message .= $v->MESSAGE.',';
-                    $result = array(
+                    $result[] = array(
                         'TYPE' => 'E',
                         'ID' => $v->ID,
                         'NUMBER' => $v->NUMBER,
@@ -4842,57 +4842,65 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             }
             //die();
             
-
-            if( $result['TYPE'] == 'S' )
+            foreach( $result as $k => $v )
             {
-                $user_id = Session::get('user_id');
 
-                DB::beginTransaction();
-                try 
-                {   
-                    //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '".$result['nilaibuku']."' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
-                    DB::UPDATE($sql_1);
- 
-                    //2. INSERT LOG
-                    $create_date = date('Y-m-d H:i:s');
-                    $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
-                    DB::INSERT($sql_2);
-                    
-                    DB::STATEMENT($sql_3);
-                    DB::commit();
-
-                    return true;
-                }
-                catch (\Exception $e) 
+                if( $v['TYPE'] == 'S' )
+                // if( $result['TYPE'] == 'S' )
                 {
-                    DB::rollback();
-                    return false;
-                    //die();
-                }
-            }
-            else 
-            {
-                DB::beginTransaction();
+                    $user_id = Session::get('user_id');
 
-                try 
-                {    
-                    $create_date = date("Y-m-d H:i:s");
-                    $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
-                    // Debugbar::info($create_date);
-                    DB::INSERT($sql); 
-                    DB::commit();
-                    
-                    $result = array('status'=>'error','message'=> ''.$result['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
-                    return $result;                 
+                    DB::beginTransaction();
+                    try 
+                    {   
+                        //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
+                        // $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '".$result['nilaibuku']."' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                        $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$v['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '".$v['nilaibuku']."' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                        DB::UPDATE($sql_1);
+    
+                        //2. INSERT LOG
+                        $create_date = date('Y-m-d H:i:s');
+                        // $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
+                        $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$v['TYPE']."','".$v['ID']."','".$v['NUMBER']."','".$v['MESSAGE']."','".$v['MESSAGE_V1']."','".$v['MESSAGE_V2']."','".$v['MESSAGE_V3']."','".$v['MESSAGE_V4']."','".$create_date."') ";
+                        DB::INSERT($sql_2);
+                        
+                        DB::STATEMENT($sql_3);
+                        DB::commit();
+
+                        return true;
+                    }
+                    catch (\Exception $e) 
+                    {
+                        DB::rollback();
+                        return false;
+                        //die();
+                    }
                 }
-                catch (\Exception $e) 
+                else 
                 {
-                    DB::rollback();
-                    $result = array('status'=>'error','message'=>$e->getMessage());
-                    return $result;
-                }
-            }              
+                    DB::beginTransaction();
+
+                    try 
+                    {    
+                        $create_date = date("Y-m-d H:i:s");
+                        // $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
+                        $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$v['TYPE']."','".$v['ID']."','".$v['NUMBER']."','".$v['MESSAGE']."','".$v['MESSAGE_V1']."','".$v['MESSAGE_V2']."','".$v['MESSAGE_V3']."','".$v['MESSAGE_V4']."','".$create_date."') ";
+                        // Debugbar::info($create_date);
+                        DB::INSERT($sql); 
+                        DB::commit();
+                        
+                        // $result = array('status'=>'error','message'=> ''.$result['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
+                        $result = array('status'=>'error','message'=> ''.$v['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
+                        return $result;                 
+                    }
+                    catch (\Exception $e) 
+                    {
+                        DB::rollback();
+                        $result = array('status'=>'error','message'=>$e->getMessage());
+                        return $result;
+                    }
+                }  
+            }            
         }
     }
     
