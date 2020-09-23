@@ -4704,10 +4704,6 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         
         $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
         
-        $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
-                     ->where('NO_REG','LIKE','%'.$noreg.'%')
-                     ->get();
-        $NILAI_BUKU = $this->get_nilai_buku($row);
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
             
@@ -4744,6 +4740,11 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {   
+                    $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                                ->where('NO_REG','LIKE','%'.$noreg.'%')
+                                ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
+                                ->get();
+                    $NILAI_BUKU = $this->get_nilai_buku($row);
                     $nilaibuku =  $NILAI_BUKU[0];
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
                     $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', NILAI_BUKU = '{$nilaibuku}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
@@ -4794,20 +4795,20 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             //RETURN ARRAY LEBIH DARI 1 ROW
             $result = array();
             $message = '';
+            $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                        ->where('NO_REG','LIKE','%'.$noreg.'%')
+                        ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
+                        ->get();
+            $NILAI_BUKU = $this->get_nilai_buku($row);
+            $nilaibuku =  $NILAI_BUKU[0];
+
             foreach($data->item as $k => $v)
             {
-                
-                // $jml = count($NILAI_BUKU);
-                // $item = count($data->item);
-                // if($jml == 1 && $k == $jml) { //return SAP selalu array lebih dr 1 row; 
-                //     break;
-                // }
-
                 //echo "20<pre>"; print_r($v);                
                 if( $v->TYPE == 'S' && $v->ID == 'AA' && $v->NUMBER == 228 )
                 {
                     $message .= $v->MESSAGE.',';
-                    $result[] = array(
+                    $result = array(
                         'TYPE' => 'S',
                         'ID' => $v->ID,
                         'NUMBER' => $v->NUMBER,
@@ -4817,14 +4818,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         'MESSAGE_V1' => $v->MESSAGE_V1,
                         'MESSAGE_V2' => $v->MESSAGE_V2,
                         'MESSAGE_V3' => $v->MESSAGE_V3,
-                        'MESSAGE_V4' => $v->MESSAGE_V4,
-                        'nilaibuku' => $NILAI_BUKU[$k]
+                        'MESSAGE_V4' => $v->MESSAGE_V4
                     );
                 }
                 else
                 {
                     $message .= $v->MESSAGE.',';
-                    $result[] = array(
+                    $result = array(
                         'TYPE' => 'E',
                         'ID' => $v->ID,
                         'NUMBER' => $v->NUMBER,
@@ -4834,19 +4834,14 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         'MESSAGE_V1' => $v->MESSAGE_V1,
                         'MESSAGE_V2' => $v->MESSAGE_V2,
                         'MESSAGE_V3' => $v->MESSAGE_V3,
-                        'MESSAGE_V4' => $v->MESSAGE_V4,
-                        'nilaibuku' => $NILAI_BUKU[$k]
+                        'MESSAGE_V4' => $v->MESSAGE_V4
                     );
                 }
                 
             }
             //die();
             
-            foreach( $result as $k => $v )
-            {
-
-                if( $v['TYPE'] == 'S' )
-                // if( $result['TYPE'] == 'S' )
+                if( $result['TYPE'] == 'S' )
                 {
                     $user_id = Session::get('user_id');
 
@@ -4854,14 +4849,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     try 
                     {   
                         //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                        // $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '".$result['nilaibuku']."' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
-                        $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$v['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '".$v['nilaibuku']."' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                        $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$result['MESSAGE_V2']."', COST_CENTER = '{$dt->COST_CENTER}' , NILAI_BUKU = '{$nilaibuku}' , POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                         DB::UPDATE($sql_1);
     
                         //2. INSERT LOG
                         $create_date = date('Y-m-d H:i:s');
-                        // $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
-                        $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$v['TYPE']."','".$v['ID']."','".$v['NUMBER']."','".$v['MESSAGE']."','".$v['MESSAGE_V1']."','".$v['MESSAGE_V2']."','".$v['MESSAGE_V3']."','".$v['MESSAGE_V4']."','".$create_date."') ";
+                        $sql_2 = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
                         DB::INSERT($sql_2);
                         
                         DB::STATEMENT($sql_3);
@@ -4883,14 +4876,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     try 
                     {    
                         $create_date = date("Y-m-d H:i:s");
-                        // $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
-                        $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$v['TYPE']."','".$v['ID']."','".$v['NUMBER']."','".$v['MESSAGE']."','".$v['MESSAGE_V1']."','".$v['MESSAGE_V2']."','".$v['MESSAGE_V3']."','".$v['MESSAGE_V4']."','".$create_date."') ";
+                        $sql = " INSERT INTO TR_LOG_SYNC_SAP(no_reg,asset_po_id,no_reg_item,msgtyp,msgid,msgnr,message,msgv1,msgv2,msgv3,msgv4,create_date)VALUES('{$dt->NO_REG_DISPOSAL}','','{$dt->NO_REG_ITEM}','".$result['TYPE']."','".$result['ID']."','".$result['NUMBER']."','".$result['MESSAGE']."','".$result['MESSAGE_V1']."','".$result['MESSAGE_V2']."','".$result['MESSAGE_V3']."','".$result['MESSAGE_V4']."','".$create_date."') ";
                         // Debugbar::info($create_date);
                         DB::INSERT($sql); 
                         DB::commit();
                         
-                        // $result = array('status'=>'error','message'=> ''.$result['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
-                        $result = array('status'=>'error','message'=> ''.$v['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
+                        $result = array('status'=>'error','message'=> ''.$result['MESSAGE'].' (No Reg Item: '.$dt->NO_REG_ITEM.')');
                         return $result;                 
                     }
                     catch (\Exception $e) 
@@ -4899,8 +4890,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         $result = array('status'=>'error','message'=>$e->getMessage());
                         return $result;
                     }
-                }  
-            }            
+                }             
         }
     }
     
