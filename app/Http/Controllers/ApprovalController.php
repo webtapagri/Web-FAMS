@@ -4703,6 +4703,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $noreg = $dt->NO_REG_DISPOSAL;
         
         $posting_date = DATE_FORMAT(date_create($RAIFP1_BUDAT), 'Y-m-d');
+
+        $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                ->where('NO_REG','LIKE','%'.$noreg.'%')
+                ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
+                ->get();
+        $NILAI_BUKU = $this->get_nilai_buku($row);
+        $nilaibuku =  $NILAI_BUKU[0];
         
 
         $ANLN1 = $this->get_anln1($dt->KODE_ASSET_SAP);
@@ -4740,12 +4747,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 DB::beginTransaction();
                 try 
                 {   
-                    $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
-                                ->where('NO_REG','LIKE','%'.$noreg.'%')
-                                ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
-                                ->get();
-                    $NILAI_BUKU = $this->get_nilai_buku($row);
-                    $nilaibuku =  $NILAI_BUKU[0];
+                    // $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+                    //             ->where('NO_REG','LIKE','%'.$noreg.'%')
+                    //             ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
+                    //             ->get();
+                    // $NILAI_BUKU = $this->get_nilai_buku($row);
+                    // $nilaibuku =  $NILAI_BUKU[0];
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
                     $sql_1 = " UPDATE TR_DISPOSAL_ASSET_DETAIL SET NO_FICO = '".$data->item->MESSAGE_V2."', COST_CENTER = '{$dt->COST_CENTER}', NILAI_BUKU = '{$nilaibuku}', POSTING_DATE = '{$posting_date}', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_DISPOSAL}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
@@ -4795,12 +4802,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             //RETURN ARRAY LEBIH DARI 1 ROW
             $result = array();
             $message = '';
-            $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
-                        ->where('NO_REG','LIKE','%'.$noreg.'%')
-                        ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
-                        ->get();
-            $NILAI_BUKU = $this->get_nilai_buku($row);
-            $nilaibuku =  $NILAI_BUKU[0];
+            // $row = DB::table('TR_DISPOSAL_ASSET_DETAIL')
+            //             ->where('NO_REG','LIKE','%'.$noreg.'%')
+            //             ->where('KODE_ASSET_AMS','LIKE','%'.$dt->KODE_ASSET_AMS.'%')
+            //             ->get();
+            // $NILAI_BUKU = $this->get_nilai_buku($row);
+            // $nilaibuku =  $NILAI_BUKU[0];
 
             foreach($data->item as $k => $v)
             {
