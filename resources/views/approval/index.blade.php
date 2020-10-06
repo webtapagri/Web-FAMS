@@ -819,7 +819,8 @@
 
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Access-Control-Allow-Methods': 'GET, POST',
             }
         });
 
@@ -1051,12 +1052,14 @@
             placeholder: ' ',
             allowClear: true
         });
-
+       
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Access-Control-Allow-Methods': 'GET, POST',
             }
         });
+
         var grid_history = new Datatable();
         grid_history.init({
             src: $("#data-table-history"),
