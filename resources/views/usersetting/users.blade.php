@@ -120,7 +120,8 @@
 
         jQuery.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Access-Control-Allow-Methods': 'GET, POST',
             }
         });
         var grid = new Datatable();

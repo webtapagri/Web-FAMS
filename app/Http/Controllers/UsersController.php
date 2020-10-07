@@ -10,7 +10,7 @@ use Session;
 use API;
 use AccessRight;
 use App\User;
-use App\Http\Requests\UserRequest;
+// use App\Http\Requests\UserRequest;
 
 
 class UsersController extends Controller
@@ -113,7 +113,8 @@ class UsersController extends Controller
         return response()->json($records);
     }
 
-    public function store(UserRequest $request)
+    // public function store(UserRequest $request)
+    public function store(Request $request)
     {
        try {
             if ($request->edit_id) {
