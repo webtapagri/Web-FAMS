@@ -1067,7 +1067,7 @@
 	$.fn.dataTable.pipeline = function ( opts ) {
 		// Configuration options
 		var conf = $.extend( {
-			pages: 5,     // number of pages to cache
+			pages: 2,     // number of pages to cache
 			url: '',      // script url
 			data: null,   // function or object with parameters to send to the server
 						  // matching how `ajax.data` works in DataTables
