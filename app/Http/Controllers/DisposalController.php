@@ -315,11 +315,12 @@ class DisposalController extends Controller
 
 				$HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
 				
-				dd($HARGA_PEROLEHAN);
+				// dd($HARGA_PEROLEHAN);
 
 				$sql = "INSERT INTO TR_DISPOSAL_TEMP(KODE_ASSET_AMS,KODE_ASSET_SAP,NAMA_MATERIAL,BA_PEMILIK_ASSET,LOKASI_BA_CODE,LOKASI_BA_DESCRIPTION,NAMA_ASSET_1,CREATED_BY,JENIS_PENGAJUAN,CHECKLIST,HARGA_PEROLEHAN)
 							VALUES('{$row->KODE_ASSET_AMS}','{$row->KODE_ASSET_SAP}','{$row->NAMA_MATERIAL}','{$row->BA_PEMILIK_ASSET}','{$row->LOKASI_BA_CODE}','{$row->LOKASI_BA_DESCRIPTION}','{$row->NAMA_ASSET_1}','{$user_id}','{$jenis_pengajuan}',0,'{$HARGA_PEROLEHAN}')";
 				//	echo $sql; die();
+				
 				DB::insert($sql);
 				DB::commit();
 
