@@ -589,6 +589,12 @@
         $file_category_noseri = '';
         $file_category_imei = '';
 
+        if($data['editable']['FILE_UPLOAD'] != 1) {
+          $readonly = "readonly" ;
+        }else{
+          $readonly = "";
+        }
+
     		if(!empty($data['file']))
     		{
     			header("Content-type: image/jpeg");
@@ -601,7 +607,8 @@
                 $file_category_asset .= 'asset';
       					$l .= "<div class='col-xs-4' align='center'>";
       					$l .= "<span class='username'><b>".$v->JENIS_FOTO."</b></span>";
-                $l .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
+                $l .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden' ".$readonly."/> ";
+                // $l .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
                 $l .= "<div class='image-group'>";
                 $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-asset-remove hide' OnClick=removeImage('asset')><i class='fa fa-trash'></i></button>";
                 $l .= "<img src='".$v->FILE_UPLOAD."' title='Click to change image' id='fotoasset' class='img img-responsive'/>";
@@ -617,7 +624,8 @@
                 $file_category_noseri .= 'no seri';
       					$l .= "<div class='col-xs-4' align='center'>";
       					$l .= "<span class='username'><b>".$v->JENIS_FOTO."</b></span>";
-                $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
+                $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden' ".$readonly."/> ";
+                // $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
       					$l .= "<div class='image-group'>";
                 $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-seri-remove hide' OnClick=removeImage('seri')><i class='fa fa-trash'></i></button>";
                 $l .= "<img src='".$v->FILE_UPLOAD."' title='Click to change image' id='fotoseri' class='img img-responsive'/>";
@@ -632,7 +640,8 @@
                   $file_category_imei .= 'imei';
         					$l .= "<div class='col-xs-4' align='center'>";
         					$l .= "<span class='username'><b>".$v->JENIS_FOTO."</b></span>";
-        					$l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
+        					$l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden' ".$readonly."/> ";
+        					// $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
                   $l .= "<div class='image-group'>";
                   $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-mesin-remove hide' OnClick=removeImage('mesin')><i class='fa fa-trash'></i></button>";
                   $l .= "<img src='".$v->FILE_UPLOAD."' title='Click to change image' id='fotoimei' class='img img-responsive'/>";
@@ -647,7 +656,8 @@
           {
               $m .= "<div class='col-xs-4' align='center'>";
               $m .= "<span class='username'>Foto asset</span>";
-              $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
+              $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden' ".$readonly."/> ";
+              // $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
               $m .= "<div class='image-group'>";
               $m .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-asset-remove hide' OnClick=removeImage('asset')><i class='fa fa-trash'></i></button>";
               $m .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoasset' class='img img-responsive'/>";
@@ -660,7 +670,8 @@
           {
                $l .= "<div class='col-xs-4' align='center'>";
                $l .= "<span class='username'>Foto no. seri / no rangka</span>";
-               $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
+               $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden' ".$readonly." /> ";
+              //  $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden' /> ";
                $l .= "<div class='image-group'>";
                $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-seri-remove hide' OnClick=removeImage('seri')><i class='fa fa-trash'></i></button>";
                $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoseri' class='img img-responsive'/>";
@@ -673,7 +684,8 @@
           {
               $l .= "<div class='col-xs-4' align='center'>";
               $l .= "<span class='username'>Foto No msin / IMEI</span>";
-              $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
+              $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden' ".$readonly."/> ";
+              // $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
               $l .= "<div class='image-group'>";
               $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-mesin-remove hide' OnClick=removeImage('mesin')><i class='fa fa-trash'></i></button>";
               $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoimei' class='img img-responsive'/>";
@@ -688,7 +700,8 @@
             {
                 $m .= "<div class='col-xs-4' align='center'>";
                 $m .= "<span class='username'>Foto asset</span>";
-                $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
+                $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden' ".$readonly."/> ";
+                // $m .= "<input type='file' accept='image/*' id='imgupload_asset' name='foto_asset' style='visibility:hidden'/> ";
                 $m .= "<div class='image-group'>";
                 $m .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-asset-remove hide' OnClick=removeImage('asset')><i class='fa fa-trash'></i></button>";
                 $m .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoasset' class='img img-responsive'/>";
@@ -701,7 +714,8 @@
             {
                  $l .= "<div class='col-xs-4' align='center'>";
                  $l .= "<span class='username'>Foto no. seri / no rangka</span>";
-                 $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
+                 $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden' ".$readonly."/> ";
+                //  $l .= "<input type='file' accept='image/*' id='imgupload_seri' name='foto_seri' style='visibility:hidden'/> ";
                  $l .= "<div class='image-group'>";
                  $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-seri-remove hide' OnClick=removeImage('seri ')><i class='fa fa-trash'></i></button>";
                  $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoseri' class='img img-responsive'/>";
@@ -714,7 +728,8 @@
             {
                 $l .= "<div class='col-xs-4' align='center'>";
                 $l .= "<span class='username'>Foto No msin / IMEI</span>";
-                $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
+                $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden' ".$readonly."/> ";
+                // $l .= "<input type='file' accept='image/*' id='imgupload_imei' name='foto_imei' style='visibility:hidden'/> ";
                 $l .= "<div class='image-group'>";
                 $l .= "<button type='button' class='btn btn-danger btn-xs btn-flat btn-foto-mesin-remove hide' OnClick=removeImage('mesin')><i class='fa fa-trash'></i></button>";
                 $l .= "<img src='".url('img/default-img.png')."' title='Click to change image' id='fotoimei' class='img img-responsive'/>";

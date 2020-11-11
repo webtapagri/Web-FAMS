@@ -71,7 +71,7 @@ class EditFieldController extends Controller
                     select id, role_id, tablename, fieldname, editable
                     from TBM_EDITFIELD 
                     ) as te ON (te.role_id = role.id AND te.tablename = tn.TABLE_NAME  AND te.fieldname = tn.COLUMN_NAME)
-                    WHERE role.deleted=0 AND tn.TABLE_NAME = "TM_MSTR_ASSET" ';
+                    WHERE role.deleted=0 AND tn.TABLE_NAME IN ("TM_MSTR_ASSET","TM_MSTR_ASSET_FILE") ';
 
         if($request->role)
             $sql .= ' AND role.id = ' . $request->role;
@@ -159,7 +159,7 @@ class EditFieldController extends Controller
     public function select_tablename()
     {
         // $sql = 'SELECT DISTINCT UPPER(TABLE_NAME) as id, UPPER(TABLE_NAME) as text FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME LIKE "TM_%" ';
-        $sql = " SELECT DISTINCT UPPER(TABLE_NAME) as id, UPPER(TABLE_NAME) as text FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'TM_MSTR_ASSET' ";
+        $sql = " SELECT DISTINCT UPPER(TABLE_NAME) as id, UPPER(TABLE_NAME) as text FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME IN ('TM_MSTR_ASSET','TM_MSTR_ASSET_FILE') ";
         $data = DB::select(DB::raw($sql));
         return response()->json(array("data" => $data));
     }

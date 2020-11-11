@@ -492,7 +492,8 @@ class MasterAssetController extends Controller
     public function edit_asset($id)
     {
         $id = base64_decode($id);
-        $table = (new TM_MSTR_ASSET)->getTable();
+        // $table = (new TM_MSTR_ASSET)->getTable();
+        $table = " 'TM_MSTR_ASSET','TM_MSTR_ASSET_FILE' ";
         $role_id = Session::get('role_id');
         //echo $id; die();
         if (empty(Session::get('authenticated')))
@@ -645,10 +646,14 @@ class MasterAssetController extends Controller
 
     function get_editable_field($role_id,$table)
     {
+        // $sql = " SELECT DISTINCT UPPER(b.COLUMN_NAME) AS fieldname, a.editable FROM INFORMATION_SCHEMA.COLUMNS b
+        //             LEFT JOIN TBM_EDITFIELD a ON a.fieldname =  b.COLUMN_NAME AND a.role_id = '".$role_id."'
+        //             WHERE b.TABLE_NAME ='".$table."' ";
         $sql = " SELECT DISTINCT UPPER(b.COLUMN_NAME) AS fieldname, a.editable FROM INFORMATION_SCHEMA.COLUMNS b
                     LEFT JOIN TBM_EDITFIELD a ON a.fieldname =  b.COLUMN_NAME AND a.role_id = '".$role_id."'
-                    WHERE b.TABLE_NAME ='".$table."' ";
+                    WHERE b.TABLE_NAME IN (".$table.") ";
 
+        Debugbar::info($sql);
         $data = DB::SELECT($sql);
 
         if(!empty($data))
