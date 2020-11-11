@@ -315,7 +315,7 @@ class DisposalController extends Controller
 
 				$HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
 				
-				// dd($HARGA_PEROLEHAN);
+				dd($HARGA_PEROLEHAN);
 
 				$sql = "INSERT INTO TR_DISPOSAL_TEMP(KODE_ASSET_AMS,KODE_ASSET_SAP,NAMA_MATERIAL,BA_PEMILIK_ASSET,LOKASI_BA_CODE,LOKASI_BA_DESCRIPTION,NAMA_ASSET_1,CREATED_BY,JENIS_PENGAJUAN,CHECKLIST,HARGA_PEROLEHAN)
 							VALUES('{$row->KODE_ASSET_AMS}','{$row->KODE_ASSET_SAP}','{$row->NAMA_MATERIAL}','{$row->BA_PEMILIK_ASSET}','{$row->LOKASI_BA_CODE}','{$row->LOKASI_BA_DESCRIPTION}','{$row->NAMA_ASSET_1}','{$user_id}','{$jenis_pengajuan}',0,'{$HARGA_PEROLEHAN}')";
@@ -821,19 +821,16 @@ class DisposalController extends Controller
     	$BUKRS = substr($row->BA_PEMILIK_ASSET,0,2);
 		$YEAR = date('Y');
 
-		$ANLN1 = $this->get_anln1($row[0]->KODE_ASSET_SAP);
-    	// $ANLN1 = $this->get_anln1($row->KODE_ASSET_SAP);
+    	$ANLN1 = $this->get_anln1($row->KODE_ASSET_SAP);
     	
-    	if($row[0]->KODE_ASSET_SUBNO_SAP == '') 
-    	// if( $row->KODE_ASSET_SUBNO_SAP == '') 
+    	if( $row->KODE_ASSET_SUBNO_SAP == '') 
     	{
     		$ANLN2 = '0000';
     	}
     	else
     	{
 			// $ANLN2 = $row->KODE_ASSET_SUBNO_SAP;
-			// $ANLN2 = str_pad($row->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
-			$ANLN2 = str_pad($row[0]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
+			$ANLN2 = str_pad($row->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
 			
     	}
 		
