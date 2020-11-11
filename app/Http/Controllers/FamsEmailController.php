@@ -65,7 +65,8 @@ class FamsEmailController extends Controller
 		$sql2 = " SELECT a.*, a.date AS date_create FROM v_history a WHERE a.document_code = '{$document_code}' ORDER BY date_create ";
 		$dt_history_approval = DB::SELECT($sql2);
 
-		$row = DB::table('v_email_approval')
+		// $row = DB::table('v_email_approval')
+		$row = DB::table('v_email_data_approval')
                      ->where('document_code','LIKE','%'.$document_code.'%')
                      ->get();
 		
@@ -206,7 +207,8 @@ class FamsEmailController extends Controller
 	
 	function get_harga_perolehan($row)
     {
-        $nilai = array();
+		$nilai = array();
+		// dd($row);
 
         for($i=0;$i<count($row);$i++){
             $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
