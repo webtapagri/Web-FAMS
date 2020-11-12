@@ -1720,7 +1720,9 @@
             } 
 
             // if(jenis_asset.charAt(0) !== asset_class[i])
-            if(!asset_class.includes(jenis_asset.charAt(0)))
+            var implode = asset_class.join(",");
+            var assetclass = implode.split(",");
+            if(!assetclass.includes(jenis_asset.charAt(0)))
             {
                 notify({
                     type: 'warning',
