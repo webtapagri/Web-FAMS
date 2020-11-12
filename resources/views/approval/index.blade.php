@@ -1719,7 +1719,8 @@
                 return false;
             } 
 
-            if(jenis_asset.charAt(0) !== asset_class[i])
+            // if(jenis_asset.charAt(0) !== asset_class[i])
+            if(!asset_class.includes(jenis_asset.charAt(0)))
             {
                 notify({
                     type: 'warning',

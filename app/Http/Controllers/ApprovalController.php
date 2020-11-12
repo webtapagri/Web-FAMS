@@ -3757,9 +3757,12 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         $request = array();
         
         // $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) WHERE a.no_reg = '{$noreg}' ";
-        $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS, d.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) 
+        // $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS, d.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) 
+        // LEFT JOIN TM_ASSET_CONTROLLER_MAP d ON a.JENIS_ASSET_TUJUAN = d.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = d.GROUP_CODE AND a.SUB_GROUP_TUJUAN = d.SUBGROUP_CODE
+        // WHERE a.no_reg = '{$noreg}' ";
+        $sql = " SELECT distinct b.*, b.NO_REG as DOCUMENT_CODE, a.* , group_concat(c.DESCRIPTION) as KODE_ASSET_CLASS, d.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) 
         LEFT JOIN TM_ASSET_CONTROLLER_MAP d ON a.JENIS_ASSET_TUJUAN = d.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = d.GROUP_CODE AND a.SUB_GROUP_TUJUAN = d.SUBGROUP_CODE
-        WHERE a.no_reg = '{$noreg}' ";
+        WHERE a.no_reg =  '{$noreg}' GROUP BY b.KODE_ASSET_AMS ";
 
         $data = DB::SELECT($sql);
 
