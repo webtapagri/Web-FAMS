@@ -4750,9 +4750,11 @@
         }
         
         <?php if($user_role == 'AMS'){ ?> 
-            if(!jenis_asset_tujuan.includes("")){
-                if(update_jenis_asset() ==  false ){
-                    return false;
+            if(status !== 'R'){
+                if(!jenis_asset_tujuan.includes("")){
+                    if(update_jenis_asset() ==  false ){
+                        return false;
+                    }
                 }
             }
         <?php } ?>    
