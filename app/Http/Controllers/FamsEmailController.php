@@ -60,6 +60,7 @@ class FamsEmailController extends Controller
 				WHERE a.document_code = '{$document_code}'
 				order by a.nama_material ";
 		$dt = DB::SELECT($sql);
+		// dd($sql);
 
 		// 2. HISTORY APPROVAL 
 		$sql2 = " SELECT a.*, a.date AS date_create FROM v_history a WHERE a.document_code = '{$document_code}' ORDER BY date_create ";
@@ -85,7 +86,7 @@ class FamsEmailController extends Controller
 		$data->history_approval = $dt_history_approval;
 		$data->no_reg = $req['noreg'];
 		$data->message = "";
-		
+		// dd($data->datax);
 		$document_code_new = $data->datax[0]->document_code;
 		if($document_code_new != "")
 		{
