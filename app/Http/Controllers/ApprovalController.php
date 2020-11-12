@@ -4938,7 +4938,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. ADD KODE_SAP_TUJUAN  TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$data->item->MESSAGE_V1."', KODE_ASSET_AMS_TUJUAN = '".$ANLA_BUKRS.$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
+                    // $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}'; ";
                     DB::UPDATE($sql_1);
                     //2. INSERT LOG
                     $create_date = date("Y-m-d H:i:s");
@@ -5047,7 +5048,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 try 
                 {   
                     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$result['MESSAGE_V1']."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    // $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$result['MESSAGE_V1']."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
+                    $sql_1 = " UPDATE TR_MUTASI_ASSET_DETAIL SET KODE_SAP_TUJUAN = '".$result['MESSAGE_V1']."', KODE_ASSET_AMS_TUJUAN = '".$ANLA_BUKRS.$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG_MUTASI}' AND KODE_ASSET_AMS = '{$dt->KODE_ASSET_AMS}' ";
                     DB::UPDATE($sql_1);
 
                     //2. INSERT LOG
