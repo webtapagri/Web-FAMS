@@ -4630,6 +4630,7 @@
                    
                     });
                     var i = 1;
+                    
                     $.each(data.item_detail, function(key, val) 
                     {
                         if(area_code.includes(val.tujuan)){
@@ -4719,12 +4720,15 @@
 
         } 
           
+
         // VALIDASI
         for (var i = 0; i < input.length/2; i++) {             
             var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
             kode_ac.push(ka_con);
             var jns_at = $("#jenis_asset_tujuan-"+no_reg_item[i]+"").val();
+
             jenis_asset_tujuan.push(jns_at);
+
                 if(po_type[i] == 1)
                 {
                     // AMP & LAIN
@@ -4750,7 +4754,7 @@
         }
         <?php if($user_role == 'AMS'){ ?> 
             if(status !== 'R'){
-                if(jenis_asset_tujuan.length>0){
+                if(jenis_asset_tujuan.length < 1){
                 // if(!jenis_asset_tujuan.includes("")){
                     if(update_jenis_asset() ==  false ){
                         return false;
