@@ -311,7 +311,7 @@ class ReportController extends Controller
 		DB::unprepared("SET SESSION group_concat_max_len = 4000000;");
         $dt = DB::SELECT($sql);
         Debugbar::info($dt);
-        // dd($dt);
+        dd($dt);
         if(!empty($dt))
         {
             foreach( $dt as $k => $v )

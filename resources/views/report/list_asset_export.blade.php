@@ -111,6 +111,8 @@
             $mtsa = "";
             $milik = "";
             $sewa = "";
+            $hperolehan = "";
+            $nbuku = "";
             $i = 0;
 
             foreach( $report as $v )
@@ -136,13 +138,21 @@
                     if(strpos( $v->STATUS_DOCUMENT, 'DSPA' )){
                         $dspa = "&#x2714;";
                         $mtsa = "";
+                        $hperolehan = '0';
+                        $nbuku = '0';
                     }
                     else{
                         $mtsa = "&#x2714;";
                         $dspa = "";
+                        $hperolehan = '0';
+                        $nbuku = '0';
                     }
                 }
                 else{
+
+                    $hperolehan = $harga[$i];
+                    $nbuku = $nilai_buku[$i];
+
                     if(substr($v->BA_PEMILIK_ASSET,0,2)<>12){
                         $milik =  "&#x2714;";
                         $sewa = "";
@@ -174,8 +184,8 @@
                     <td><img src='".$v->FOTO_ASET."' width='100px' /></td>
                     <td><img src='".$v->FOTO_SERI."' width='100px' /></td>
                     <td><img src='".$v->FOTO_MESIN."' width='100px' /></td>
-                    <td>".$harga[$i]."</td>
-                    <td>".$nilai_buku[$i]."</td>
+                    <td>".$hperolehan."</td>
+                    <td>".$nbuku."</td>
                     <td>".$dspa."</td>
                     <td>".$mtsa."</td>
                 </tr>

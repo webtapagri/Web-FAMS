@@ -117,11 +117,15 @@ html, body {
             $sewa = "";
             $foto_aset = "";
             $foto_seri = "";
-            $foto_mesin = "";
+            $foto_mesin = ""; 
+            $hperolehan = "";
+            $nbuku = "";
             
             foreach( $data['report'] as $k => $v )
             {
 
+                $hperolehan = $v['HARGA_PEROLEHAN'];
+                $nbuku = $v['NILAI_BUKU'];
                 if($v['KONDISI_ASSET'] == 'B')
                 {
                     $b = "<i class='fa fa-check'></i>";
@@ -142,10 +146,14 @@ html, body {
                     if(strpos( $v['STATUS_DOCUMENT'], 'DSPA' )){
                         $dspa = "<i class='fa fa-check'></i>";
                         $mtsa = "";
+                        $hperolehan = "0";
+                        $nbuku = "0";
                     }
                     else{
                         $mtsa = "<i class='fa fa-check'></i>";
                         $dspa = "";
+                        $hperolehan = "0";
+                        $nbuku = "0";
                     }
                     
                 }
@@ -189,8 +197,8 @@ html, body {
                     <td>".$foto_aset."</td>
                     <td>".$foto_seri."</td>
                     <td>".$foto_mesin."</td>
-                    <td>".number_format($v['HARGA_PEROLEHAN'],0,',','.')."</td>
-                    <td>".number_format($v['NILAI_BUKU'],0,',','.')."</td>
+                    <td>".number_format($hperolehan,0,',','.')."</td>
+                    <td>".number_format($nbuku,0,',','.')."</td>
                     <td>".$dspa."</td>
                     <td>".$mtsa."</td>
                 </tr>

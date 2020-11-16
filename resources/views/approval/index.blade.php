@@ -4556,7 +4556,7 @@
                         item += "<td>" + val.kode_asset_sap + "</td>";
                         item += "<td>" + val.nama_asset_1 + "</td>";
                         item += "<td>" + val.lokasi_ba_description + "</td>";
-                        item += "<td>" + val.tujuan + "</td>";
+                        item += "<td>" + val.tujuan + " - " + val.tujuan_desc +  "</td>";
                         <?php if( $user_role == 'AMS' ){ ?>
                                         if(val.kode_asset_ams_tujuan === "") { 
                                             if(val.jenis_asset_tujuan === "" || val.group_tujuan === "" || val.sub_group_tujuan === ""){
@@ -4565,18 +4565,18 @@
                                             item += "<td width='10%'><input type='text' class='form-control input-sm' id='jenis_asset_subgroup-"+val.no_reg_item+"' name='jenis_asset_subgroup-"+val.no_reg_item+"'   autocomplete='off' ></td>";
                                             }
                                             else{
-                                            item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                            item += "<td>" + val.jenis_asset_tujuan +  " - " + val.jenis_asset_desc +  "</td>";
                                             item += "<td>" + val.group_tujuan +  " - " + val.group_desc + "</td>";
                                             item += "<td>" + val.sub_group_tujuan + " - " + val.subgroup_desc + "</td>";
                                             }
                                         }
                                         else{
-                                            item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                            item += "<td>" + val.jenis_asset_tujuan + " - " + val.jenis_asset_desc +  "</td>";
                                             item += "<td>" + val.group_tujuan +  " - " + val.group_desc + "</td>";
                                             item += "<td>" + val.sub_group_tujuan + " - " + val.subgroup_desc + "</td>";
                                         }
                         <?php } else {?>
-                                    item += "<td>" + val.jenis_asset_tujuan + "</td>";
+                                    item += "<td>" + val.jenis_asset_tujuan + " - " + val.jenis_asset_desc +  "</td>";
                                     item += "<td>" + val.group_tujuan +  " - " + val.group_desc + "</td>";
                                     item += "<td>" + val.sub_group_tujuan + " - " + val.subgroup_desc + "</td>";
                         <?php  } ?>
