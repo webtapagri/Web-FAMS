@@ -4580,7 +4580,7 @@
                                     item += "<td>" + val.group_tujuan + "</td>";
                                     item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
-                        item += "<input type='hidden' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
+                        item += "<input type='text' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
                         
                         item += "<td>" + val.kode_asset_ams_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_asset_ams_tujuan-"+val.no_reg_item+"' id='kode_asset_ams_tujuan-"+val.no_reg_item+"' value='"+ val.kode_asset_ams_tujuan +"'></td>";
                         item += "<td>" + val.kode_sap_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_sap_tujuan-"+val.no_reg_item+"' id='kode_sap_tujuan-"+val.no_reg_item+"' value='"+ val.kode_sap_tujuan +"'></td>";
@@ -4712,7 +4712,8 @@
         var po_type = [];    
         var kode_sap = [];    
         var kode_ac = []; 
-        var jenis_asset_tujuan = [];   
+        var jenis_asset_tujuan = [];  
+        // var jns_at = ""; 
         for (var i = 0; i < input.length/2; i++) { 
             mandatory_ac.push(input[i+input.length/2].value); 
             no_reg_item.push(input2[i+input2.length/2].value); 
@@ -4725,9 +4726,9 @@
         for (var i = 0; i < input.length/2; i++) {             
             var ka_con = $("#kode_aset_controller-"+no_reg_item[i]+"").val();
             kode_ac.push(ka_con);
-            var jns_at = $("#jenis_asset_tujuan-"+no_reg_item[i]+"").val();
-
-            jenis_asset_tujuan.push(jns_at);
+            // var jns_at = $("#request-form #jenis_asset_tujuan-"+no_reg_item[i]+"").val();
+            // var jns_at = $("#jenis_asset_tujuan-0").val();
+            // jenis_asset_tujuan.push(jns_at);
 
                 if(po_type[i] == 1)
                 {
@@ -4754,7 +4755,9 @@
         }
         <?php if($user_role == 'AMS'){ ?> 
             if(status !== 'R'){
-                if(jenis_asset_tujuan.length === 0){
+                
+            var aset_tujuan = $("#jenis_asset_tujuan-0").val(); 
+                if(aset_tujuan === ""){
                 /// if(!jenis_asset_tujuan.includes("")){
                     if(update_jenis_asset() ==  false ){
                         return false;
