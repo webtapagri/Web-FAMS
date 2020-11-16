@@ -4580,7 +4580,7 @@
                                     item += "<td>" + val.group_tujuan + "</td>";
                                     item += "<td>" + val.sub_group_tujuan + "</td>";
                         <?php  } ?>
-                        item += "<input type='text' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
+                        item += "<input type='hidden' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
                         
                         item += "<td>" + val.kode_asset_ams_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_asset_ams_tujuan-"+val.no_reg_item+"' id='kode_asset_ams_tujuan-"+val.no_reg_item+"' value='"+ val.kode_asset_ams_tujuan +"'></td>";
                         item += "<td>" + val.kode_sap_tujuan + "<input type='hidden' class='form-control input-sm' name='kode_sap_tujuan-"+val.no_reg_item+"' id='kode_sap_tujuan-"+val.no_reg_item+"' value='"+ val.kode_sap_tujuan +"'></td>";
