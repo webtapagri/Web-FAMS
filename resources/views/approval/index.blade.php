@@ -4754,8 +4754,8 @@
         }
         <?php if($user_role == 'AMS'){ ?> 
             if(status !== 'R'){
-                if(jenis_asset_tujuan.length < 1){
-                // if(!jenis_asset_tujuan.includes("")){
+                if(jenis_asset_tujuan.length === 0){
+                /// if(!jenis_asset_tujuan.includes("")){
                     if(update_jenis_asset() ==  false ){
                         return false;
                     }
