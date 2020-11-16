@@ -4566,19 +4566,19 @@
                                             }
                                             else{
                                             item += "<td>" + val.jenis_asset_tujuan + "</td>";
-                                            item += "<td>" + val.group_tujuan + "</td>";
-                                            item += "<td>" + val.sub_group_tujuan + "</td>";
+                                            item += "<td>" + val.group_tujuan +  " - " + val.group_desc + "</td>";
+                                            item += "<td>" + val.sub_group_tujuan + " - " + val.subgroup_desc + "</td>";
                                             }
                                         }
                                         else{
                                             item += "<td>" + val.jenis_asset_tujuan + "</td>";
-                                            item += "<td>" + val.group_tujuan + "</td>";
-                                            item += "<td>" + val.sub_group_tujuan + "</td>";
+                                            item += "<td>" + val.group_tujuan +  " - " + val.group_desc + "</td>";
+                                            item += "<td>" + val.sub_group_tujuan + " - " + val.subgroup_desc + "</td>";
                                         }
                         <?php } else {?>
                                     item += "<td>" + val.jenis_asset_tujuan + "</td>";
-                                    item += "<td>" + val.group_tujuan + "</td>";
-                                    item += "<td>" + val.sub_group_tujuan + "</td>";
+                                    item += "<td>" + val.group_tujuan +  " - " + val.group_desc + "</td>";
+                                    item += "<td>" + val.sub_group_tujuan + " - " + val.subgroup_desc + "</td>";
                         <?php  } ?>
                         item += "<input type='hidden' class='form-control input-sm' id='jenis_asset_tujuan-"+val.no_reg_item+"' name='jenis_asset_tujuan-"+val.no_reg_item+"'  value='"+val.jenis_asset_tujuan+"' >";
                         
