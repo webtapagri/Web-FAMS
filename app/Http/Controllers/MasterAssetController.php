@@ -312,7 +312,7 @@ class MasterAssetController extends Controller
 
                     // DB::insert($sql);
                     // DB::commit();
-                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_asset ? 'updated' : 'added')]);
+                    // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_asset ? 'updated' : 'added')]);
 
                 } 
                 catch (\Exception $e) 
@@ -379,8 +379,7 @@ class MasterAssetController extends Controller
 
                     // DB::insert($sql);
                     // DB::commit();
-                    
-                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
+                    // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
 
                 } 
                 catch (\Exception $e) 
@@ -441,7 +440,7 @@ class MasterAssetController extends Controller
 
                     // DB::insert($sql);
                     // DB::commit();
-                    return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
+                    // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->foto_seri ? 'updated' : 'added')]);
 
                 } 
                 catch (\Exception $e) 
@@ -450,10 +449,8 @@ class MasterAssetController extends Controller
                     return response()->json(['status' => false, "message" => 'Failed to update Foto Mesin']);
                 }
             }
-           
             
-
-            $data->save();
+            // $data->save();
             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($request->file_name ? 'updated' : 'added')]);
             
        } catch (\Exception $e) {

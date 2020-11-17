@@ -1329,7 +1329,6 @@ jQuery('#request-form').on('submit', function(e) {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
     var param = new FormData(this);
     jQuery.ajax({
         url: "{{ url('asset/upload_image') }}",
