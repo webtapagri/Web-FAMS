@@ -4138,12 +4138,15 @@
         $('#print-modal').modal('show');
     }
 
-    function printFormIOMutasi(asset_po_id,no_reg_item)
+    function printFormIOMutasi(kode_ams,no_reg_item)
     {
         //alert(asset_po_id);
         var getnoreg = $("#getnoreg").val(); //alert(getnoreg); return false;
         var no_registrasi= getnoreg.replace(/\//g, '-');
-        var jenis_kendaraan = $("#request-form jenis-kendaraan-"+no_reg_item+"").val();
+        // var jenis_kendaraan = $("#jenis-kendaraan-"+no_reg_item+"").val();
+        var jenis_kendaraan = $('input[name="jenis-kendaraan-'+no_reg_item+'"]').select2('data')[0].id;
+        // console.log(jenis_kendaraan);
+        // return false;
 
         if( jenis_kendaraan == '' )
         {
@@ -4155,11 +4158,12 @@
         }
            
         $('#pdf-modal .modal-title').text('FORM PARAMETER INTERNAL ORDER '+getnoreg+'');
-        $('#pdf-modal .modal-body').html('<iframe id="print" style="width:100%;height:500px;" frameborder="0" src="{{ url("printio") }}/'+no_registrasi+'/'+asset_po_id+'/'+jenis_kendaraan+'/'+no_reg_item+'">');
+        $('#pdf-modal .modal-body').html('<iframe id="print" style="width:100%;height:500px;" frameborder="0" src="{{ url("printio_mutasi") }}/'+no_registrasi+'/'+kode_ams+'/'+jenis_kendaraan+'">');
         $('#pdf-modal').modal({
             backdrop: 'static',
             keyboard: false
         });
+        console.log(no_registrasi+'/'+kode_ams+'/'+jenis_kendaraan);
         $('#print-modal').modal('show');
     }
 
@@ -4591,7 +4595,7 @@
         
                                 item += "<input type='hidden' class='form-control input-sm' name='kode_asset_ams-"+val.no_reg_item+"' id='kode_asset_ams-"+val.no_reg_item+"' value='"+ val.kode_asset_ams +"'><input type='hidden' class='form-control input-sm' name='no_reg_item[]' id='no_reg_item[]' value='"+ val.no_reg_item +"'><input type='hidden' class='form-control input-sm' name='mandatory_ac[]' id='mandatory_ac[]' value='"+ val.mandatory_ac +"'><input type='hidden' class='form-control input-sm' name='po_type[]' id='po_type[]' value='"+ po_type +"'>";
                                 item += "<td><input type='text' class='form-control input-sm' name='kode_aset_controller-"+val.no_reg_item+"' value='"+val.kode_asset_controller+"' id='kode_aset_controller-"+val.no_reg_item+"' autocomplete='off' onkeyup='get_kode_aset("+val.no_reg_item+")'><input type='hidden' id='request_kode_aset_input' name='request_kode_aset_input'><div class='btn btn-warning btn-sm' OnClick='validasiKodeAssetControllerMutasi("+po_type+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px;margin-bottom:5px'><i class='fa fa-save'></i> SAVE</div></td>";
-                                item += "<td><input type='text' class='form-control' placeholder='Jenis Kendaraan' id='jenis-kendaraan-"+val.no_reg_item+"' name='jenis-kendaraan-"+val.no_reg_item+"'><div class='btn btn-info btn-sm' OnClick='printFormIOMutasi("+val.asset_po_id+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px' data-toggle='modal' data-dismiss='modal'><i class='fa fa-print'> PRINT FORM IO</i></div></td>";
+                                item += "<td><input type='text' class='form-control' placeholder='Jenis Kendaraan' id='jenis-kendaraan-"+val.no_reg_item+"' name='jenis-kendaraan-"+val.no_reg_item+"'><div class='btn btn-info btn-sm' OnClick='printFormIOMutasi("+val.kode_asset_ams+","+val.no_reg_item+")' style='margin-right:25px;margin-top:5px' data-toggle='modal' data-dismiss='modal'><i class='fa fa-print'> PRINT FORM IO</i></div></td>";
                         <?php } else {?>
                                     item += "<td>" + val.kode_asset_controller + "</td>";
                         <?php  } ?>
