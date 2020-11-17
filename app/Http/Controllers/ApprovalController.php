@@ -3760,15 +3760,31 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         // $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , c.DESCRIPTION as KODE_ASSET_CLASS, d.mandatory_kode_asset_controller FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) 
         // LEFT JOIN TM_ASSET_CONTROLLER_MAP d ON a.JENIS_ASSET_TUJUAN = d.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = d.GROUP_CODE AND a.SUB_GROUP_TUJUAN = d.SUBGROUP_CODE
         // WHERE a.no_reg = '{$noreg}' ";
-        $sql = " SELECT b.*, b.NO_REG as DOCUMENT_CODE, a.* , group_concat(c.DESCRIPTION) as KODE_ASSET_CLASS, d.mandatory_kode_asset_controller,e.GROUP_DESCRIPTION, f.SUBGROUP_DESCRIPTION, g.JENIS_ASSET_DESCRIPTION, h.DESCRIPTION as TUJUAN_DESC FROM TR_MUTASI_ASSET_DETAIL a LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE= 'kodefikasi_asset_class' AND c.DESCRIPTION_CODE = SUBSTR(a.TUJUAN, 3, 1) 
-                    LEFT JOIN TM_ASSET_CONTROLLER_MAP d ON a.JENIS_ASSET_TUJUAN = d.JENIS_ASSET_CODE AND a.GROUP_TUJUAN = d.GROUP_CODE AND a.SUB_GROUP_TUJUAN = d.SUBGROUP_CODE
-                    LEFT JOIN TM_GROUP_ASSET e ON b.GROUP = e.GROUP_CODE AND e.JENIS_ASSET_CODE =  b.JENIS_ASSET
-                    LEFT JOIN TM_SUBGROUP_ASSET f ON b.SUB_GROUP = f.SUBGROUP_CODE AND f.JENIS_ASSET_CODE = e.JENIS_ASSET_CODE
-                    LEFT JOIN TM_JENIS_ASSET g ON g.JENIS_ASSET_CODE =  a.JENIS_ASSET_TUJUAN
-                    LEFT JOIN TM_GENERAL_DATA h ON h.GENERAL_CODE= 'plant' AND h.DESCRIPTION_CODE = a.TUJUAN
-                    WHERE a.no_reg =  '{$noreg}'
-                    AND c.DESCRIPTION = SUBSTR(a.JENIS_ASSET_TUJUAN, 1, 1)
-                    GROUP BY b.KODE_ASSET_AMS ";
+        $sql = " SELECT DISTINCT b.*, b.NO_REG AS DOCUMENT_CODE, a.*, group_concat(c.DESCRIPTION) AS KODE_ASSET_CLASS,
+                    d.mandatory_kode_asset_controller,
+                    e.GROUP_DESCRIPTION,
+                    f.SUBGROUP_DESCRIPTION,
+                    g.JENIS_ASSET_DESCRIPTION,
+                    h.DESCRIPTION AS TUJUAN_DESC 
+                FROM
+                    TR_MUTASI_ASSET_DETAIL a
+                    LEFT JOIN TM_MSTR_ASSET b ON a.kode_asset_ams = b.KODE_ASSET_AMS
+                    LEFT JOIN TM_GENERAL_DATA c ON c.GENERAL_CODE = 'kodefikasi_asset_class' 
+                    AND c.DESCRIPTION_CODE = SUBSTR( a.TUJUAN, 3, 1 )
+                    LEFT JOIN TM_ASSET_CONTROLLER_MAP d ON a.JENIS_ASSET_TUJUAN = d.JENIS_ASSET_CODE 
+                    AND a.GROUP_TUJUAN = d.GROUP_CODE 
+                    AND a.SUB_GROUP_TUJUAN = d.SUBGROUP_CODE
+                    LEFT JOIN TM_GROUP_ASSET e ON a.GROUP_TUJUAN = e.GROUP_CODE 
+                    AND e.JENIS_ASSET_CODE = b.JENIS_ASSET
+                    LEFT JOIN TM_SUBGROUP_ASSET f ON a.SUB_GROUP_TUJUAN = f.SUBGROUP_CODE 
+                    AND f.JENIS_ASSET_CODE = e.JENIS_ASSET_CODE
+                    LEFT JOIN TM_JENIS_ASSET g ON g.JENIS_ASSET_CODE = a.JENIS_ASSET_TUJUAN
+                    LEFT JOIN TM_GENERAL_DATA h ON h.GENERAL_CODE = 'plant' 
+                    AND h.DESCRIPTION_CODE = a.TUJUAN 
+                WHERE
+                    a.no_reg = '{$noreg}' 
+                GROUP BY
+                    b.KODE_ASSET_AMS ";
 
         $data = DB::SELECT($sql);
 

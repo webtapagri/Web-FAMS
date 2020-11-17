@@ -4374,6 +4374,7 @@
                 <?php //} else { ?>
                     //var costcenter = data.cost_center;
                 <?php // }?>
+                var pengajuan = "";
                 var costcenter = data.cost_center;
                 var po_type = data.po_type;
                 if(po_type == ""){
