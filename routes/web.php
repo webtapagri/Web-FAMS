@@ -50,7 +50,7 @@ Route::post('/request/active', 'RequestController@active');
 Route::get('grid-request', ['as' => 'get.request_grid', 'uses' => 'RequestController@dataGrid']);
 Route::get('get-no_po', ['as' => 'get.no_po', 'uses' => 'RequestController@getPO']);
 Route::get('requestpdf', ['as' => 'get.requestpdf', 'uses' => 'RequestController@pdfDoc']);
-Route::get('get-businessarea', ['as' => 'get.businessarea', 'uses' => 'RequestController@businessarea']);
+Route::get('/get-businessarea', ['as' => 'get.businessarea', 'uses' => 'RequestController@businessarea']);
 Route::get('get-qty-po', ['as' => 'get.qty_po', 'uses' => 'RequestController@qty_po']);
 
 Route::resource('/approval', 'ApprovalController');
