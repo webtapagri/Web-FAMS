@@ -17,7 +17,7 @@ use App\TR_REG_ASSET_DETAIL_FILE;
 use App\TR_REG_ASSET_DETAIL_DETAIL;
 use App\TR_REG_ASSET_DETAIL_PO;
 
-class RequestController extends Controller
+class RequestBakController1 extends Controller
 {
     public function index()
     {

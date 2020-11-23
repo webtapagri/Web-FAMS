@@ -20,7 +20,7 @@ use App\TR_REG_ASSET_DETAIL_PO;
 use App\Mail\FamsEmail;
 use Illuminate\Support\Facades\Mail;
 
-class RequestController extends Controller
+class RequestBakController extends Controller
 {
     public function index()
     {
