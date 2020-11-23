@@ -564,7 +564,7 @@ class MasterAssetController extends Controller
                             FROM TM_MSTR_ASSET a 
                                 LEFT JOIN TM_JENIS_ASSET d ON a.JENIS_ASSET = d.JENIS_ASSET_CODE
                                 LEFT JOIN TM_GROUP_ASSET e ON a.GROUP = e.GROUP_CODE AND e.JENIS_ASSET_CODE =  a.JENIS_ASSET
-                                LEFT JOIN TM_SUBGROUP_ASSET f ON a.SUB_GROUP = f.SUBGROUP_CODE AND f.JENIS_ASSET_CODE = e.JENIS_ASSET_CODE
+                                LEFT JOIN TM_SUBGROUP_ASSET f ON a.SUB_GROUP = f.SUBGROUP_CODE AND f.JENIS_ASSET_CODE = e.JENIS_ASSET_CODE AND d.JENIS_ASSET_CODE = f.JENIS_ASSET_CODE AND e.GROUP_CODE = f.GROUP_CODE
                                 LEFT JOIN TM_GENERAL_DATA b ON a.BA_PEMILIK_ASSET = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'plant' 
                                 LEFT JOIN TM_GENERAL_DATA c ON a.LOKASI_BA_CODE = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'plant' 
                             WHERE a.KODE_ASSET_AMS = ".$id." ";
