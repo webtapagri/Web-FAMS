@@ -143,14 +143,15 @@ class DisposalController extends Controller
  			$datax = '';
  			foreach( $data as $k => $v )
  			{
-				$nama_material = str_replace("'","''",$v->nama_material);
-				$nama_asset_1 = str_replace("'","''",$v->nama_asset_1);
+				$nama_material = str_replace(PHP_EOL, '', str_replace("'","`",$v->nama_material));
+				$nama_asset_1 = str_replace(PHP_EOL, '', str_replace("'","`",$v->nama_asset_1));
+				$kode_asset_ams = str_replace(PHP_EOL, '', str_replace("'","`",$v->kode_asset_ams));
 
  				$kode_asset_ams = base64_encode($v->kode_asset_ams);
  				$datax .= "{id : '{$kode_asset_ams}',
  								name : '{$nama_material}  ',
  								asset : '{$nama_asset_1} ',
- 								kode_asset_ams : '{$v->kode_asset_ams}',
+ 								kode_asset_ams : '$kode_asset_ams',
  								lokasi_ba_description : '{$v->lokasi_ba_description}',
  								ba_pemilik_asset : '{$v->ba_pemilik_asset}'
  							},";
