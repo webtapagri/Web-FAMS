@@ -136,6 +136,27 @@ class RequestController extends Controller
                 echo "<pre>"; print_r($v);
             }
             die();*/
+			$tmp = $data->DETAIL_ITEM;
+			$arr = [];
+			foreach($tmp as $t){
+				$t = (array) $t;
+				$arr[$t['EBELP'].$t['MAKTX'].$t['MATNR'].$t['WERKS']] = @$arr[$t['EBELP'].$t['MAKTX'].$t['MATNR'].$t['WERKS']] ? array(($arr[$t['EBELP'].$t['MAKTX'].$t['MATNR'].$t['WERKS']][0] + $t['MENGE']), $t) : array($t['MENGE'], $t);
+			}
+			
+			$tt = [];
+			foreach($arr as $ar){
+				$tt[] = array(
+					'EBELP'	=> $ar[1]['EBELP'],
+					'MAKTX'	=> $ar[1]['MAKTX'],
+					'MATNR'	=> $ar[1]['MATNR'],
+					'MEINS'	=> $ar[1]['MEINS'],
+					'MENGE'	=> $ar[0],
+					'NETPR'	=> $ar[1]['NETPR'],
+					'WERKS'	=> $ar[1]['WERKS'],
+				);
+			}
+			
+			$data->DETAIL_ITEM = $tt;
             return response()->json(array('data' => $data));
         } 
         else 
