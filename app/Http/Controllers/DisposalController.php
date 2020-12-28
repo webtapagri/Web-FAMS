@@ -148,7 +148,12 @@ class DisposalController extends Controller
 				$kode_asset_ams = str_replace(PHP_EOL, '', str_replace("'","`",$v->kode_asset_ams));
 				$lokasi_ba_description = str_replace(PHP_EOL, '', str_replace(" ","-",$v->lokasi_ba_description));
 				// $kode_asset_ams = str_replace(' ','',$kode_asset_ams);
-
+				
+				$kode_asset_ams = str_replace("\n","",$kode_asset_ams);
+				$nama_material = str_replace("\n","",$nama_material);
+				$nama_asset_1 = str_replace("\n","",$nama_asset_1);
+				$lokasi_ba_description = str_replace("\n","",$lokasi_ba_description);
+				
  				// $kode_asset_ams = base64_encode($v->kode_asset_ams);
  				$datax .= "{id : '{$kode_asset_ams}',
  								name : '{$nama_material}  ',
