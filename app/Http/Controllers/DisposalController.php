@@ -149,7 +149,7 @@ class DisposalController extends Controller
 				$lokasi_ba_description = str_replace(PHP_EOL, '', str_replace(" "," ",$v->lokasi_ba_description));
 				// $kode_asset_ams = str_replace(' ','',$kode_asset_ams);
 				
-				$kode_asset_ams = str_replace(array("\r\n", "\n"),"",$kode_asset_ams);
+				$kode_asset_ams = substr(str_replace(array("\r\n", "\n"),"",$kode_asset_ams),0,10);
 				$nama_material = str_replace(array("\r\n", "\n"),"",$nama_material);
 				$nama_asset_1 = str_replace(array("\r\n", "\n"),"",$nama_asset_1);
 				$lokasi_ba_description = str_replace(array("\r\n", "\n"),"",$lokasi_ba_description);
