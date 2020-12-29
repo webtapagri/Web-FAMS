@@ -154,8 +154,8 @@ class DisposalController extends Controller
 				$nama_asset_1 = str_replace(array("\r\n", "\n"),"",$nama_asset_1);
 				$lokasi_ba_description = str_replace(array("\r\n", "\n"),"",$lokasi_ba_description);
 				
- 				// $kode_asset_ams = base64_encode($v->kode_asset_ams);
- 				$datax .= "{id : '{$kode_asset_ams}',
+ 				$kode_asset_ams2 = base64_encode($kode_asset_ams);
+ 				$datax .= "{id : '{$kode_asset_ams2}',
  								name : '{$nama_material}  ',
  								asset : '{$nama_asset_1} ',
  								kode_asset_ams : '$kode_asset_ams',
