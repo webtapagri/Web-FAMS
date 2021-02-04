@@ -796,8 +796,8 @@
 
     $(document).ready(function() 
     {
-		$(".form-filter2").bind('keydown',function(e) {  
-			  if (e.keyCode === 13){
+		$(".form-filter2").bind('blur keydown',function(e) {  
+			  if (e.type === 'blur' || e.keyCode === 13){
 				  console.log('Here')
 				  $("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load()
 			  }  
