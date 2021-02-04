@@ -115,13 +115,13 @@
                                 <th>BERKAS</th>
                             </tr>
                             <tr role="row" class="filter">
-                                <th><input type="text" class="form-control input-xs form-filter" name="document_code"></th>
+                                <th><input type="text" class="form-control input-xs form-filter2" name="document_code"></th>
                                 <th>
-                                    <input type="text" class="form-control input-xs form-filter" name="area_code">
+                                    <input type="text" class="form-control input-xs form-filter2" name="area_code">
                                 </th>
-                                <th><input type="text" class="form-control input-xs form-filter" name="name"></th>
-                                <th><input type="text" class="form-control input-xs form-filter" name="status_dokumen"></th>
-                                <th><input type="text" class="form-control input-xs form-filter datepicker" name="date_history" id="date_history" autocomplete="off"></th>
+                                <th><input type="text" class="form-control input-xs form-filter2" name="name"></th>
+                                <th><input type="text" class="form-control input-xs form-filter2" name="status_dokumen"></th>
+                                <th><input type="text" class="form-control input-xs form-filter2 datepicker" name="date_history" id="date_history" autocomplete="off"></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -796,6 +796,12 @@
 
     $(document).ready(function() 
     {
+		$(".form-filter2").bind('keydown',function(e) {  
+			  if (e.keyCode === 13){
+				  console.log('Here')
+				  $("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load()
+			  }  
+		 });  
         <?php
 
             if($email_noreg != '')
@@ -1196,14 +1202,21 @@
                     [50, 100, 250, 500, 1000]
                 ],
                 "pageLength": 50,
-                // "ajax": {
-                //     url: "{!! route('get.approval_grid_history') !!}",
-                //     pages: 5
-                // },
-                ajax: $.fn.dataTable.pipeline( {
-                    url: '{{ route("get.approval_grid_history") }}',
-                    pages: 2 // number of pages to cache
-                } ),
+                "ajax": {
+                    url: "{!! route('get.approval_grid_history') !!}",
+                    pages: 5,
+					data: {
+					  document_code: function() { return $('input[name=document_code]').val() },
+					  area_code: function() { return $('input[name=area_code]').val() },
+					  name: function() { return $('input[name=name]').val() },
+					  status_dokumen: function() { return $('input[name=status_dokumen]').val() },
+					  date_history: function() { return $('input[name=date_history]').val() },
+					 }
+                },
+                // ajax: $.fn.dataTable.pipeline( {
+                    // url: '{{ route("get.approval_grid_history") }}',
+                    // pages: 2 // number of pages to cache
+                // } ),
                 columns: [{
                         "render": function(data, type, row) 
                         {
