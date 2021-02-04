@@ -755,7 +755,7 @@ class ApprovalController extends Controller
             WHERE 1=1 
         ';
 
-        $total_data = DB::select(DB::raw($sql));
+        // $total_data = DB::select(DB::raw($sql));
 
         // IF ROLE = SUPER ADMINISTRATOR, SHOW ALL DATA IT@111019
         if( $role_id != 4 )
