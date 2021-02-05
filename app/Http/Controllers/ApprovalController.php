@@ -786,7 +786,7 @@ class ApprovalController extends Controller
         {
             $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
         }
-		echo $sql;die;
+		// echo $sql;die;
 
         $data = DB::select(DB::raw($sql." limit {$request->start},{$request->length}"));
 
