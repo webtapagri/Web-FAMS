@@ -1198,13 +1198,13 @@
                 "dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
                 "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
                 "lengthMenu": [
-                    [50, 100, 250, 500, 1000],
-                    [50, 100, 250, 500, 1000]
+                    [10,50, 100, 250, 500, 1000],
+                    [10,50, 100, 250, 500, 1000]
                 ],
-                "pageLength": 50,
+                "pageLength": 10,
                 "ajax": {
                     url: "{!! route('get.approval_grid_history') !!}",
-                    pages: 5,
+                    // pages: 5,
 					data: {
 					  document_code: function() { return $('input[name=document_code]').val() },
 					  area_code: function() { return $('input[name=area_code]').val() },
