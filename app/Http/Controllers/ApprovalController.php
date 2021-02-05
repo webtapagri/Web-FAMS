@@ -801,7 +801,7 @@ class ApprovalController extends Controller
         $data = DB::select(DB::raw($sql." limit {$request->start},{$request->length}"));
         $len = DB::select(DB::raw($cekLength));
 
-        $iTotalRecords = $len[0]['jml'];
+        $iTotalRecords = $len[0]->jml;
         $iDisplayLength = intval($request->length);
         $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;
         $iDisplayStart = intval($request->start);
