@@ -786,8 +786,9 @@ class ApprovalController extends Controller
         {
             $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
         }
+		echo $sql;die;
 
-        $data = DB::select(DB::raw($sql));
+        $data = DB::select(DB::raw($sql." limit {$request->start},{$request->length}"));
 
         $iTotalRecords = count($data);
         $iDisplayLength = intval($request->length);
@@ -795,14 +796,15 @@ class ApprovalController extends Controller
         $iDisplayStart = intval($request->start);
         $sEcho = intval($request->draw);
         $records = array();
-        $records["data"] = array();
+        // $records["data"] = array();
+        $records["data"] = $data;
 
         $end = $iDisplayStart + $iDisplayLength;
         $end = $end > $iTotalRecords ? $iTotalRecords : $end;
 
-        for ($i = $iDisplayStart; $i < $end; $i++) {
-            $records["data"][] =  $data[$i];
-        }
+        // for ($i = $iDisplayStart; $i < $end; $i++) {
+            // $records["data"][] =  $data[$i];
+        // }
 
         if (isset($_REQUEST["customActionType"]) && $_REQUEST["customActionType"] == "group_action") {
             $records["customActionStatus"] = "OK"; // pass custom message(useful for getting status of group actions)
