@@ -755,7 +755,7 @@ class ApprovalController extends Controller
             WHERE 1=1 
         ';
 		
-		$cekLength = 'SELECT count(*) jml FROM v_history a';
+		$cekLength = 'SELECT count(*) jml FROM v_history a where 1=1 ';
 
         // $total_data = DB::select(DB::raw($sql));
 
