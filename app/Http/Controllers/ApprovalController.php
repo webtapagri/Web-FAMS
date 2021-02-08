@@ -761,32 +761,46 @@ class ApprovalController extends Controller
 
         // IF ROLE = SUPER ADMINISTRATOR, SHOW ALL DATA IT@111019
         if( $role_id != 4 )
-            $sql .= " AND a.user_id = '{$user_id}' ";
+		{
+			$sql .= " AND a.user_id = '{$user_id}' ";
             $cekLength .= " AND a.user_id = '{$user_id}' ";
+		}
 
         if ($request->document_code)
-            $sql .= " AND a.document_code like '%".$request->document_code."%'";
+		{
+			$sql .= " AND a.document_code like '%".$request->document_code."%'";
             $cekLength .= " AND a.document_code like '%".$request->document_code."%'";
+		}
 
         if ($request->area_code)
-            $sql .= " AND a.area_code  like '%" . $request->area_code . "%'";
+		{
+			$sql .= " AND a.area_code  like '%" . $request->area_code . "%'";
             $cekLength .= " AND a.area_code  like '%" . $request->area_code . "%'";
+		}
        
         if ($request->name)
-            $sql .= " AND a.name  like '%" . $request->name . "%'";
+		{
+			$sql .= " AND a.name  like '%" . $request->name . "%'";
             $cekLength .= " AND a.name  like '%" . $request->name . "%'";
+		}
 
         if ($request->status_dokumen)
-            $sql .= " AND a.status_dokumen  like '%" . $request->status_dokumen . "%'";
+		{
+			$sql .= " AND a.status_dokumen  like '%" . $request->status_dokumen . "%'";
             $cekLength .= " AND a.status_dokumen  like '%" . $request->status_dokumen . "%'";
+		}
 
         if ($request->status_approval)
-            $sql .= " AND a.status_approval  like '%" . $request->status_approval . "%'";
+		{
+			$sql .= " AND a.status_approval  like '%" . $request->status_approval . "%'";
             $cekLength .= " AND a.status_approval  like '%" . $request->status_approval . "%'";
+		}
 
         if ($request->date_history)
-            $sql .= " AND DATE_FORMAT(a.date, '%d/%m/%Y') = '".$request->date_history."' ";
+		{
+			$sql .= " AND DATE_FORMAT(a.date, '%d/%m/%Y') = '".$request->date_history."' ";
             $cekLength .= " AND DATE_FORMAT(a.date, '%d/%m/%Y') = '".$request->date_history."' ";
+		}
     
         if ($orderColumn != "") {
             $sql .= " ORDER BY " . $field[$orderColumn]['field'] . " " . $dirColumn;
@@ -796,11 +810,11 @@ class ApprovalController extends Controller
         {
             // $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
         }
-		// echo $sql;die;
+		// echo $cekLength.'<br>'.$sql;die;
 
         $data = DB::select(DB::raw($sql." limit {$request->start},{$request->length}"));
         $len = DB::select(DB::raw($cekLength));
-
+// dd($len);
         $iTotalRecords = $len[0]->jml;
         $iDisplayLength = intval($request->length);
         $iDisplayLength = $iDisplayLength < 0 ? $iTotalRecords : $iDisplayLength;

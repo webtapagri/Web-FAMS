@@ -1189,14 +1189,16 @@
         grid_history.init({
             src: $("#data-table-history"),
             onSuccess: function(grid_history) {},
-            onError: function(grid_history) {},
+            onError: function(grid_history) {
+				console.log('ERR1123X')
+			},
             onDataLoad: function(grid_history) {},
             destroy: true,
             loadingMessage: 'Loading...',
             dataTable: 
             {
                 "dom": "<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'<'table-group-actions pull-right'>>r>t<'row'<'col-md-8 col-sm-12'pli><'col-md-4 col-sm-12'>>",
-                "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
+                // "bStateSave": true, // save datatable state(pagination, sort, etc) in cookie.
                 "lengthMenu": [
                     [10,50, 100, 250, 500, 1000],
                     [10,50, 100, 250, 500, 1000]
