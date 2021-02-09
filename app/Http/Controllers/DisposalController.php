@@ -829,7 +829,7 @@ class DisposalController extends Controller
     	
     	$BUKRS = substr($row->BA_PEMILIK_ASSET,0,2);
 		// $YEAR = date('Y');
-		$YEAR = '2021'; //kebutuhan test restuque
+		$YEAR = '2020'; //kebutuhan test restuque
 
     	$ANLN1 = $this->get_anln1($row->KODE_ASSET_SAP);
     	
