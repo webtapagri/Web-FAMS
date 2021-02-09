@@ -408,3 +408,8 @@ Route::get('/disposal/delete_berkas_temp','DisposalController@delete_berkas_temp
 
 #image
 Route::get( 'storage/{filename}', 'StorageController@image' );
+
+//Restuque
+Route::get('/getToken','FamsEmailController@getToken');
+Route::get('/getdataams','FamsEmailController@getDataApi');
+Route::get('/getapiams/{noreg}','FamsEmailController@getApi');
