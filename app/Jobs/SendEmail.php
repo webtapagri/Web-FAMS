@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Cache;
 
 use App\Mail\FamsEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\FamsEmailController;
 
 
 class SendEmail implements ShouldQueue
@@ -32,6 +33,7 @@ class SendEmail implements ShouldQueue
     {
         $this->email = $email;
         $this->data = $data;
+        // $this->document_code = $document_code;
     }
 
     /**
@@ -48,6 +50,10 @@ class SendEmail implements ShouldQueue
 			Mail::to($this->email)
 				->bcc('system.administrator@tap-agri.com')
 				->send(new FamsEmail($this->data));
+
+        // $restuque = new FamsEmailController();
+        // $response_restuque = $restuque->hitRestuque($this->doc_number);
+        // Log::info('hitRestuque jobs running: '.$response_restuque);
 		// }catch (\Throwable $e) {
 			// \Log::error('Error: '.$e->getMessage());
 		// }catch (\Exception $e) {
