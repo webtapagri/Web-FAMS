@@ -238,10 +238,11 @@ class RestuqueController extends Controller
 			$number = array() ;
 			$no = array();
 			$i = 0;
+			$doc = str_replace("/", "-", $document_code); 
 			foreach($dt_email_to as $qda){
 				$no[] = $x++;
 				$param_approve = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'A',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -251,7 +252,7 @@ class RestuqueController extends Controller
 				);
 
 				$param_reject = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'R',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -640,10 +641,11 @@ class RestuqueController extends Controller
 			$number = array() ;
 			$no = array();
 			$i = 0;
+			$doc = str_replace("/", "-", $document_code); 
 			foreach($dt_email_to as $qda){
 				$no[] = $x++;
 				$param_approve = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'A',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -653,7 +655,7 @@ class RestuqueController extends Controller
 				);
 
 				$param_reject = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'R',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
