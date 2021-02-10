@@ -539,7 +539,7 @@ class FamsEmailController extends Controller
 		// dd($detail);
 
 		$sql2 = " SELECT b.name as full_name,
-					case when a.status_approval = 'menunggu' then 'Waiting' else a.status_approval end as approval_status,
+					case when a.status_approval = 'menunggu' then 'WAITING' else a.status_approval end as approval_status,
 					b.username,
 					b.email, b.id as user_id, b.role_id, c.name as role_name
 					FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID
@@ -941,7 +941,7 @@ class FamsEmailController extends Controller
 		// dd($detail);
 
 		$sql2 = " SELECT b.name as full_name,
-					case when a.status_approval = 'menunggu' then 'Waiting' else a.status_approval end as approval_status,
+					case when a.status_approval = 'menunggu' then 'WAITING' else a.status_approval end as approval_status,
 					b.username,
 					b.email, b.id as user_id, b.role_id, c.name as role_name
 					FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID
