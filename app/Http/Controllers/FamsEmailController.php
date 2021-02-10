@@ -578,7 +578,7 @@ class FamsEmailController extends Controller
 				);
 				$ida = urlencode(serialize($param_approve));
 				$idr = urlencode(serialize($param_reject));
-				$approve_url[] = url('/email_approve/?id='.$ida);
+				$approve_url[] = url('/direct_approve/?id='.$ida);
 				$reject_url[] = url('/direct_reject/?id='.$idr);
 
 
