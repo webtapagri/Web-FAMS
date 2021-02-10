@@ -14,7 +14,7 @@ use DateTime;
 use Debugbar;
 use App\TM_MSTR_ASSET;
 use Redirect;
-use App\Http\Controllers\FamsEmailController;
+use App\Http\Controllers\RestuqueController;
 /* use NahidulHasan\Html2pdf\Facades\Pdf; */
 
 class ApprovalController extends Controller
@@ -1077,7 +1077,7 @@ class ApprovalController extends Controller
                         {
                             DB::STATEMENT('CALL complete_document("'.$no_registrasi.'", "'.$user_id.'")');
                             DB::commit();
-                            $restuque = new FamsEmailController;
+                            $restuque = new RestuqueController;
                             $restuque->completeRestuque($no_registrasi);
                             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                         } 
@@ -1196,7 +1196,7 @@ class ApprovalController extends Controller
                         {
                             DB::STATEMENT('CALL complete_document("'.$no_registrasi.'", "'.$user_id.'")');
                             DB::commit();
-                            $restuque = new FamsEmailController;
+                            $restuque = new RestuqueController;
                             $restuque->completeRestuque($no_registrasi);
                             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'completed'), "new_noreg"=>$no_registrasi ]);
                         } 
@@ -3336,7 +3336,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     // DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET POSTING_DATE = '{$posting_date}' WHERE NO_REG = '".$no_registrasi."' "); 
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$user_id.'")');
                     DB::commit();
-                    $restuque = new FamsEmailController;
+                    $restuque = new RestuqueController;
                     $restuque->completeRestuque($no_registrasi);
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 } 
@@ -3419,7 +3419,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 {
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req['user_id'].'")');
                     DB::commit();
-                    $restuque = new FamsEmailController;
+                    $restuque = new RestuqueController;
                     $restuque->completeRestuque($no_registrasi);
                     // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     $data['message'] =   'Data is successfully updated' ;                    
@@ -3506,7 +3506,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     
                     DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req->user_id.'")');
                     DB::commit();
-                    $restuque = new FamsEmailController;
+                    $restuque = new RestuqueController;
                     $restuque->completeRestuque($no_registrasi);
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                     // $data['message'] =   'Data is successfully updated' ;
@@ -4318,7 +4318,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         {
                             DB::STATEMENT('CALL complete_document_mutasi("'.$no_registrasi.'", "'.$user_id.'")');
                             DB::commit();
-                            $restuque = new FamsEmailController;
+                            $restuque = new RestuqueController;
                             $restuque->completeRestuque($no_registrasi);
                             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                         } 
@@ -4441,7 +4441,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                         {
                             DB::STATEMENT('CALL complete_document_mutasi("'.$no_registrasi.'", "'.$user_id.'")');
                             DB::commit();
-                            $restuque = new FamsEmailController;
+                            $restuque = new RestuqueController;
                             $restuque->completeRestuque($no_registrasi);
                             return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'completed'), "new_noreg"=>$no_registrasi ]);
                         } 
