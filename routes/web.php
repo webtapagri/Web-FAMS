@@ -99,8 +99,6 @@ Route::post('/approval/update_status_disposal/{status}/{no_reg}','ApprovalContro
 Route::post('/approval/update_status_disposal_email','ApprovalController@update_status_disposal_email');
 Route::post('/approval/update_disposal_email','ApprovalController@update_disposal_email');
 Route::get('/email_approve','FamsEmailController@approve');
-Route::post('/direct_approve','FamsEmailController@approve');
-Route::post('/direct_reject','FamsEmailController@direct_reject');
 Route::get('/email_reject','FamsEmailController@reject');
 Route::get('/mail_response/{message}','FamsEmailController@respon')->name('mail_response');
 Route::get('/approval/view_disposal/{no_reg}', 'ApprovalController@view_disposal')->name('no_reg');
@@ -415,3 +413,5 @@ Route::get( 'storage/{filename}', 'StorageController@image' );
 Route::get('/getToken','FamsEmailController@getToken');
 Route::get('/getdataams','FamsEmailController@getDataApi');
 Route::get('/getapiams/{noreg}','FamsEmailController@getApi');
+// Route::post('/direct_approve','FamsEmailController@approve');
+Route::post('/direct_reject','FamsEmailController@direct_reject');

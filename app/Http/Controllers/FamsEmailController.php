@@ -555,10 +555,11 @@ class FamsEmailController extends Controller
 			$number = array() ;
 			$no = array();
 			$i = 0;
+			$doc = str_replace("/", "-", $document_code); 
 			foreach($dt_email_to as $qda){
 				$no[] = $x++;
 				$param_approve = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'A',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -568,7 +569,7 @@ class FamsEmailController extends Controller
 				);
 
 				$param_reject = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'R',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -957,10 +958,11 @@ class FamsEmailController extends Controller
 			$number = array() ;
 			$no = array();
 			$i = 0;
+			$doc = str_replace("/", "-", $document_code); 
 			foreach($dt_email_to as $qda){
 				$no[] = $x++;
 				$param_approve = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'A',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -970,7 +972,7 @@ class FamsEmailController extends Controller
 				);
 
 				$param_reject = array(
-					'noreg' => $document_code,
+					'noreg' => $doc,
 					'status' => 'R',
 					'user_id' => $qda->user_id,
 					'id' => $qda->user_id,
@@ -1147,15 +1149,14 @@ class FamsEmailController extends Controller
 
 	public function direct_reject(Request $rq)
 	{
-		$request = new \Illuminate\Http\Request();
-		$request->replace(['id' => $_GET['id']]);
-        $req = json_decode($_GET['id']);
+		// $request = new \Illuminate\Http\Request();
+		// $request->replace(['id' => $_GET['id']]);
+        $req = unserialize(urldecode($_GET['id']));
 		$notes = $rq->notes;
-		// dd($req,$notes); 
 
-		$status = $req->status;
+		$status = $req['status'];
         $note = $rq->notes;
-        $no_registrasi = $req->noreg;
+        $no_registrasi = $req['noreg'];
 
 		$appcontrol = new ApprovalController;
         $asset_controller = $appcontrol->get_ac($no_registrasi); //get asset controller 
@@ -1172,7 +1173,7 @@ class FamsEmailController extends Controller
                     DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
                 }
 
-                DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req->user_id.'","'.$status.'", "'.$note.'", "'.$req->role_name.'", "'.$asset_controller.'")');
+                DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req['user_id'].'","'.$status.'", "'.$note.'", "'.$req['role_name'].'", "'.$asset_controller.'")');
                 
                 DB::commit();
 
@@ -1196,7 +1197,7 @@ class FamsEmailController extends Controller
                 try 
                 {
                     
-                    DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req->user_id.'")');
+                    DB::STATEMENT('CALL complete_document_disposal("'.$no_registrasi.'", "'.$req['user_id'].'")');
                     DB::commit();
                     return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 } 
