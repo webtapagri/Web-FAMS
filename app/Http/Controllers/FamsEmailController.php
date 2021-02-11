@@ -11,6 +11,7 @@ use API;
 use App\Jobs\SendEmail;
 use GuzzleHttp\Client;
 use App\Http\Controllers\ApprovalController;
+use App\Http\Controllers\RestuqueController;
 use Redirect;
 use Illuminate\Support\Facades\Log;
 
@@ -163,7 +164,14 @@ class FamsEmailController extends Controller
 					// ->send(new FamsEmail($data));
 			}
 			
-			$this->hitRestuque($document_code);	
+			$list_approve_role = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
+			if(count($dt_email_to) == 1){
+				if(in_array($dt_email_to[0]->role_name,$list_approve_role)){
+					$restuque = new RestuqueController;
+					$restuque->hitRestuque($document_code);	
+					
+				}
+			}
 		}
 	}
 
@@ -1218,161 +1226,5 @@ class FamsEmailController extends Controller
         }
 	}
 
-
-	public function hitRestuque($noreg)
-	{
-		Log::info('hit restuque');
-		$data = $this->getApi($noreg);	
-		Log::info($data);
-		// dd(json_encode($data));	
-		$token = $this->getToken();
-		$var = "rtq/v1.0/documents";
-		$url = $this->restuque . $var;
-		$curl = curl_init();
-		
-		curl_setopt_array($curl, array(
-			CURLOPT_URL => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30000,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => $data,
-			CURLOPT_HTTPHEADER => array(
-				"accept: */*",
-				"content-type: application/json",
-				"x-access-token: ".$token
-			),
-		));
-		
-		$response = curl_exec($curl);
-		$err = curl_error($curl);
-		$statusCode = json_decode($response)->statusCode;
-		
-		$dt = json_decode($data);
-
-		$doc_type = $dt->doc_type;
-		$api_header = json_encode($dt->header);
-		$api_detail = json_encode($dt->detail);
-		$api_footer = json_encode($dt->footer);
-		$api_history = json_encode($dt->history);
-		$api_attach = json_encode($dt->lampiran);
-		$doc_number = $noreg;
-
-		$retry = 0;
-		DB::beginTransaction();
-		while($statusCode != 200 && $statusCode != 201 && $retry < 3){
-			curl_exec($curl);
-			$retry++;  
-			if($retry == 2) {
-			$err = $statusCode;
-				$query_log = "insert into TR_RESTUQUE_LOG (API_URL,STATUS_CODE,LOG_TIME,DOC_TYPE,DOC_NUMBER,API_HEADER,API_DETAIL,API_FOOTER,API_HISTORY,API_ATTACHMENT)
-								VALUES ('".$url."','".$err."',NOW(),'".$doc_type."','".$doc_number."','".$api_header."','".$api_detail."','".$api_footer."','".$api_history."','".$api_attach."')";
-				DB::statement( $query_log );
-				DB::commit();
-			}
-		}  
-
-		$query_log = "insert into TR_RESTUQUE_LOG (API_URL,STATUS_CODE,LOG_TIME,DOC_TYPE,DOC_NUMBER,API_HEADER,API_DETAIL,API_FOOTER,API_HISTORY,API_ATTACHMENT)
-						VALUES ('".$url."','".$statusCode."',NOW(),'".$doc_type."','".$doc_number."','".$api_header."','".$api_detail."','".$api_footer."','".$api_history."','".$api_attach."')";
-
-		DB::statement( $query_log );
-		DB::commit();
-					  
-		curl_close($curl);
-	}
-
-	public function completeRestuque($noreg)
-	{
-		$data = array('doc_type'=>'ams',
-						'document_number' => $noreg,
-						'status' =>'COMPLETED');
-		$token = $this->getToken();
-		$var = "rtq/v1.0/documents";
-		$url = $this->restuque . $var;
-		$curl = curl_init();
-		
-		curl_setopt_array($curl, array(
-			CURLOPT_URL => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30000,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => json_encode($data),
-			CURLOPT_HTTPHEADER => array(
-				"accept: */*",
-				"content-type: application/json",
-				"x-access-token: ".$token
-			),
-		));
-
-		
-		$response = curl_exec($curl);
-		$err = curl_error($curl);
-		$statusCode = json_decode($response)->statusCode;
-
-		$dt = json_decode($data);
-		$doc_type = $dt->doc_type;;
-		$doc_number = $noreg;
-
-		$retry = 0;
-		DB::beginTransaction();
-		while($statusCode != 200 && $statusCode != 201 && $retry < 3){
-			curl_exec($curl);
-			$retry++;  
-			if($retry == 2) {
-				$err = $statusCode;
-				$query_log = "insert into TR_RESTUQUE_LOG (API_URL,STATUS_CODE,LOG_TIME,DOC_TYPE,DOC_NUMBER,API_HEADER)
-								VALUES ('".$url."','".$err."',NOW(),'".$doc_type."','".$doc_number."','COMPLETED')";
-								
-				DB::statement( $query_log );
-				DB::commit();
-				
-			}
-		}  
-
-		$query_log = "insert into TR_RESTUQUE_LOG (API_URL,STATUS_CODE,LOG_TIME,DOC_TYPE,DOC_NUMBER,API_HEADER)
-						VALUES ('".$url."','".$statusCode."',NOW(),'".$doc_type."','".$doc_number."','COMPLETED')";
-
-		DB::statement( $query_log );
-		DB::commit();
-							
-					  
-		curl_close($curl);
-	}
-
-	public function getToken()
-	{
-       	$data = array( 'username'=> 'uat4',
-						'password'=>'superSecret',
-						'device_token'=> 'device_token' );
-		$var = "rtq/v1.0/auth/login";
-		$url = $this->restuque . $var;
-		$curl = curl_init();
-		
-		curl_setopt_array($curl, array(
-			CURLOPT_URL => $url,
-			CURLOPT_RETURNTRANSFER => true,
-			CURLOPT_ENCODING => "",
-			CURLOPT_MAXREDIRS => 10,
-			CURLOPT_TIMEOUT => 30000,
-			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => json_encode($data),
-			CURLOPT_HTTPHEADER => array(
-				"accept: */*",
-				"content-type: application/json"
-			),
-		));
-
-		
-		$response = curl_exec($curl);
-		$res =json_decode(json_encode($response));
-		// dd(json_decode($res)->data->token);
-		return json_decode($res)->data->token;
-	}
 
 }

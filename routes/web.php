@@ -410,8 +410,8 @@ Route::get('/disposal/delete_berkas_temp','DisposalController@delete_berkas_temp
 Route::get( 'storage/{filename}', 'StorageController@image' );
 
 //Restuque
-Route::get('/getToken','FamsEmailController@getToken');
-Route::get('/getdataams','FamsEmailController@getDataApi');
-Route::get('/getapiams/{noreg}','FamsEmailController@getApi');
+Route::get('/getToken','RestuqueController@getToken');
+Route::get('/getdataams','RestuqueController@getDataApi');
+Route::get('/getapiams/{noreg}','RestuqueController@getApi');
 // Route::post('/direct_approve','FamsEmailController@approve');
 Route::post('/direct_reject','FamsEmailController@direct_reject');
