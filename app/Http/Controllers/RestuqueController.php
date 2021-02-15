@@ -934,8 +934,7 @@ class RestuqueController extends Controller
 		$err = curl_error($curl);
 		$statusCode = json_decode($response)->statusCode;
 
-		$dt = json_decode($data);
-		$doc_type = $dt->doc_type;;
+		$doc_type = 'ams';
 		$doc_number = $noreg;
 
 		$retry = 0;

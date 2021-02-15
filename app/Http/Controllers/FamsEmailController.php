@@ -171,14 +171,15 @@ class FamsEmailController extends Controller
 					// ->bcc('system.administrator@tap-agri.com')
 					// ->send(new FamsEmail($data));
 			}
-			
+
 			$list_approve_role = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
 			if(count(array_intersect($role,$list_approve_role)) > 0){
 					$restuque = new RestuqueController;
 					$restuque->hitRestuque($document_code);	
 			}
 
-			if(count($lasthit) == 1){
+			//next approver = last stage
+			if(count($lasthit) == 1){ 
 				if(strpos($lasthit[0]->workflow_group_name, 'Complete') !== false){
 					$restuque = new RestuqueController;
 					$restuque->hitRestuque($document_code);	
