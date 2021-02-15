@@ -114,6 +114,8 @@ class FamsEmailController extends Controller
 								where a.document_code = '{$document_code}' and execution_status = '' ";
 		$lasthit = DB::SELECT($check_last_approve);
 
+		$role = array();
+
 		
 		#1 IT@220719 
 		if(!empty($dt_email_to))
@@ -124,6 +126,7 @@ class FamsEmailController extends Controller
 				$data->role_name = $v->role_name;
 				$data->role_id = $v->role_id;
 				$data->user_id = $v->user_id;
+				$role[] = $v->role_name;
 
 				$param_approve = array(
 					'noreg' => $data->no_reg,
@@ -170,12 +173,9 @@ class FamsEmailController extends Controller
 			}
 			
 			$list_approve_role = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
-			if(count($dt_email_to) == 1){
-				if(in_array($dt_email_to[0]->role_name,$list_approve_role)){
+			if(count(array_intersect($role,$list_approve_role)) > 0){
 					$restuque = new RestuqueController;
 					$restuque->hitRestuque($document_code);	
-					
-				}
 			}
 
 			if(count($lasthit) == 1){
