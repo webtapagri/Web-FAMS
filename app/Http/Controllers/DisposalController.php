@@ -866,7 +866,8 @@ class DisposalController extends Controller
         }
 
 		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
-        return $nilai*100;
+        // return $nilai*100; //sap clone mati sementara
+		return 999999999;
     }
 
     function get_anln1($kode)
