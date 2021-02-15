@@ -109,6 +109,11 @@ class FamsEmailController extends Controller
 		// $sql3 = " SELECT b.name, b.email FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
 		$sql3 = " SELECT b.name, b.email, b.id as user_id, b.role_id, c.name as role_name FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID LEFT JOIN TBM_ROLE c ON b.role_id = c.id WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
 		$dt_email_to = DB::SELECT($sql3);
+
+		$check_last_approve = " SELECT distinct b.workflow_group_name from TR_APPROVAL a left join TR_WORKFLOW_DETAIL b ON a.workflow_detail_code = b.workflow_detail_code
+								where a.document_code = '{$document_code}' and execution_status = '' ";
+		$lasthit = DB::SELECT($check_last_approve);
+
 		
 		#1 IT@220719 
 		if(!empty($dt_email_to))
@@ -170,6 +175,13 @@ class FamsEmailController extends Controller
 					$restuque = new RestuqueController;
 					$restuque->hitRestuque($document_code);	
 					
+				}
+			}
+
+			if(count($lasthit) == 1){
+				if(strpos($lasthit[0]->workflow_group_name, 'Complete') !== false){
+					$restuque = new RestuqueController;
+					$restuque->hitRestuque($document_code);	
 				}
 			}
 		}
