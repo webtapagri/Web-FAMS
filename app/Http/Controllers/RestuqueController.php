@@ -88,13 +88,15 @@ class RestuqueController extends Controller
 								d.DESCRIPTION as plant_description,
 								d.DESCRIPTION as company_name,
 								CASE WHEN a.TYPE_TRANSAKSI = 'hilang' THEN 'DISPOSAL HILANG'
-								WHEN a.TYPE_TRANSAKSI = 'rusak' THEN 'DISPOSAL RUSAK'
-								ELSE 'DISPOSAL PENJUALAN' END as transaction_type,
-								b.description as header_note
+									WHEN a.TYPE_TRANSAKSI = 'rusak' THEN 'DISPOSAL RUSAK'
+									ELSE 'DISPOSAL PENJUALAN' END as transaction_type,
+								e.NOTES as header_note
 							FROM TR_DISPOSAL_ASSET a
-							left join TR_APPROVAL b ON a.NO_REG = b.document_code
-							join TBM_USER c on c.id = a.CREATED_BY
-							left join TM_GENERAL_DATA d on d.DESCRIPTION_CODE = a.BUSINESS_AREA and d.GENERAL_CODE = 'plant'
+									left join TR_APPROVAL b ON a.NO_REG = b.document_code
+									join TBM_USER c on c.id = a.CREATED_BY
+									left join TM_GENERAL_DATA d on d.DESCRIPTION_CODE = a.BUSINESS_AREA and d.GENERAL_CODE = 'plant'
+									left join (select distinct NOTES, NO_REG from TR_DISPOSAL_ASSET_FILE where NO_REG = '{$document_code}') e
+										on e.NO_REG = a.NO_REG
 							where b.seq is null
 							and a.NO_REG = '{$document_code}' ";
 			$sql_detail = "SELECT distinct
