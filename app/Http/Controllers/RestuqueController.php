@@ -12,6 +12,7 @@ use GuzzleHttp\Client;
 use App\Http\Controllers\ApprovalController;
 use Redirect;
 use Illuminate\Support\Facades\Log;
+use Debugbar;
 
 class RestuqueController extends Controller
 {
@@ -905,11 +906,12 @@ class RestuqueController extends Controller
 
 	public function completeRestuque($noreg)
 	{
+		Debugbar::disable();
 		$data = array('doc_type'=>'ams',
 						'document_number' => $noreg,
 						'status' =>'COMPLETED');
 		$token = $this->getToken();
-		$var = "rtq/v1.0/documents";
+		$var = "rtq/v1.0/documents/status";
 		$url = $this->restuque . $var;
 		$curl = curl_init();
 		
@@ -933,6 +935,7 @@ class RestuqueController extends Controller
 		$response = curl_exec($curl);
 		$err = curl_error($curl);
 		$statusCode = json_decode($response)->statusCode;
+		Log::info($response);
 
 		$doc_type = 'ams';
 		$doc_number = $noreg;
@@ -945,7 +948,7 @@ class RestuqueController extends Controller
 			if($retry == 2) {
 				$err = $statusCode;
 				$query_log = "insert into TR_RESTUQUE_LOG (API_URL,STATUS_CODE,LOG_TIME,DOC_TYPE,DOC_NUMBER,API_HEADER)
-								VALUES ('".$url."','".$err."',NOW(),'".$doc_type."','".$doc_number."','COMPLETED')";
+								VALUES ('".$url."','".$err."',NOW(),'".$doc_type."','".$doc_number."','".json_encode($data)."')";
 								
 				DB::statement( $query_log );
 				DB::commit();
@@ -954,7 +957,7 @@ class RestuqueController extends Controller
 		}  
 
 		$query_log = "insert into TR_RESTUQUE_LOG (API_URL,STATUS_CODE,LOG_TIME,DOC_TYPE,DOC_NUMBER,API_HEADER)
-						VALUES ('".$url."','".$statusCode."',NOW(),'".$doc_type."','".$doc_number."','COMPLETED')";
+						VALUES ('".$url."','".$statusCode."',NOW(),'".$doc_type."','".$doc_number."','".json_encode($data)."')";
 
 		DB::statement( $query_log );
 		DB::commit();
