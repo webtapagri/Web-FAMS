@@ -3307,7 +3307,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 {
                     // SEMENTARA DI DELETE DULU JIKA DI REJECT IT@081019 
                     //DB::DELETE(" DELETE FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '".$no_registrasi."' ");
-                    DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
+                    DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' ");                     
+                    $restuque = new RestuqueController;
+                    $restuque->completeRestuque($no_registrasi);
                 }
 
                 DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$user_id.'","'.$status.'", "'.$note.'", "'.$role_name.'", "'.$asset_controller.'")');
@@ -3385,6 +3387,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     // SEMENTARA DI DELETE DULU JIKA DI REJECT IT@081019 
                     //DB::DELETE(" DELETE FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '".$no_registrasi."' ");
                     DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
+                    $restuque = new RestuqueController;
+                    $restuque->completeRestuque($no_registrasi);
                 }
 
                 DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req['user_id'].'","'.$status.'", "'.$note.'", "'.$req['role_name'].'", "'.$asset_controller.'")');
@@ -3473,6 +3477,8 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                     // SEMENTARA DI DELETE DULU JIKA DI REJECT IT@081019 
                     //DB::DELETE(" DELETE FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '".$no_registrasi."' ");
                     DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
+                    $restuque = new RestuqueController;
+                    $restuque->completeRestuque($no_registrasi);
                 }
 
                 DB::STATEMENT('CALL update_approval("'.$no_registrasi.'", "'.$req->user_id.'","'.$status.'", "'.$note.'", "'.$req->role_name.'", "'.$asset_controller.'")');
