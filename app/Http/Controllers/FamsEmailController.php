@@ -1164,7 +1164,7 @@ class FamsEmailController extends Controller
 
 		$status = $req['status'];
         $note = $rq->notes;
-        $no_registrasi = $req['noreg'];
+		$no_registrasi = str_replace("-", "/", $req['noreg']); 
 
 		$appcontrol = new ApprovalController;
         $asset_controller = $appcontrol->get_ac($no_registrasi); //get asset controller 
