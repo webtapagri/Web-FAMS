@@ -11,6 +11,7 @@ use App\Jobs\SendEmail;
 use GuzzleHttp\Client;
 use App\Http\Controllers\ApprovalController;
 use Redirect;
+use Illuminate\Support\Facades\Log;
 
 class RestuqueController extends Controller
 {
