@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\TR_REG_ASSET_DETAIL;
+use API;
+use App\Jobs\SendEmail;
+use GuzzleHttp\Client;
+use App\Http\Controllers\ApprovalController;
+use Redirect;
 
 class RestuqueController extends Controller
 {
@@ -985,5 +991,123 @@ class RestuqueController extends Controller
 		// dd(json_decode($res)->data->token);
 		return json_decode($res)->data->token;
 	}
+
+	
+	function get_harga_perolehan($row)
+    {
+		$nilai = array();
+		// dd($row);
+
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
+            
+            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+            {
+                $ANLN2 = '0000';
+            }
+            else
+            {
+				// $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
+            }
+            
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
+                //'method' => "assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019", 
+                //http://tap-ldapdev.tap-agri.com/data-sap/assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+
+		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
+        }
+
+        // dd($nilai);
+        return $nilai;
+
+    	
+    }
+
+    function get_nilai_buku($row)
+    {
+        $nilai = array();
+
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
+            
+            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+            {
+                $ANLN2 = '0000';
+            }
+            else
+            {
+				// $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
+            }
+            
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_bookvalue?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+        }
+
+        return $nilai;
+
+    	
+    }
+
+    function get_anln1($kode)
+    {
+    	$total = strlen($kode); //12 DIGIT
+
+    	if( $total == 8 )
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	elseif( $total == 7 )
+    	{
+    		$ksap = '00000'.$kode.'';
+    	}
+    	else
+    	{
+    		$ksap = '0000'.$kode.'';
+    	}
+    	return $ksap;
+    }
 
 }
