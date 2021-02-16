@@ -166,7 +166,7 @@
                     <td>$no</td>
                     <td>".$v->BA_PEMILIK_ASSET."</td>
                     <td>".$v->KODE_ASSET_AMS."</td>
-                    <td>".$v->NAMA_ASSET."</td>
+                    <td>".str_replace('&','dan',$v->NAMA_ASSET)."</td>
                     <td>".$v->QUANTITY_ASSET_SAP."</td>
                     <td>".$v->UOM_ASSET_SAP."</td>
                     <td>".$v->MERK."</td>
