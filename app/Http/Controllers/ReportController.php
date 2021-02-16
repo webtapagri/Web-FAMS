@@ -201,6 +201,7 @@ class ReportController extends Controller
 
     function list_asset_submit(Request $request)
     {
+		$start = microtime(true);
         if (empty(Session::get('authenticated')))
             return redirect('/login');
 
@@ -219,13 +220,14 @@ class ReportController extends Controller
         ->orderBy('KODE_ASSET_AMS', 'ASC')
         ->orderBy('KODE_ASSET_SAP', 'ASC')
         ->limit($req['no-of-list'])->get()->all();
-        
+        // echo(microtime(true) - $start).' <br/>';
         // dd($row);
                 // $row = TM_MSTR_ASSET::find($filter);
         $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+		// echo(microtime(true) - $start).' <br/>';
         $NILAI_BUKU = $this->get_nilai_buku($row);
+		// echo(microtime(true) - $start).' <br/>';
         // dd($HARGA_PEROLEHAN);
-
 
         if( !empty($req['kode-aset-fams']) )
         {
@@ -280,9 +282,17 @@ class ReportController extends Controller
 		$sqk_o = "select a.*, c.FILE_CATEGORY, c.NO_REG, c.FILE_UPLOAD FROM TM_MSTR_ASSET a
                         LEFT JOIN TR_REG_ASSET_DETAIL_FILE c 
                                     ON c.NO_REG = a.NO_REG $where ";
-		
-		$geti = DB::select($sqk_o);
-		
+		// echo $sqk_o;die;
+		// $geti = DB::select($sqk_o);
+		$geti = DB::table(DB::raw('TM_MSTR_ASSET a'))
+					->selectRaw('a.*, c.FILE_CATEGORY, c.NO_REG, c.FILE_UPLOAD')
+					->leftJoin(DB::raw('TR_REG_ASSET_DETAIL_FILE c'), 'c.NO_REG', '=', 'a.NO_REG')
+					->whereRaw("1=1 $where")
+					->get();
+					
+					
+
+		// echo(microtime(true) - $start).' <br/>';die;
 		$tampung = [];
 		foreach($geti as $gti){
 			$tampung[$gti->NO_REG][$gti->FILE_CATEGORY] = $gti->FILE_UPLOAD;
@@ -311,6 +321,7 @@ class ReportController extends Controller
 		DB::unprepared("SET SESSION group_concat_max_len = 4000000;");
         $dt = DB::SELECT($sql);
         Debugbar::info($dt);
+		// echo(microtime(true) - $start).' <br/>';
         // dd($dt);
         if(!empty($dt))
         {
@@ -356,6 +367,8 @@ class ReportController extends Controller
                 ); 
             }
         }
+		
+		// echo(microtime(true) - $start).' <br/>';die;
 		// dd($result);
         $access = AccessRight::access();    
         $data['page_title'] = 'Report List Asset';
