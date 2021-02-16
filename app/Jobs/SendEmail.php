@@ -27,7 +27,8 @@ class SendEmail implements ShouldQueue
 	private $data;
 	
 	public $tries = 20; //max retry
-	public $timeout  = 600; //max ekse time
+	// public $timeout  = 600; //max ekse time
+	public $timeout  = 0; //max ekse time
 	
     public function __construct($email, $data)
     {
