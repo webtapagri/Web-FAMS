@@ -279,24 +279,7 @@ class ReportController extends Controller
             $where .= " AND UPPER(a.LOKASI_BA_CODE) LIKE UPPER('%{$req['lokasi-aset']}%') ";
         }
 		
-		$sqk_o = "select a.*, c.FILE_CATEGORY, c.NO_REG, c.FILE_UPLOAD FROM TM_MSTR_ASSET a
-                        LEFT JOIN TR_REG_ASSET_DETAIL_FILE c 
-                                    ON c.NO_REG = a.NO_REG $where ";
-		// echo $sqk_o;die;
-		// $geti = DB::select($sqk_o);
-		$geti = DB::table(DB::raw('TM_MSTR_ASSET a'))
-					->selectRaw('a.*, c.FILE_CATEGORY, c.NO_REG, c.FILE_UPLOAD')
-					->leftJoin(DB::raw('TR_REG_ASSET_DETAIL_FILE c'), 'c.NO_REG', '=', 'a.NO_REG')
-					->whereRaw("1=1 $where")
-					->get();
-					
-					
-
-		// echo(microtime(true) - $start).' <br/>';die;
-		$tampung = [];
-		foreach($geti as $gti){
-			$tampung[$gti->NO_REG][$gti->FILE_CATEGORY] = $gti->FILE_UPLOAD;
-		}
+		
 		
 		// dd($tampung);
 		
@@ -320,9 +303,45 @@ class ReportController extends Controller
                     
 		DB::unprepared("SET SESSION group_concat_max_len = 4000000;");
         $dt = DB::SELECT($sql);
+		// echo(microtime(true) - $start).' <br/>';
         Debugbar::info($dt);
 		// echo(microtime(true) - $start).' <br/>';
         // dd($dt);
+		
+		$tmpNoReg = '';
+		$validasiNoreg = [];
+		if(!empty($dt))
+        {
+            foreach( $dt as $k => $v )
+            {
+				$comma = $k==0 ? '' : ',';
+				if(!in_array($v->NO_REG,$validasiNoreg)){
+					$tmpNoReg .= "$comma'".$v->NO_REG."'";
+					array_push($validasiNoreg, $v->NO_REG);
+				}
+			}
+		}
+		
+		if($tmpNoReg != ''){
+			$where .= " and a.NO_REG in ($tmpNoReg) ";
+		}
+		$sqk_o = "select a.*, c.FILE_CATEGORY, c.NO_REG, c.FILE_UPLOAD FROM TM_MSTR_ASSET a
+                        LEFT JOIN TR_REG_ASSET_DETAIL_FILE c 
+                                    ON c.NO_REG = a.NO_REG where 1=1 $where ";	
+		
+		// echo $sqk_o;die;
+		$geti = DB::select($sqk_o);								
+
+		// echo($sqk_o).' <br/>';
+		// echo(microtime(true) - $start).' <br/>';die;
+		$tampung = [];
+		// dd($geti);
+		foreach($geti as $gti){
+			$tampung[$gti->NO_REG][$gti->FILE_CATEGORY] = $gti->FILE_UPLOAD;
+		}
+		
+		// dd($tampung);
+		
         if(!empty($dt))
         {
             foreach( $dt as $k => $v )
