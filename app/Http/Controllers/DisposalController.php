@@ -828,8 +828,7 @@ class DisposalController extends Controller
     {
     	
     	$BUKRS = substr($row->BA_PEMILIK_ASSET,0,2);
-		// $YEAR = date('Y');
-		$YEAR = '2020'; //kebutuhan test restuque
+		$YEAR = date('Y');
 
     	$ANLN1 = $this->get_anln1($row->KODE_ASSET_SAP);
     	
@@ -866,8 +865,8 @@ class DisposalController extends Controller
         }
 
 		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
-        // return $nilai*100; //sap clone mati sementara
-		return 999999999;
+        return $nilai*100; 
+		// return 999999999;
     }
 
     function get_anln1($kode)
