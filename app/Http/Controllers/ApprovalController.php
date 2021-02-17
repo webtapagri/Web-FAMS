@@ -2192,7 +2192,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 }   
 
                 $proses = $this->synchronize_sap_process($v);   
-                
+
                     if($proses['status']=='error')
                     {
                                 
@@ -3385,12 +3385,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             
             try 
             {
+                $restuque = new RestuqueController;
+
                 if($status=='R')
                 {
                     // SEMENTARA DI DELETE DULU JIKA DI REJECT IT@081019 
                     //DB::DELETE(" DELETE FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '".$no_registrasi."' ");
                     DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
-                    $restuque = new RestuqueController;
                     $restuque->completeRestuque($no_registrasi);
                 }
 
@@ -3400,7 +3401,9 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
-                $data = serialize($data);
+
+                $restuque->send_email($no_registrasi);
+
                 return view('email.respon')->with('message', $data);
             } 
             catch (\Exception $e) 

@@ -225,8 +225,9 @@ class FamsEmailController extends Controller
 
 	public function kirim_email()
 	{
+		
+		Log::info('send outstanding email');
 		$request = new \Illuminate\Http\Request();
-
 		$request->replace(['noreg' => $_GET['doc_code']]);
 		$this->index($request);
 		
