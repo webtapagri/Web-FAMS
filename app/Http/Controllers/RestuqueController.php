@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\TR_REG_ASSET_DETAIL;
 use API;
 use App\Jobs\SendEmail;
+use App\Http\Controllers\FamsEmailController;
 use GuzzleHttp\Client;
 use Redirect;
 use Illuminate\Support\Facades\Log;
@@ -23,11 +24,6 @@ class RestuqueController extends Controller
 			$this->restuque = 'http://apisqa.tap-agri.com/rtq-msa-qa-approval/';
 		}
     }
-
-	public function send_email($no_registrasi)
-	{
-		return redirect()->route('outstanding_email', ['doc_code' => $no_registrasi]);
-	}
 
     //
     

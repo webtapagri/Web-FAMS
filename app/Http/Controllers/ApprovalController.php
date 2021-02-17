@@ -16,6 +16,7 @@ use App\TM_MSTR_ASSET;
 use Redirect;
 use App\Http\Controllers\RestuqueController;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\SendEmail;
 /* use NahidulHasan\Html2pdf\Facades\Pdf; */
 
 class ApprovalController extends Controller
@@ -3359,7 +3360,210 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
         }
     }
 
+    function send_email_restuque($no_reg)
+	{
+		Log::info('send email from restuque link approval');
+		$request = new \Illuminate\Http\Request();
+		$request->replace(['noreg' => $no_reg]);
+		$this->email_restuque($request);
+	}
+    
+    public function email_restuque(Request $request)
+	{
+		$req = $request->all();
+		$no_registrasi = $req['noreg'];
+		$document_code = str_replace("-", "/", $no_registrasi); 
+		$jenis_document = "";
+		$kolom_mutasi = "";
+		$kolom_pendaftaran = "";
+		$join_mutasi = "";
+		$join_pendaftaran = "";
+		
+		if (strpos($document_code, 'PDFA') !== false) 
+		{
+			$jenis_document = 'PENDAFTARAN';
+			$kolom_pendaftaran = ' ,d.QUANTITY_SUBMIT as QTY';
+			$join_pendaftaran = ' LEFT JOIN  TR_REG_ASSET_DETAIL_PO d  ON d.NO_REG = a.document_code ';
+		}
+		else if (strpos($document_code, 'DSPA') !== false) 
+		{ 
+			$jenis_document = "DISPOSAL";}
+		else
+		{
+			$jenis_document = "MUTASI";
+			$kolom_mutasi = ", d.TUJUAN, e.DESCRIPTION as LOKASI_TUJUAN_DESC, d.KODE_ASSET_AMS_TUJUAN ";
+			$join_mutasi = "LEFT JOIN TR_MUTASI_ASSET_DETAIL d ON a.document_code = d.NO_REG AND d.KODE_ASSET_AMS = a.KODE_ASSET_AMS LEFT JOIN TM_GENERAL_DATA e ON d.TUJUAN = e.DESCRIPTION_CODE AND e.GENERAL_CODE = 'PLANT'";
+		}
+	
+		// 1. DATA ASSET
+		// $sql = " SELECT distinct(a.document_code) as document_code, a.KODE_MATERIAL, a.NAMA_MATERIAL, a.LOKASI_BA_CODE, a.PO_TYPE, a.NO_PO, a.BA_PEMILIK_ASSET, b.DESCRIPTION as LOKASI_BA_CODE_DESC, c.DESCRIPTION as BA_PEMILIK_ASSET_DESC, a.TAHUN_ASSET as TAHUN_PEROLEHAN, a.KODE_ASSET_AMS as KODE_ASSET_AMS "
+		$sql = " SELECT distinct(a.document_code) as document_code, a.KODE_MATERIAL, a.NAMA_MATERIAL, a.LOKASI_BA_CODE, a.PO_TYPE, a.NO_PO, a.BA_PEMILIK_ASSET, b.DESCRIPTION as LOKASI_BA_CODE_DESC, c.DESCRIPTION as BA_PEMILIK_ASSET_DESC, a.TAHUN_ASSET as TAHUN_PEROLEHAN "
+				.$kolom_pendaftaran.$kolom_mutasi."  
+				FROM v_email_data_approval a 
+				LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
+				LEFT JOIN TM_GENERAL_DATA c ON a.BA_PEMILIK_ASSET = c.DESCRIPTION_CODE AND c.GENERAL_CODE = 'PLANT'"
+				.$join_pendaftaran 
+				.$join_mutasi ."
+				WHERE a.document_code = '{$document_code}'
+				order by a.nama_material ";
+		$dt = DB::SELECT($sql);
+		// dd($sql);
 
+		// 2. HISTORY APPROVAL 
+		$sql2 = " SELECT a.*, a.date AS date_create FROM v_history a WHERE a.document_code = '{$document_code}' ORDER BY date_create ";
+		$dt_history_approval = DB::SELECT($sql2);
+
+		// $row = DB::table('v_email_approval')
+		$row = DB::table('v_email_data_approval')
+                     ->where('document_code','LIKE','%'.$document_code.'%')
+                     ->get();
+		
+        $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+		$NILAI_BUKU = $this->get_nilai_buku($row);
+		
+
+		// 3. EMAIL TO
+		$data = new \stdClass();
+        $data->noreg = array($document_code,1,2);
+        $data->jenis_pemberitahuan = $jenis_document;
+        $data->sender = 'TAP Agri';
+		$data->datax = $dt;
+		$data->harga_perolehan = $HARGA_PEROLEHAN;
+		$data->nilai_buku = $NILAI_BUKU;
+		$data->history_approval = $dt_history_approval;
+		$data->no_reg = $req['noreg'];
+		$data->message = "";
+		// dd($data->datax);
+		$document_code_new = $data->datax[0]->document_code;
+		if($document_code_new != "")
+		{
+			$dc = base64_encode($document_code_new);
+		}
+		else
+		{
+			$dc = "";
+		}
+		$data->detail_url = url('/?noreg='.$dc.'');
+		
+		$sql3 = " SELECT b.name, b.email, b.id as user_id, b.role_id, c.name as role_name FROM v_history_approval a LEFT JOIN TBM_USER b ON a.USER_ID = b.ID LEFT JOIN TBM_ROLE c ON b.role_id = c.id WHERE a.document_code = '{$document_code}' AND status_approval = 'menunggu' "; //echo $sql3; die();
+		$dt_email_to = DB::SELECT($sql3);
+
+		$check_last_approve = " SELECT distinct b.workflow_group_name from TR_APPROVAL a left join TR_WORKFLOW_DETAIL b ON a.workflow_detail_code = b.workflow_detail_code
+								where a.document_code = '{$document_code}' and execution_status = '' ";
+		$lasthit = DB::SELECT($check_last_approve);
+
+		$role = array();
+
+		
+		#1 IT@220719 
+		if(!empty($dt_email_to))
+		{
+			foreach($dt_email_to as $k => $v)
+			{
+				$data->nama_lengkap = $v->name;
+				$data->role_name = $v->role_name;
+				$data->role_id = $v->role_id;
+				$data->user_id = $v->user_id;
+				$role[] = $v->role_name;
+
+				$param_approve = array(
+					'noreg' => $data->no_reg,
+					'status' => 'A',
+					'user_id' => $data->user_id,
+					'id' => $data->user_id,
+					'role_name' => $data->role_name,
+					'role_id' => $data->role_id,
+					'note' =>''
+				);
+
+				$param_reject = array(
+					'noreg' => $data->no_reg,
+					'status' => 'R',
+					'user_id' => $data->user_id,
+					'id' => $data->user_id,
+					'role_name' => $data->role_name,
+					'role_id' => $data->role_id,
+					'note' => ''
+				);
+
+
+				$ida = urlencode(serialize($param_approve));
+				$idr = urlencode(serialize($param_reject));
+				$data->approve_url = url('/email_approve/?id='.$ida);
+				$data->reject_url = url('/email_reject/?id='.$idr);
+
+				dispatch((new SendEmail($v->email, $data))->onQueue('high'));
+			}
+
+			$list_approve_role = array("VP", "MPC", "KADIV", "CEOR", "MDU", "DM", "MDD", "CFO");
+			if(count(array_intersect($role,$list_approve_role)) > 0){
+					$restuque = new RestuqueController;
+					$restuque->hitRestuque($document_code);	
+			}
+
+			//next approver = last stage
+			if(count($lasthit) == 1){ 
+				if(strpos($lasthit[0]->workflow_group_name, 'Complete') !== false){
+					$restuque = new RestuqueController;
+					$restuque->hitRestuque($document_code);	
+				}
+			}
+		}
+	}
+
+
+    
+	function get_harga_perolehan($row)
+    {
+		$nilai = array();
+		// dd($row);
+
+        for($i=0;$i<count($row);$i++){
+            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
+
+            $YEAR = date('Y');
+
+            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
+            
+            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
+            {
+                $ANLN2 = '0000';
+            }
+            else
+            {
+				// $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
+				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
+            }
+            
+            
+
+            $service = API::exec(array(
+                'request' => 'GET',
+                'host' => 'ldap',
+                'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
+                //'method' => "assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019", 
+                //http://tap-ldapdev.tap-agri.com/data-sap/assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019
+            ));
+            
+            $data = $service;
+
+            if(!empty($data))
+            {
+                $nilai[] = $data*100;
+            }
+            else
+            {
+                $nilai[] = 0;
+            }
+
+		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
+        }
+
+        // dd($nilai);
+        return $nilai;
+
+    	
+    }
     
 
     function update_status_disposal_email()
@@ -3385,13 +3589,13 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
             
             try 
             {
-                $restuque = new RestuqueController;
 
                 if($status=='R')
                 {
                     // SEMENTARA DI DELETE DULU JIKA DI REJECT IT@081019 
                     //DB::DELETE(" DELETE FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '".$no_registrasi."' ");
                     DB::UPDATE(" UPDATE TR_DISPOSAL_ASSET_DETAIL SET DELETED = 'R' WHERE NO_REG = '".$no_registrasi."' "); 
+                    $restuque = new RestuqueController;
                     $restuque->completeRestuque($no_registrasi);
                 }
 
@@ -3402,7 +3606,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
                 // return response()->json(['status' => true, "message" => 'Data is successfully ' . ($no_registrasi ? 'updated' : 'update'), "new_noreg"=>$no_registrasi]);
                 $data['message'] =  'Data is successfully updated' ;
 
-                $restuque->send_email($no_registrasi);
+                $this->send_email_restuque($no_registrasi);
 
                 return view('email.respon')->with('message', $data);
             } 
@@ -3623,7 +3827,7 @@ WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER 
 
         for($i=0;$i<count($row);$i++){
             $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
-            $NO_FICO = $row[$i]->NO_FICO;
+            // $NO_FICO = $row[$i]->NO_FICO;
 
             $YEAR = date('Y');
 
