@@ -32,6 +32,7 @@ class SendEmail implements ShouldQueue
 	
     public function __construct($email, $data)
     {
+        // $this->email = $email;
         $this->email = $email;
         $this->data = $data;
         // $this->document_code = $document_code;
@@ -49,7 +50,7 @@ class SendEmail implements ShouldQueue
 		
 		// try {
 			Mail::to($this->email)
-				->bcc('system.administrator@tap-agri.com')
+				->bcc(['system.administrator@tap-agri.com','ana.luthfatunnisa@tap-agri.co.id'])
 				->send(new FamsEmail($this->data));
 
         // $restuque = new FamsEmailController();

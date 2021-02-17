@@ -2191,15 +2191,15 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     die();
                 }   
 
-                $proses = $this->synchronize_sap_process($v);             
+                $proses = $this->synchronize_sap_process($v);   
                 
-                if($proses['status']=='error')
-                {
-                               
-                    dd($proses);
-                    return response()->json(['status' => false, "message" => $proses['message']]);
-                    die();
-                }
+                    if($proses['status']=='error')
+                    {
+                                
+                        dd($proses);
+                        return response()->json(['status' => false, "message" => $proses['message']]);
+                        die();
+                    }
             }
 
             return response()->json(['status' => true, "message" => "Synchronize success"]);
@@ -2257,6 +2257,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         ));
         
         $data = $service;
+
         if( !empty($data->item->TYPE) )
         {
             #2
@@ -2268,8 +2269,9 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 DB::beginTransaction();
                 try 
                 {   
+                    $asset_sap = $data->item->MESSAGE_V1;
                     //1. ADD KODE_ASSET_SAP & ASSET_CONTROLLER TR_REG_ASSET 
-                    $sql_1 = " UPDATE TR_REG_ASSET_DETAIL SET ASSET_CONTROLLER = '{$asset_controller}', KODE_ASSET_SAP = '".$data->item->MESSAGE_V1."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG}' AND ASSET_PO_ID = '{$dt->ASSET_PO_ID}' AND NO_REG_ITEM = '{$dt->NO_REG_ITEM}' ";
+                    $sql_1 = " UPDATE TR_REG_ASSET_DETAIL SET ASSET_CONTROLLER = '{$asset_controller}', KODE_ASSET_SAP = '".$asset_sap."', UPDATED_BY = '{$user_id}', UPDATED_AT = current_timestamp() WHERE NO_REG = '{$dt->NO_REG}' AND ASSET_PO_ID = '{$dt->ASSET_PO_ID}' AND NO_REG_ITEM = '{$dt->NO_REG_ITEM}' ";
                     DB::UPDATE($sql_1);
 
                     //2. INSERT LOG
@@ -2315,7 +2317,6 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     return $result;
                 }
             }         
-            Log::info('Sync Data : '. $data);
         }
         
         if( !empty($data->item[0]->TYPE) ) 
@@ -2365,9 +2366,6 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 
             }
             //die();
-            
-            Log::info('Sync Data lebih dari 1 row : '. $data);
-            Log::info('Sync Result : '. $result);
             
 
             if( $result['TYPE'] == 'S' )
