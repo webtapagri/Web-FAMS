@@ -15,6 +15,7 @@ use Debugbar;
 use App\TM_MSTR_ASSET;
 use Redirect;
 use App\Http\Controllers\RestuqueController;
+use Illuminate\Support\Facades\Log;
 /* use NahidulHasan\Html2pdf\Facades\Pdf; */
 
 class ApprovalController extends Controller
@@ -2314,6 +2315,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                     return $result;
                 }
             }         
+            Log::info('Sync Data : '. $data);
         }
         
         if( !empty($data->item[0]->TYPE) ) 
@@ -2325,7 +2327,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
             //echo "20<pre>"; count($data); die();
 
             foreach($data->item as $k => $v)
-            {
+            {   
                 //echo "20<pre>"; print_r($v);
                 
                 if( $v->TYPE == 'S' && $v->ID == 'AA' && $v->NUMBER == 228 )
@@ -2363,6 +2365,9 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 
             }
             //die();
+            
+            Log::info('Sync Data lebih dari 1 row : '. $data);
+            Log::info('Sync Result : '. $result);
             
 
             if( $result['TYPE'] == 'S' )
