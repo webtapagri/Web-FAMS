@@ -9,7 +9,6 @@ use App\TR_REG_ASSET_DETAIL;
 use API;
 use App\Jobs\SendEmail;
 use GuzzleHttp\Client;
-// use App\Http\Controllers\FamsEmailController;
 use Redirect;
 use Illuminate\Support\Facades\Log;
 use Debugbar;
