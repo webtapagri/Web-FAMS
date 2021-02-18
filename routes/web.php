@@ -106,6 +106,8 @@ Route::post('/approval/delete_asset_disposal', 'ApprovalController@delete_asset_
 Route::get('/approval/view_mutasi/{no_reg}', 'ApprovalController@view_mutasi')->name('no_reg');
 Route::post('/approval/update_status_mutasi/{status}/{no_reg}','ApprovalController@update_status_mutasi');
 Route::post('/approval/delete_asset_mutasi', 'ApprovalController@delete_asset_mutasi');
+Route::get('/setting/resync', 'ApprovalController@resync_sap');
+Route::post('/resynchronize', 'ApprovalController@resync_process');
 
 Route::get('get-select_jenis_kendaraan', ['as' => 'get.select_jenis_kendaraan', 'uses' => 'Select2Controller@select_jenis_kendaraan']);
 Route::get('get-select_jenis_asset', ['as' => 'get.select_jenis_asset', 'uses' => 'Select2Controller@select_jenis_asset']);

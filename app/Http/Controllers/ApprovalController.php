@@ -2170,9 +2170,54 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
         return $datax;
     }
 
-    function synchronize_sap(Request $request)
+    function resync_sap(){
+        return view('approval.resync');
+    }
+
+
+    function resync_process(Request $request)
     {
         $no_reg = @$request->noreg;
+        $user_id = Session::get('user_id');
+        $sql_reg = " SELECT KODE_ASSET_AMS FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '{$no_reg}' ";
+        $reg = DB::SELECT($sql_reg); 
+        if( !empty($reg) )
+        {
+            foreach($reg as $k => $v)
+            {
+                $kode_asset = substr($v->KODE_ASSET_AMS,2);
+                $sql_log = " SELECT msgv1 FROM TR_LOG_SYNC_SAP WHERE msgtyp= 'S' and msgid = 'AA' AND no_reg = '{$no_reg}' and msgv1 = '{$kode_asset}' ";
+                $cek_log = DB::SELECT($sql_log); 
+                if(!empty($cek_log))
+                {
+                    $kode_asset = $cek_log[$k]->msgv1;
+                    $sql = " UPDATE TR_REG_ASSET_DETAIL SET KODE_ASSET_SAP = '{$kode_asset}', UPDATED_AT = current_timestamp(), UPDATED_BY = '{$user_id}' WHERE NO_REG = '{$no_reg}' AND KODE_ASSET_AMS = '{$v->KODE_ASSET_AMS}' ";
+                        
+                    DB::UPDATE($sql);
+                    DB::commit();
+                        
+                    Session::flash('message','Synchronize success');
+                    return Redirect::to('/setting/resync');
+                }
+                else
+                {
+                    $result = $this->synchronize_sap($request);
+                    Session::flash('alert',json_decode(json_encode($result))->original->message);
+                    return Redirect::to('/setting/resync');
+                }
+            }
+
+        }else{
+            $result = $this->synchronize_sap($request);
+            Session::flash('alert', json_decode(json_encode($result))->original->message);
+            return Redirect::to('/setting/resync');
+        }
+    }
+
+
+    function synchronize_sap(Request $request)
+    {
+        $no_reg = @$request->noreg;     
 
         $sql = " SELECT a.*, date_format(a.CAPITALIZED_ON,'%d.%m.%Y') AS CAPITALIZED_ON, date_format(a.DEACTIVATION_ON,'%d.%m.%Y') AS DEACTIVATION_ON FROM TR_REG_ASSET_DETAIL a WHERE a.NO_REG = '{$no_reg}' AND (a.KODE_ASSET_SAP = '' OR a.KODE_ASSET_SAP is null) AND (a.DELETED is null OR a.DELETED = '') ";
 
@@ -2180,7 +2225,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
         $params = array();
 
-        if($data)
+        if(!empty($data))
         {
             foreach( $data as $k => $v )
             {
