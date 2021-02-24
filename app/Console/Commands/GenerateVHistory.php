@@ -39,6 +39,6 @@ class GenerateVHistory extends Command
     public function handle()
     {
         DB::unprepared("truncate v_history");
-        // DB::unprepared("insert into v_history select * from view_history");
+        DB::unprepared("insert into v_history select * from view_history");
     }
 }
