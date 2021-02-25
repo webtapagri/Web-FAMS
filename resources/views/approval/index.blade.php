@@ -1350,7 +1350,7 @@
         {
 			$.ajax({
 				type:'get',
-				url:'{{ route'refresh_grid_history' }}',
+				url:'{{ route('refresh_grid_history') }}',
 				data:'get',
 				cache:false,
 				beforeSend: function(){
