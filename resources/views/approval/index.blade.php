@@ -1348,8 +1348,24 @@
 
         $(".refresh-history").click(function()
         {
-            //$('#data-table-history').DataTable().fnDestroy();
-            $("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load();
+			$.ajax({
+				type:'get',
+				url:'{{ route'refresh_grid_history' }}',
+				data:'get',
+				cache:false,
+				beforeSend: function(){
+					
+				},
+				success: function(){
+					//$('#data-table-history').DataTable().fnDestroy();
+					$("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load();
+				},
+				complete: function(){
+					
+				}
+			})
+			
+            
         });
         
         // $('body').on('change', '.jenis_asset', function() {

@@ -714,6 +714,12 @@ class ApprovalController extends Controller
                 return response()->json(['status' => false, "message" => $e->getMessage()]);
             }
     }
+	
+	public function refresh_grid_history()
+	{
+		$exe = \Artisan::call('generate:v_history');
+		return $exe;
+	}
 
 
     public function dataGridHistory(Request $request)
