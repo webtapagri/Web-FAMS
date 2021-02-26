@@ -720,7 +720,7 @@ class ApprovalController extends Controller
 		\DB::unprepared("truncate v_history");
         \DB::unprepared("insert into v_history select * from view_history");
 		// $exe = \Artisan::call('generate:v_history');
-		return true;
+		return 123;
 	}
 
 
