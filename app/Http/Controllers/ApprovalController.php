@@ -819,7 +819,7 @@ class ApprovalController extends Controller
         }
         else
         {
-            // $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
+            $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
         }
 		// echo $cekLength.'<br>'.$sql;die;
 
