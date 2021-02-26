@@ -717,8 +717,10 @@ class ApprovalController extends Controller
 	
 	public function refresh_grid_history()
 	{
-		$exe = \Artisan::call('generate:v_history');
-		return $exe;
+		\DB::unprepared("truncate v_history");
+        \DB::unprepared("insert into v_history select * from view_history");
+		// $exe = \Artisan::call('generate:v_history');
+		return true;
 	}
 
 

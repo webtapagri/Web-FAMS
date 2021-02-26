@@ -1354,14 +1354,13 @@
 				data:'get',
 				cache:false,
 				beforeSend: function(){
-					
+					$('.loading-event').fadeIn();
 				},
 				success: function(){
-					//$('#data-table-history').DataTable().fnDestroy();
 					$("#data-table-history").DataTable().ajax.url("{!! route('get.approval_grid_history') !!}").load();
 				},
 				complete: function(){
-					
+					$('.loading-event').fadeOut();
 				}
 			})
 			
