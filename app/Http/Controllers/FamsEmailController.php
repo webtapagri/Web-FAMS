@@ -22,11 +22,11 @@ class FamsEmailController extends Controller
     {
         $this->ApprovalController = $ApprovalController;
 		
-		if(env('APP_ENV') == 'production'){
+		// if(env('APP_ENV') == 'production'){
 			$this->restuque = 'http://apis.tap-agri.com/rtq-msa-approval/';
-		}else{
-			$this->restuque = 'http://apisqa.tap-agri.com/rtq-msa-qa-approval/';
-		}
+		// }else{
+		// 	$this->restuque = 'http://apisqa.tap-agri.com/rtq-msa-qa-approval/';
+		// }
     }
 
 	public function index(Request $request)
