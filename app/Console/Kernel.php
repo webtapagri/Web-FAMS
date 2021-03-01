@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\GenerateVHistory::class,
     ];
 
     /**
@@ -24,8 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+        $schedule->command( "generate:v_history" )
+					->dailyAt('07:00');
+        $schedule->command( "generate:v_history" )
+					->dailyAt('12:00');
     }
 
     /**

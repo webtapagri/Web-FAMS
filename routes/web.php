@@ -92,6 +92,7 @@ Route::match(['get', 'post'], 'grid-approval-history', [
     'as' => 'get.approval_grid_history',
     'uses' => 'ApprovalController@dataGridHistory'
 ]);
+Route::get('/approval/grid-history/refresh', 'ApprovalController@refresh_grid_history')->name('refresh_grid_history');
 Route::get('/approval/berkas-amp/{no_reg}', 'ApprovalController@berkas_amp')->name('no_reg');
 Route::get('/printio/{noreg}/{asset_po_id}/{jenis_kendaraan}/{no_reg_item}', 'ApprovalController@print_io');
 Route::get('/printio_mutasi/{noreg}/{kode_ams}/{jenis_kendaraan}', 'ApprovalController@print_io_mutasi');

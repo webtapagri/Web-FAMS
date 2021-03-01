@@ -714,6 +714,14 @@ class ApprovalController extends Controller
                 return response()->json(['status' => false, "message" => $e->getMessage()]);
             }
     }
+	
+	public function refresh_grid_history()
+	{
+		\DB::unprepared("truncate v_history");
+        \DB::unprepared("insert into v_history select * from view_history");
+		// $exe = \Artisan::call('generate:v_history');
+		return 123;
+	}
 
 
     public function dataGridHistory(Request $request)
@@ -811,7 +819,7 @@ class ApprovalController extends Controller
         }
         else
         {
-            // $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
+            $sql .= " ORDER BY a.DOCUMENT_CODE DESC ";
         }
 		// echo $cekLength.'<br>'.$sql;die;
 
