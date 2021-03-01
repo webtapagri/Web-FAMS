@@ -227,7 +227,7 @@ class RestuqueController extends Controller
 							'value'=>$hp);
 			$nbuku[] = array('key'=> 'nbv',
 							'label'=>'NBV',
-							'value'=>$hp);
+							'value'=>$nbv);
 			$detail = array_merge($detail,$hrgperolehan,$nbuku);		
 		}
 		// dd($detail);
@@ -632,7 +632,7 @@ class RestuqueController extends Controller
 							'value'=>$hp);
 			$nbuku[] = array('key'=> 'nbv',
 							'label'=>'NBV',
-							'value'=>$hp);
+							'value'=>$nbv);
 			$detail = array_merge($detail,$hrgperolehan,$nbuku);		
 		}
 		// dd($detail);
