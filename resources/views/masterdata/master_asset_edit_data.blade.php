@@ -921,7 +921,7 @@ if(readonly_group !== '1'){
       placeholder: ' '
   });
 }
-var group = $('input[name="asset_group"]').val();
+var group = $('input[name="group"]').val();
 
 var el3 = document.getElementById("sub_group"); 
 var readonly_subgroup = el3.getAttribute("readonly");
@@ -934,6 +934,21 @@ if(readonly_subgroup !== '1'){
       placeholder: ' '
   });
 }
+
+$('input[name="group"]').change(()=>{
+    var group2 = $('input[name="group"]').val()
+    var el3 = document.getElementById("sub_group"); 
+var readonly_subgroup = el3.getAttribute("readonly");
+if(readonly_subgroup !== '1'){
+  var assetsubgroup = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.assetsubgroup") !!}?group='+group2+'&jenis_asset_code='+jenis_asset_code )));
+  jQuery("#sub_group").select2({
+      data: assetsubgroup,
+      width: "100%",
+      allowClear: true,
+      placeholder: ' '
+  });
+}
+})
 
 
 var el4 = document.getElementById("lokasi_ba_code"); 
