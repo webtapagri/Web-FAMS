@@ -557,7 +557,7 @@
         </div>
         <!-- /.col -->
 
-
+		<button type="button" id="btnsave" onClick="save()"  class="btn btn-danger btn-flat pull-right" style="margin-right: 5px;">Submit</button>
 
       </div>
       <!-- /.row -->
