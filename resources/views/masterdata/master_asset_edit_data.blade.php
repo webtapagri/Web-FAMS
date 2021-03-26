@@ -493,7 +493,7 @@
               <label for="" class="col-sm-4 control-label">Kode Asset Controller</label>
 
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="kode_asset_controller" placeholder="Kode Asset Controller" value="{{@$data['content']->KODE_ASSET_CONTROLLER}}" readonly="1">
+                <input type="text" class="form-control" id="kode_asset_controller" placeholder="Kode Asset Controller" value="{{@$data['content']->KODE_ASSET_CONTROLLER}}" @if($data['editable']['KODE_ASSET_CONTROLLER'] != 1) readonly="1" @endif>
               </div>
             </div>
         	
