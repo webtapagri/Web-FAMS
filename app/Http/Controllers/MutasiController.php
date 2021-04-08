@@ -673,7 +673,7 @@ class MutasiController extends Controller
         $role = Session::get('role');
         $where2 = "";
         
-        if($role == 'PGA'){$where = '1=1'; }else { $where = '1=0'; }
+        if($role == 'PGA' || $role = 'Super Administrator'){$where = '1=1'; }else { $where = '1=0'; }
 
         $where .= " AND a.JENIS_PENGAJUAN = '{$jenis}' ";
 
