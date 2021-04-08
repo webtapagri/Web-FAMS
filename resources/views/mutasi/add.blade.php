@@ -1569,7 +1569,11 @@ Array
                         "render": function(data, type, row) 
                         {
                             var str = row.NAMA_ASSET;
-                            var nama_aset = str.replace(/\"/g,"");
+							if(str){
+								var nama_aset = str.replace(/\"/g,"");
+							}else{
+								var nama_aset = str;
+							}
                             return '<a href="javascript:;" style="font-weight:bold" OnClick="get_asset_mutasi(\''+row.KODE_ASSET_AMS+'\',\''+nama_aset+'\',\''+row.ASSET_CONTROLLER+'\',\''+row.BA_PEMILIK_ASSET+'\',\''+row.LOKASI_BA_DESCRIPTION+'\',\''+row.LOKASI_BA_CODE+'\')"><i class="fa fa-plus"></i></a>';
                         }
                     }
