@@ -673,7 +673,7 @@ class MutasiController extends Controller
         $role = Session::get('role');
         $where2 = "";
         
-        if($role == 'PGA' || $role = 'Super Administrator'){$where = '1=1'; }else { $where = '1=0'; }
+        if($role == 'PGA'){$where = '1=1'; }else { $where = '1=0'; }
 
         $where .= " AND a.JENIS_PENGAJUAN = '{$jenis}' ";
 
@@ -682,7 +682,7 @@ class MutasiController extends Controller
             $where2 .= " WHERE LOKASI in (".$area_code.") ";
         }        
 
-        $sql = " SELECT * FROM ( SELECT a.*,SUBSTRING_INDEX(SUBSTRING_INDEX(a.LOKASI_BA_DESCRIPTION, '-', 1), ' ', -1) AS LOKASI FROM TR_MUTASI_TEMP a WHERE $where ) TR_MUTASI_TEMP2 $where2 ";
+        $sql = " SELECT * FROM ( SELECT a.*,SUBSTRING_INDEX(SUBSTRING_INDEX(a.LOKASI_BA_DESCRIPTION, '-', 1), ' ', -1) AS LOKASI_OLD, LOKASI_BA_CODE as LOKASI FROM TR_MUTASI_TEMP a WHERE $where ) TR_MUTASI_TEMP2 $where2 ";
 
         $data = DB::SELECT($sql);
         return $data;
