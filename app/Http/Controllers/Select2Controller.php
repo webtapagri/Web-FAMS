@@ -126,6 +126,24 @@ class Select2Controller extends Controller
         //echo "<pre>"; print_r($arr); die();
         return response()->json(array('data' => $arr));
     }
+
+    public function jenis_asset(Request $request) {
+        $sql = "SELECT A.JENIS_ASSET_CODE as id, A.JENIS_ASSET_DESCRIPTION as text FROM TM_JENIS_ASSET A
+        JOIN TM_GENERAL_DATA B ON B.GENERAL_CODE = 'kodefikasi_asset_class'
+        WHERE B.DESCRIPTION_CODE = '3' AND B.DESCRIPTION = SUBSTR( A.JENIS_ASSET_CODE, 1, 1 ) ";
+        $data = DB::select(DB::raw($sql));
+        $arr = array();
+        $arr[] = array("id"=>"","text"=>"");
+        foreach ($data as $row) 
+        {
+            $arr[] = array(
+                "id" => $row->id,
+                "text" => $row->id .'-' . $row->text
+            );
+        }
+        //echo "<pre>"; print_r($arr); die();
+        return response()->json(array('data' => $arr));
+    }
     
     public function assetgroup(Request $request) 
     {

@@ -244,6 +244,7 @@ Route::get('get-assetgroup', ['as' => 'get.assetgroup', 'uses' => 'Select2Contro
 Route::get('get-assetgroupcondition', ['as' => 'get.assetgroupcondition', 'uses' => 'Select2Controller@assetgroupcondition']);
 Route::get('get-assetsubgroup', ['as' => 'get.assetsubgroup', 'uses' => 'Select2Controller@assetsubgroup']);
 Route::get( 'get-jenisasset', ['as' => 'get.jenisasset', 'uses' => 'Select2Controller@jenisasset']);
+Route::get( 'get-jenis_asset', ['as' => 'get.jenis_asset', 'uses' => 'Select2Controller@jenis_asset']);
 Route::get('get-select_workflow_code', ['as' => 'get.select_workflow_code', 'uses' => 'WorkflowController@workflowcode']);
 Route::get('get-select_workflow_detail_code', ['as' => 'get.select_workflow_detail_code', 'uses' => 'WorkflowController@workflowcodedetail']);
 Route::get('get-select_workflow_detail_role', ['as' => 'get.select_workflow_detail_role', 'uses' => 'WorkflowController@workflowcoderole']);

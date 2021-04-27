@@ -528,7 +528,10 @@
         jQuery("#asset_group").select2();
         jQuery("#asset_sub_group").select2();
 
-        var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenisasset") !!}')));
+        // var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenisasset") !!}'))); 
+        var ba = jQuery("#asset_location").val();
+        var digit3 = ba.substring(2, 1);
+        var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenis_asset")  !!}?ba_code=' + digit3)));
         jQuery("#asset_type").select2({
             data: jenisasset,
             width: "100%",
