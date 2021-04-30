@@ -394,7 +394,7 @@ class RestuqueController extends Controller
 			else{
 				$file = array(array('key' => 'title',
 							'label' => 'Title',
-							'value' => [null]),
+							'value' => []),
 						array('key' => 'link_file',
 							'label' => 'Link File',
 							'value' => []),
@@ -799,7 +799,7 @@ class RestuqueController extends Controller
 			else{
 				$file = array(array('key' => 'title',
 							'label' => 'Title',
-							'value' => [null]),
+							'value' => []),
 						array('key' => 'link_file',
 							'label' => 'Link File',
 							'value' => []),
