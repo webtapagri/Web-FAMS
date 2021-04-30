@@ -1453,8 +1453,8 @@ class DisposalController extends Controller
 					WHERE b.ID = '".$id."' "; 
         $data = DB::SELECT($sql);
 
-        $path       = public_path($v->FILE_NAME);
-        $contents   = base64_decode($v->FILE_UPLOAD);
+        $path       = public_path($data->FILE_NAME);
+        $contents   = base64_decode($data->FILE_UPLOAD);
 
         //store file temporarily
         file_put_contents($path, $contents);
