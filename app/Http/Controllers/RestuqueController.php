@@ -113,7 +113,7 @@ class RestuqueController extends Controller
 
 			$sql_lampiran = " SELECT b.FILE_NAME as title ,concat('"
 							.url('/approval/attachment-disposal/')
-							."b.ID) as link_file"
+							."/'"."b.ID) as link_file"
 							." FROM TR_DISPOSAL_ASSET_FILE b WHERE b.no_reg = '{$document_code}' ";
         
 		}
@@ -518,7 +518,7 @@ class RestuqueController extends Controller
 
 			$sql_lampiran = " SELECT b.FILE_NAME as title ,concat('"
 							.url('/approval/attachment-disposal/')
-							."b.ID) as link_file"
+							."/'"."b.ID) as link_file"
 							." FROM TR_DISPOSAL_ASSET_FILE b WHERE b.no_reg = '{$document_code}' ";
         
 		}
