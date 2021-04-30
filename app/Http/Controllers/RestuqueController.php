@@ -397,7 +397,7 @@ class RestuqueController extends Controller
 							'value' => [null]),
 						array('key' => 'link_file',
 							'label' => 'Link File',
-							'value' => [null]),
+							'value' => []),
 					);
 			}
 
@@ -802,7 +802,7 @@ class RestuqueController extends Controller
 							'value' => [null]),
 						array('key' => 'link_file',
 							'label' => 'Link File',
-							'value' => [null]),
+							'value' => []),
 					);
 			}
 
