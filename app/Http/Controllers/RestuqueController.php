@@ -112,7 +112,7 @@ class RestuqueController extends Controller
 							order by a.NAMA_MATERIAL";
 
 			$sql_lampiran = " SELECT b.FILE_NAME as title ,concat('"
-							.url('/approval/berkas-disposal/')
+							.url('/approval/attachment-disposal/')
 							."','/{$no_doc}') as link_file"
 							." FROM TR_DISPOSAL_ASSET_FILE b WHERE b.no_reg = '{$document_code}' ";
         
@@ -517,7 +517,7 @@ class RestuqueController extends Controller
 							order by a.NAMA_MATERIAL";
 
 			$sql_lampiran = " SELECT b.FILE_NAME as title ,concat('"
-							.url('/approval/berkas-disposal/')
+							.url('/approval/attachment-disposal/')
 							."','/{$no_doc}') as link_file"
 							." FROM TR_DISPOSAL_ASSET_FILE b WHERE b.no_reg = '{$document_code}' ";
         

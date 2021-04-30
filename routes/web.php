@@ -394,6 +394,7 @@ Route::post('/disposal/upload_berkas', 'DisposalController@upload_berkas');
 Route::get('/approval/berkas-disposal/{no_reg}', 'ApprovalController@berkas_disposal')->name('no_reg');
 Route::get('/approval/berkas-mutasi/{no_reg}', 'ApprovalController@berkas_mutasi')->name('no_reg');
 Route::get('/disposal/view-berkas/{no_reg}', 'DisposalController@berkas_disposal')->name('no_reg');
+Route::get('/approval/attachment-disposal/{id}', 'DisposalController@attachment_disposal');
 Route::get('/disposal/view-berkas-serah-terima/{kode_asset_ams}', 'DisposalController@berkas_serah_terima')->name('kode_asset_ams');
 Route::get('/disposal/view-berkas-detail/{kode_asset_ams}/{file_category}', 'DisposalController@berkas_disposal_detail')->name('kode_asset_ams');
 Route::get('/disposal/list-kategori-upload/{kode_asset_ams}/{jenis_pengajuan}', 'DisposalController@list_file_category')->name('kode_asset_ams');

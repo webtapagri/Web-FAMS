@@ -1446,6 +1446,23 @@ class DisposalController extends Controller
         echo $l; 
     }
 
+    function attachment_disposal($id)
+    {		
+        $sql = " SELECT b.DOC_SIZE, b.FILE_NAME, b.FILE_CATEGORY, b.FILE_UPLOAD, b.JENIS_FILE
+					FROM TR_DISPOSAL_ASSET_FILE b
+					WHERE b.ID = '".$id."' "; 
+        $data = DB::SELECT($sql);
+
+        $path       = public_path($v->FILE_NAME);
+        $contents   = base64_decode($v->FILE_UPLOAD);
+
+        //store file temporarily
+        file_put_contents($path, $contents);
+
+        //download file and delete it
+        return response()->download($path)->deleteFileAfterSend(true);
+    }
+
     function file_download($kode_asset_ams,$file_category)  
     {
     	$data = DB::SELECT(" SELECT * FROM TR_DISPOSAL_TEMP_FILE WHERE KODE_ASSET_AMS = {$kode_asset_ams} AND FILE_CATEGORY = '{$file_category}' ");
