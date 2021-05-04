@@ -508,13 +508,17 @@
                 $("#ganti-no-po").hide();
             }
         });
-
+        var ba = '';
         var plant = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.businessarea") !!}')));
         jQuery("#business_area").select2({
             data: plant,
             width: "100%",
             allowClear: true,
             placeholder: ' '
+        }).on('change', function() 
+        {
+            ba =  $('#business_area :selected').val();
+            console.log(ba);
         });
 
         var plant_all = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.generaldataplant") !!}')));
@@ -529,8 +533,10 @@
         jQuery("#asset_sub_group").select2();
 
         // var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenisasset") !!}'))); 
-        var ba = jQuery("#asset_location").val();
+        // $('#business_area').select2('data');
+       
         var digit3 = ba.substring(2, 1);
+        console.log(ba);
         var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenis_asset")  !!}?ba_code=' + digit3)));
         jQuery("#asset_type").select2({
             data: jenisasset,
@@ -1282,6 +1288,16 @@
                 detail: []
             };
 
+            var ba =  $('#business_area :selected').val();
+            var digit3 = ba.substr(2, 1);
+            console.log(digit3);
+            var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenis_asset")  !!}?ba_code=' + digit3)));
+            jQuery("#asset_type").select2({
+                data: jenisasset,
+                width: "100%",
+                allowClear: true,
+                placeholder: ' '
+            })
             createPage(index);
         });
 
