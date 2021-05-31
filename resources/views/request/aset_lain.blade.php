@@ -613,6 +613,7 @@
 
         var ba = $('#business_area :selected').val();
         var digit3 = ba.substring(2, 1);
+        console.log(ba);
         console.log(digit3);
         var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenis_asset")  !!}?ba_code=' + digit3)));
         jQuery("#asset_type").select2({
