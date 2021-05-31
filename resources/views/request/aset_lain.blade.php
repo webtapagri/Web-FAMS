@@ -611,7 +611,7 @@
         jQuery("#asset_group").select2();
         jQuery("#asset_sub_group").select2();
 
-        var ba = jQuery("#asset_location").val();
+        var ba =  $('#business_area :selected').val();
         var digit3 = ba.substring(2, 1);
         console.log('digit ke-3 :'+digit3);
             console.log(' ba :'+ ba);
