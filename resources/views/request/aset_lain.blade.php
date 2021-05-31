@@ -611,10 +611,9 @@
         jQuery("#asset_group").select2();
         jQuery("#asset_sub_group").select2();
 
-        var ba = $("#asset_business_area :selected").val();
+        var ba = jQuery("#business_area").val();
         var digit3 = ba.substring(2, 1);
-        console.log('digit ke-3 :'+digit3);
-            console.log(' ba :'+ ba);
+        console.log(digit3);
         var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenis_asset")  !!}?ba_code=' + digit3)));
         jQuery("#asset_type").select2({
             data: jenisasset,
