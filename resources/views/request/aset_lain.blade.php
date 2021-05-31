@@ -1121,6 +1121,17 @@
                 outstanding_qty: 0,
                 detail: []
             };
+            
+            var ba =  $('#business_area :selected').val();
+            var digit3 = ba.substr(2, 1);
+            console.log(digit3);
+            var jenisasset = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.jenis_asset")  !!}?ba_code=' + digit3)));
+            jQuery("#asset_type").select2({
+                data: jenisasset,
+                width: "100%",
+                allowClear: true,
+                placeholder: ' '
+            })
 
             createPage(id);
             createItemRequestTable();
