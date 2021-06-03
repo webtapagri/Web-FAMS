@@ -128,13 +128,14 @@ class Select2Controller extends Controller
     }
 
     public function jenis_asset(Request $request) {
-        $sql = "SELECT A.JENIS_ASSET_CODE as id, A.JENIS_ASSET_DESCRIPTION as text FROM TM_JENIS_ASSET A
-        JOIN TM_GENERAL_DATA B ON B.GENERAL_CODE = 'kodefikasi_asset_class'
-        WHERE B.DESCRIPTION_CODE = '$request->ba_code' AND B.DESCRIPTION = SUBSTR( A.JENIS_ASSET_CODE, 1, 1 )
-        UNION
-        SELECT A.JENIS_ASSET_CODE as id, A.JENIS_ASSET_DESCRIPTION as text FROM TM_JENIS_ASSET A
-        WHERE SUBSTR( A.JENIS_ASSET_CODE, 1, 1 ) = 'U'
-        order by id asc ";
+        $sql = "select A.id,A.text from
+                (SELECT A.JENIS_ASSET_CODE as id, A.JENIS_ASSET_DESCRIPTION as text FROM TM_JENIS_ASSET A
+                    JOIN TM_GENERAL_DATA B ON B.GENERAL_CODE = 'kodefikasi_asset_class'
+                WHERE B.DESCRIPTION_CODE = '$request->ba_code' AND B.DESCRIPTION = SUBSTR( A.JENIS_ASSET_CODE, 1, 1 )
+                UNION
+                SELECT A.JENIS_ASSET_CODE as id, A.JENIS_ASSET_DESCRIPTION as text FROM TM_JENIS_ASSET A
+                WHERE SUBSTR( A.JENIS_ASSET_CODE, 1, 1 ) = 'U') A
+                order by A.id asc";
         $data = DB::select(DB::raw($sql));
         $arr = array();
         $arr[] = array("id"=>"","text"=>"");
