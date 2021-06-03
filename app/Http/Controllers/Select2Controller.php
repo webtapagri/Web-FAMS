@@ -112,6 +112,7 @@ class Select2Controller extends Controller
     public function jenisasset(Request $request) {
         $data = DB::table( 'TM_JENIS_ASSET')
         ->select( 'JENIS_ASSET_CODE as id', 'JENIS_ASSET_DESCRIPTION as text')
+        ->orderby('id', 'asc')
         ->get();
 
         $arr = array();
