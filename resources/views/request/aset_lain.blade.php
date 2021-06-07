@@ -620,7 +620,12 @@
             data: jenisasset,
             width: "100%",
             allowClear: true,
-            placeholder: ' '
+            placeholder: ' ',
+            sorter: function(data) {
+                    return data.sort(function(a, b) {
+                        return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+                    });
+                }
         }).on('change', function() 
         {
             var assetgroup = jQuery.parseJSON(JSON.stringify(dataJson('{!! route("get.assetgroup") !!}?type=' + jQuery(this).val())));
@@ -1130,7 +1135,12 @@
                 data: jenisasset,
                 width: "100%",
                 allowClear: true,
-                placeholder: ' '
+                placeholder: ' ',
+            sorter: function(data) {
+                    return data.sort(function(a, b) {
+                        return a.text < b.text ? -1 : a.text > b.text ? 1 : 0;
+                    });
+                }
             })
 
             createPage(id);
