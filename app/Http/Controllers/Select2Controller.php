@@ -137,9 +137,7 @@ class Select2Controller extends Controller
                 SELECT A.JENIS_ASSET_CODE as id, A.JENIS_ASSET_DESCRIPTION as text FROM TM_JENIS_ASSET A
                 WHERE SUBSTR( A.JENIS_ASSET_CODE, 1, 1 ) = 'U') A
                 order by A.id asc";
-        $data = DB::select(DB::raw($sql))
-        ->orderby('id', 'asc')
-        ->get();
+        $data = DB::select(DB::raw($sql));
         $arr = array();
         $arr[] = array("id"=>"","text"=>"");
         foreach ($data as $row) 
