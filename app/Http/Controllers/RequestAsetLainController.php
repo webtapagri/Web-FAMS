@@ -479,7 +479,7 @@ class RequestAsetLainController extends Controller
         $param = $_REQUEST;
         
         $sql = " 
-            SELECT qty_po_submit FROM v_qty_po_submit WHERE NO_PO = ".$param['po_no']." 
+            SELECT qty_po_submit FROM v_qty_po_submit WHERE NO_PO = '".$param['po_no']."'
                 AND ITEM_PO = '".$param['item_po']."' 
                 AND KODE_MATERIAL = '".$param['kode_material']."'
         ";
