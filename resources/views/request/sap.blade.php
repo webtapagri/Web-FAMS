@@ -1278,7 +1278,7 @@
             var index = $(this).val();
             var item = selected_detail_item[index];
             var id = makeInt(5);
-            
+            console.log(item);
             request_item[index] = 
             {
                 id: index,
