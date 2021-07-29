@@ -1300,7 +1300,7 @@ class ApprovalController extends Controller
         $no_registrasi = str_replace("-", "/", $noreg);
         //echo $noreg; die();
 
-        $sql = " SELECT a.JENIS_ASSET_TUJUAN AS JENIS_ASSET,a.GROUP_TUJUAN AS `GROUP`,a.SUB_GROUP_TUJUAN AS SUB_GROUP FROM TR_MUTASI_ASSET_DETAIL a WHERE a.NO_REG = '{$no_registrasi}' AND (a.DELETED is null OR a.DELETED = '') ";
+        $sql = " SELECT a.JENIS_ASSET_TUJUAN AS JENIS_ASSET,a.GROUP_TUJUAN AS GROUP,a.SUB_GROUP_TUJUAN AS SUB_GROUP FROM TR_MUTASI_ASSET_DETAIL a WHERE a.NO_REG = '{$no_registrasi}' AND (a.DELETED is null OR a.DELETED = '') ";
         $data = DB::SELECT($sql); 
         //echo "1<pre>"; print_r($data); die();
         if( !empty($data) )
@@ -2091,7 +2091,29 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
         $records = array();
 
-        $sql = "SELECT document_code,user_id,name,area_code,status_approval,notes,date FROM v_history_approval WHERE document_code = '{$noreg}' ORDER BY -date ASC, date ASC ";
+        // $sql = "SELECT document_code,user_id,name,area_code,status_approval,notes,date FROM v_history_approval WHERE document_code = '{$noreg}' ORDER BY -date ASC, date ASC ";
+        $sql = "select
+                    view_history.document_code AS document_code,
+                    view_history.user_id AS user_id,
+                    view_history.name AS name,
+                    view_history.area_code AS area_code,
+                    view_history.status_approval AS status_approval,
+                    view_history.notes AS notes,
+                    view_history.date AS date
+                from
+                    view_history where document_code = '{$noreg}'
+                union all
+                select
+                    v_outstanding.document_code AS document_code,
+                    v_outstanding.user_id AS user_id,
+                    v_outstanding.name AS name,
+                    v_outstanding.area_code AS area_code,
+                    'Menunggu' AS Menunggu,
+                    '' AS Name_exp_13,
+                    '' AS Name_exp_14
+                from
+                   v_outstanding where document_code = '{$noreg}'
+                    ORDER BY -date ASC, date ASC ";
 
         /*$sql = "SELECT a.document_code,a.user_id,a.name AS name_role,a.area_code,a.status_approval,a.notes,a.date,b.name AS nama_lengkap FROM v_history_approval a LEFT JOIN TBM_USER b ON a.user_id = b.id WHERE a.document_code = '{$noreg}' ORDER BY -a.date ASC, -a.date ASC ";*/
 
@@ -3325,8 +3347,8 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
 
         $sql = " SELECT a.NO_REG_ITEM, a.NAMA_MATERIAL, c.SUBGROUP_DESCRIPTION 
 FROM TR_REG_ASSET_DETAIL a 
-LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.`GROUP` = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE  
-LEFT JOIN TM_SUBGROUP_ASSET c ON a.JENIS_ASSET = c.JENIS_ASSET_CODE AND a.`GROUP` = c.GROUP_CODE AND a.SUB_GROUP = c.SUBGROUP_CODE 
+LEFT JOIN TM_ASSET_CONTROLLER_MAP b ON a.JENIS_ASSET = b.JENIS_ASSET_CODE AND a.GROUP = b.GROUP_CODE AND a.SUB_GROUP = b.SUBGROUP_CODE  
+LEFT JOIN TM_SUBGROUP_ASSET c ON a.JENIS_ASSET = c.JENIS_ASSET_CODE AND a.GROUP = c.GROUP_CODE AND a.SUB_GROUP = c.SUBGROUP_CODE 
 WHERE a.no_reg = '".$noreg."' AND b.MANDATORY_KODE_ASSET_CONTROLLER = 'X' ORDER BY a.NO_REG_ITEM ";
         
         $data = DB::SELECT($sql);
