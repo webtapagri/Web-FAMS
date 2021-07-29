@@ -1696,7 +1696,7 @@ class ApprovalController extends Controller
         // $data = DB::SELECT($sql);
         
         // $noreg = str_replace("-", "/", $noreg);
-        $data = DB::table('v_history')
+        $data = DB::table('view_history')
 							->selectRaw(" COUNT(*) AS jml")
 							->whereRaw ("status_dokumen = 'Disetujui' AND document_code = '$noreg'")
                             ->get();
