@@ -1276,8 +1276,8 @@
         $('#table-detail-item').find('input[type="checkbox"]:checked').each(function() 
         {
             var index = $(this).val();
-            // var item = selected_detail_item[index];
-            var item = selected_detail_item[index-1];
+            var item = selected_detail_item[index];
+            // var item = selected_detail_item[index-1];
             var id = makeInt(5);
             request_item[index] = 
             {
