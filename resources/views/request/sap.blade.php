@@ -1172,13 +1172,14 @@
             item += '</tr>';
             
             selected_detail_item = [];
-            selected_detail_item.push(0);
+            key_index = [];
             $.each(data.DETAIL_ITEM, function(key, val) 
             {
                 if( ba_user == 'All' )
                 {
                     var HARGA = val.NETPR;
                     selected_detail_item.push(val);
+                    key_index.push(key);
                     item += "<tr>";
                     item += "<td><input type='checkbox' onClick='selectPOItem(this)' value='" + key + "' ></td>";
                     item += "<td>" + val.EBELP + "</td>";
@@ -1195,6 +1196,7 @@
                     {
                         var HARGA = val.NETPR;
                         selected_detail_item.push(val);
+                        key_index.push(key);
                         item += "<tr>";
                         item += "<td><input type='checkbox' onClick='selectPOItem(this)' value='" + key + "' ></td>";
                         item += "<td>" + val.EBELP + "</td>";
@@ -1276,6 +1278,9 @@
         $('#table-detail-item').find('input[type="checkbox"]:checked').each(function() 
         {
             var index = $(this).val();
+            if(key_index.indexOf(0)==-1){
+                index = index-1;
+            }
             var item = selected_detail_item[index];
             // var item = selected_detail_item[index-1];
             var id = makeInt(5);
