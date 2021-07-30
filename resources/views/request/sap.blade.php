@@ -1172,7 +1172,7 @@
             item += '</tr>';
             
             selected_detail_item = [];
-
+            selected_detail_item.push(0);
             $.each(data.DETAIL_ITEM, function(key, val) 
             {
                 if( ba_user == 'All' )
