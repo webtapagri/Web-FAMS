@@ -2370,8 +2370,17 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                         $sql_3 = " CALL create_kode_asset_ams('".$dt->NO_REG."', '".$ANLA_BUKRS."', '".$dt->JENIS_ASSET."', '".$data->item->MESSAGE_V1."') ";
                         //echo $sql_3; die();
                         DB::STATEMENT($sql_3);
+                        
+                        // cek kode asset setelah sync
+                        $sqlcek ="SELECT KODE_ASSET_SAP FROM TR_REG_ASSET_DETAIL WHERE NO_REG = '$dt->NO_REG' AND ASSET_PO_ID = '$dt->ASSET_PO_ID' AND NO_REG_ITEM = '$dt->NO_REG_ITEM'";
+                        $kd = DB::SELECT($sqlcek);
+                        if(empty($kd)){ 
+                            $result = array('status'=>'error','message'=>'Synchronize gagal');
+                            return $result;
+                        }
                         return true;
-                     }
+                    }
+
 
                 }
                 catch (\Exception $e) 
