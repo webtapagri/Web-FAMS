@@ -172,8 +172,10 @@ class RestuqueController extends Controller
 		->where('document_code','LIKE','%'.$document_code.'%')
 		->get();
 
-		$HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
-		$NILAI_BUKU = $this->get_nilai_buku($row);
+		$HARGA_PEROLEHAN = $this->get_harga_perolehan($document_code);
+		$NILAI_BUKU = $this->get_nilai_buku($document_code);
+		// $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+		// $NILAI_BUKU = $this->get_nilai_buku($row);
 		// dd($NILAI_BUKU);
 
 		
@@ -209,12 +211,12 @@ class RestuqueController extends Controller
 				if($HARGA_PEROLEHAN == null){
 					$hp[] = 0;
 				}else{
-					$hp[] = number_format($HARGA_PEROLEHAN[$i],0,',','.');
+					$hp[] = number_format($HARGA_PEROLEHAN[$i]->HARGA_PEROLEHAN,0,',','.');
 				}
 				if($NILAI_BUKU == null){
 					$nbv[] = 0;
 				}else{
-					$nbv[] = number_format($NILAI_BUKU[$i],0,',','.');
+					$nbv[] = number_format($NILAI_BUKU[$i]->NILAI_BUKU,0,',','.');
 				}
 				
 				$i++;	
@@ -577,8 +579,10 @@ class RestuqueController extends Controller
 		->where('document_code','LIKE','%'.$document_code.'%')
 		->get();
 
-		$HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
-		$NILAI_BUKU = $this->get_nilai_buku($row);
+		$HARGA_PEROLEHAN = $this->get_harga_perolehan($document_code);
+		$NILAI_BUKU = $this->get_nilai_buku($document_code);
+		// $HARGA_PEROLEHAN = $this->get_harga_perolehan($row);
+		// $NILAI_BUKU = $this->get_nilai_buku($row);
 		// dd($NILAI_BUKU);
 
 		
@@ -614,12 +618,12 @@ class RestuqueController extends Controller
 				if($HARGA_PEROLEHAN == null){
 					$hp[] = 0;
 				}else{
-					$hp[] = number_format($HARGA_PEROLEHAN[$i],0,',','.');
+					$hp[] = number_format($HARGA_PEROLEHAN[$i]->HARGA_PEROLEHAN,0,',','.');
 				}
 				if($NILAI_BUKU == null){
 					$nbv[] = 0;
 				}else{
-					$nbv[] = number_format($NILAI_BUKU[$i],0,',','.');
+					$nbv[] = number_format($NILAI_BUKU[$i]->NILAI_BUKU,0,',','.');
 				}
 				
 				$i++;	
@@ -1002,99 +1006,20 @@ class RestuqueController extends Controller
 	
 	function get_harga_perolehan($row)
     {
-		$nilai = array();
-		// dd($row);
-
-        for($i=0;$i<count($row);$i++){
-            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
-
-            $YEAR = date('Y');
-
-            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
-            
-            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
-            {
-                $ANLN2 = '0000';
-            }
-            else
-            {
-				// $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
-				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
-            }
-            
-            
-
-            $service = API::exec(array(
-                'request' => 'GET',
-                'host' => 'ldap',
-                'method' => "assets_price?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
-                //'method' => "assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019", 
-                //http://tap-ldapdev.tap-agri.com/data-sap/assets_price?BUKRS=41&ANLN1=000060100612&ANLN2=0000&AFABE=1&GJAHR=2019
-            ));
-            
-            $data = $service;
-
-            if(!empty($data))
-            {
-                $nilai[] = $data*100;
-            }
-            else
-            {
-                $nilai[] = 0;
-            }
-
-		// dd($service,$BUKRS,$ANLN1,$ANLN2,$row->KODE_ASSET_SAP);
-        }
-
-        // dd($nilai);
+		
+		$sql = " SELECT HARGA_PEROLEHAN FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '$row' ";
+		// $nilai = DB::table('TR_DISPOSAL_ASSET_DETAIL')->select('HARGA_PEROLEHAN')->where('NO_REG',$row)->get()->toArray();
+		$nilai = DB::SELECT($sql);
+		
         return $nilai;
-
-    	
     }
 
     function get_nilai_buku($row)
     {
-        $nilai = array();
-
-        for($i=0;$i<count($row);$i++){
-            $BUKRS = substr($row[$i]->BA_PEMILIK_ASSET,0,2);
-
-            $YEAR = date('Y');
-
-            $ANLN1 = $this->get_anln1($row[$i]->KODE_ASSET_SAP);
-            
-            if( $row[$i]->KODE_ASSET_SUBNO_SAP == '') 
-            {
-                $ANLN2 = '0000';
-            }
-            else
-            {
-				// $ANLN2 = $row[$i]->KODE_ASSET_SUBNO_SAP;
-				$ANLN2 = str_pad($row[$i]->KODE_ASSET_SUBNO_SAP, 4, '0', STR_PAD_LEFT);
-            }
-            
-            
-
-            $service = API::exec(array(
-                'request' => 'GET',
-                'host' => 'ldap',
-                'method' => "assets_bookvalue?BUKRS={$BUKRS}&ANLN1={$ANLN1}&ANLN2=$ANLN2&AFABE=1&GJAHR={$YEAR}", 
-            ));
-            
-            $data = $service;
-
-            if(!empty($data))
-            {
-                $nilai[] = $data*100;
-            }
-            else
-            {
-                $nilai[] = 0;
-            }
-        }
-
+        $sql = " SELECT CASE WHEN NILAI_BUKU ='' THEN 0 ELSE NILAI_BUKU END AS NILAI_BUKU FROM TR_DISPOSAL_ASSET_DETAIL WHERE NO_REG = '$row' ";
+		$nilai = DB::SELECT($sql);
+        // dd($nilai);
         return $nilai;
-
     	
     }
 
