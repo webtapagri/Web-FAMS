@@ -34,6 +34,10 @@ class GenerateQRController extends Controller
         // \File::deleteDirectory( storage_path("app/public/tmp_download") );
         // echo "hai";
         // dd($request->hasFile('file_qr'));
+        $request->validate([
+            'file_qr' => 'required|mimes:xlsx,xls',
+        ]);
+
         if($request->hasFile('file_qr')){
             $path = $request->file('file_qr')->getRealPath();
             // $data = Excel::import($path)->get();
