@@ -39,7 +39,10 @@ class GenerateQRController extends Controller
         ]);
 
         if($request->hasFile('file_qr')){
-            $path = $request->file('file_qr')->getRealPath();
+            // $path = $request->file('file_qr')->getRealPath();
+            $path1 = $request->file('file_qr')->store('temp'); 
+            $path = storage_path('app').'/'.$path1;  
+
             // $data = Excel::import($path)->get();
             $data = Excel::import(new DataImport, $path);
             $sql = " SELECT * from TR_QRDATA";
