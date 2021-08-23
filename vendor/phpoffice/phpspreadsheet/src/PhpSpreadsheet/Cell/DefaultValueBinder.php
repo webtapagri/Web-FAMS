@@ -53,7 +53,8 @@ class DefaultValueBinder implements IValueBinder
             return DataType::TYPE_STRING;
         } elseif ($pValue instanceof RichText) {
             return DataType::TYPE_INLINE;
-        } elseif ($pValue[0] === '=' && strlen($pValue) > 1) {
+        // } elseif ($pValue[0] === '=' && strlen($pValue) > 1) {
+        } elseif (0 === strpos($pValue, '=') && strlen($pValue) > 1) {
             return DataType::TYPE_FORMULA;
         } elseif (is_bool($pValue)) {
             return DataType::TYPE_BOOL;

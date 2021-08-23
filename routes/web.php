@@ -403,6 +403,13 @@ Route::get('/disposal/view-berkas-by-type/{kode_asset_ams}/{file_category}', 'Di
 Route::get('/disposal/delete_berkas_temp','DisposalController@delete_berkas_temp');
 /* END DISPOSAL */
 
+/* EXTERNAL QR_CODE */
+
+
+Route::get('qr-bulk-download', 'GenerateQRController@index')->name('qr_bulk_download');
+Route::post('download_qrcode_result', 'GenerateQRController@download_qrcode_result')->name('download_qrcode_result');
+/* END EXTERNAL QR_CODE */
+
 
 // Route::get('storage/{filename}', function ($filename)
 // {
