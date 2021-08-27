@@ -135,9 +135,13 @@ class GenerateQRController extends Controller
 	function gen_png_img($data){
 		$string = $data; 
 
-		$width  = 350;
-		$height = 350;
-        $font = 16;
+		$width  = 140;
+		$height = 140;
+        $fontsize = 5;
+    
+		$folderPath = app_path();
+		$file = $folderPath . '/fonts/expressway-sleeve.gif';
+        $font = imageloadfont($file);
         // dd($fontfam);
 		$im = @imagecreate ($width, $height);
 		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
@@ -145,8 +149,8 @@ class GenerateQRController extends Controller
 		imagefill($im, 0, 0, $transparent);
 		imagesavealpha($im, true);
 	  
-        $width1 = imagefontwidth($font) * strlen($string); 
-        imagestring ($im, $font,($width/2)-($width1/2), 30, $string, $text_color);
+        $width1 = imagefontwidth($fontsize) * strlen($string); 
+        imagestring ($im, $font,($width/2)-($width1/2), 5, $string, $text_color);
 	  
         ob_start();
         imagealphablending($im, false);
