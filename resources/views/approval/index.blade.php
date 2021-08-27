@@ -1859,11 +1859,12 @@
                 <?php if( $user_role == 'AMS'){?>
                 console.log(data.transfer);
                 if(data.no_fico == ''){
+                    
+                    $("#posting_date_ams").show();
                     if(data.transfer != 0)
                     {
                         $(".button-approved").hide();
-                        $(".button-reject").hide(); 
-                        $("#posting_date_ams").show(); 
+                        $(".button-reject").hide();  
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" id="button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
                         $("#create-button-trasfer-disposal").show();
                         $(".button-trasfer-disposal").show(); 
