@@ -407,7 +407,7 @@ Route::get('/disposal/delete_berkas_temp','DisposalController@delete_berkas_temp
 
 
 Route::get('qr-bulk-download', 'GenerateQRController@index')->name('qr_bulk_download');
-Route::post('download_qrcode_result', 'GenerateQRController@download_qrcode_result');
+Route::post('/download_qrcode_result', 'GenerateQRController@download_qrcode_result');
 /* END EXTERNAL QR_CODE */
 
 
