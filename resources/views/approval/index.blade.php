@@ -1830,7 +1830,6 @@
         //alert(noreg); //return false;
 
         $("#box-detail-item-disposal").hide();
-        var disposal_modal = document.getElementById("approve-disposal-modal");
 
         $.ajax({
             type: 'GET',
@@ -1853,6 +1852,8 @@
                 $("#request-form #posting_date").val(data.posting_date);
 
                 $("#create-button-sync-sap").hide();
+                $("approve-disposal-modal").html('');          
+                $("approve-disposal-modal .modal-body").html(data).show();
                 $('#approve-disposal-modal').html(disposal_modal);
                 if(data.cek_reject==0){$("#button-approve").show();}
                 $(".button-reject").show(); 
