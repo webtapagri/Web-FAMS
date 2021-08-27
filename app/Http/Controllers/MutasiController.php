@@ -682,7 +682,7 @@ class MutasiController extends Controller
             $where2 .= " WHERE LOKASI in (".$area_code.") ";
         }        
 
-        $sql = " SELECT * FROM ( SELECT a.*,SUBSTRING_INDEX(SUBSTRING_INDEX(a.LOKASI_BA_DESCRIPTION, '-', 1), ' ', -1) AS LOKASI_OLD, LOKASI_BA_CODE as LOKASI FROM TR_MUTASI_TEMP a WHERE $where ) TR_MUTASI_TEMP2 $where2 ";
+        $sql = " SELECT * FROM ( SELECT a.*,SUBSTRING_INDEX(SUBSTRING_INDEX(a.LOKASI_BA_DESCRIPTION, '-', 1), ' ', -1) AS LOKASI_OLD, a.LOKASI_BA_CODE_COMPANY as LOKASI FROM TR_MUTASI_TEMP a WHERE $where ) TR_MUTASI_TEMP2 $where2 ";
 
         $data = DB::SELECT($sql);
         return $data;
