@@ -1830,7 +1830,7 @@
         //alert(noreg); //return false;
 
         $("#box-detail-item-disposal").hide();
-        var disposal_modal = document.getElementById("approve-disposal-modal").files(0).name;
+        var disposal_modal = document.getElementById("approve-disposal-modal");
 
         $.ajax({
             type: 'GET',
