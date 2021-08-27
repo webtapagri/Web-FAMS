@@ -19,7 +19,7 @@ use Illuminate\Support\Arr;
 use Maatwebsite\Excel\Facades\Excel;
 // use App\Exports\MasterAssetExport;
 use Debugbar;
-
+use File;
 
 class GenerateQRController extends Controller
 {
@@ -123,7 +123,7 @@ class GenerateQRController extends Controller
 
             DB::commit();
             
-            storage_path('app/temp')->delete();
+           File::delete('app/temp');
 
 			if ($archive->close()) {
 				return response()->download($archiveFile, basename($archiveFile))->deleteFileAfterSend(true);
