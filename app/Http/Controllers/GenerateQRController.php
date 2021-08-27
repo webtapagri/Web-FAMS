@@ -135,8 +135,8 @@ class GenerateQRController extends Controller
 	function gen_png_img($data){
 		$string = $data; 
 
-		$width  = 350;
-		$height = 450;
+		$width  = 900;
+		$height = 1600;
         $font = 16;
         // dd($fontfam);
 		$im = @imagecreate ($width, $height);
