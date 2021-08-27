@@ -5076,7 +5076,7 @@
         $("#box-detail-item").hide();
         
         var posting_date = $("#posting_date").val();
-        if($(#posting_date).is(":hidden") == 'false'){
+        if($("#posting_date").is(":hidden") == 'false'){
             if( $.trim(posting_date) == "" )
                 {
                     notify({
