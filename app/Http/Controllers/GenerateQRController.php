@@ -44,7 +44,7 @@ class GenerateQRController extends Controller
 
             // $data = Excel::import($path)->get();
             $data = Excel::import(new DataImport, $path);
-            $sql = " SELECT * from TR_QRDATA";
+            $sql = " SELECT * from TR_QRDATA where QR_CODE <>'' or QR_CODE <> null ";
 
             $getLup = DB::SELECT($sql);
             if(!empty($getLup)){
