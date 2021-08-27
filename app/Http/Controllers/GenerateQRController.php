@@ -141,8 +141,8 @@ class GenerateQRController extends Controller
         // dd($fontfam);
 		$im = @imagecreate ($width, $height);
 		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
+		$transparent = imagecolorallocatealpha($im, 0, 0, 0, 350);
 		// $transparent = imagecolorallocatealpha($im, 0, 0, 0, 127);
-		$transparent = imagecolorallocatealpha($im, 0, 0, 0, 0);
 		imagefill($im, 0, 0, $transparent);
 		imagesavealpha($im, true);
 	  
