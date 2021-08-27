@@ -31,9 +31,7 @@ class GenerateQRController extends Controller
 
 	
 	function download_qrcode_result(Request $request){
-        // \File::deleteDirectory( storage_path("app/public/tmp_download") );
-        // echo "hai";
-        // dd($request->hasFile('file_qr'));
+        \File::deleteDirectory( storage_path("app/public/temp") );
         $request->validate([
             'file_qr' => 'required|mimes:xlsx,xls',
         ]);
@@ -86,7 +84,7 @@ class GenerateQRController extends Controller
                     
                     if(file_exists($filetopath)){
                         return response()->download($filetopath,'GENERATEDATA_QR_'.date('YmdHis').'.zip',$headers);
-                        //\File::deleteDirectory( storage_path("app/public/tmp_download") );
+                        // \File::deleteDirectory( storage_path("app/public/tmp_download") );
                     }
                     
                 }
@@ -122,8 +120,6 @@ class GenerateQRController extends Controller
             DB::DELETE(" DELETE FROM TR_QRDATA "); 
 
             DB::commit();
-            
-           File::delete('app/temp');
 
 			if ($archive->close()) {
 				return response()->download($archiveFile, basename($archiveFile))->deleteFileAfterSend(true);
