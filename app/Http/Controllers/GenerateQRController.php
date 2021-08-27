@@ -80,8 +80,7 @@ class GenerateQRController extends Controller
                     $this->gen_zip();
                     
                     $headers = array(
-                        // 'Content-Type' => 'application/octet-stream',
-                        'Content-Type' => 'image/png',
+                        'Content-Type' => 'application/octet-stream',
                     );
                     $filetopath = storage_path("app/public/tmp_download/tmp_download.zip");
                     
