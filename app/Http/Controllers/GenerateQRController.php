@@ -31,7 +31,8 @@ class GenerateQRController extends Controller
 
 	
 	function download_qrcode_result(Request $request){
-        \File::deleteDirectory( storage_path("app/public/temp") );
+        \File::deleteDirectory( storage_path("app/public/tmp_download") );
+        \File::deleteDirectory( storage_path("app/temp") );
         $request->validate([
             'file_qr' => 'required|mimes:xlsx,xls',
         ]);
