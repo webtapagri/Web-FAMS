@@ -5116,10 +5116,9 @@
                             type: 'success',
                             message: result.message
                         });
-                        
-                        $("approve-disposal-modal").html('');          
-                        $("approve-disposal-modal .modal-body").html(data).show();
-                        // $('#approve-disposal-modal').modal('show');
+                                
+                        $('#approve-disposal-modal').modal('hide');
+                        $('#approve-disposal-modal').modal('show');
                         // $("#approve-disposal-modal").load(" #approve-disposal-modal");
                         $("#create-button-trasfer-disposal").hide();
                         $("#button-trasfer-disposal").hide();
