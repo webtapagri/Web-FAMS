@@ -1871,6 +1871,7 @@
                         $(".button-trasfer-disposal").show(); 
                     }else{
                         $("#posting_date_ams").hide(); 
+                        $(".button-approved").show();
                     }
                 }else{
                         $("#posting_date_ams").show(); 
