@@ -122,6 +122,8 @@ class GenerateQRController extends Controller
             DB::DELETE(" DELETE FROM TR_QRDATA "); 
 
             DB::commit();
+            
+            storage_path('app/temp')->delete();
 
 			if ($archive->close()) {
 				return response()->download($archiveFile, basename($archiveFile))->deleteFileAfterSend(true);
