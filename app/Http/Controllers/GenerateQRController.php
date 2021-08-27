@@ -135,22 +135,21 @@ class GenerateQRController extends Controller
 	function gen_png_img($data){
 		$string = $data; 
 
-		$width  = 140;
-		$height = 140;
-        $fontsize = 5;
+		$width  = 350;
+		$height = 350;
+        // $fontsize = 32;
     
 		$folderPath = app_path();
-		$file = $folderPath . '/fonts/expressway-sleeve.gif';
-        $font = imageloadfont($file);
-        // dd($fontfam);
+		$font = $folderPath . '/fonts/exprswy_free.ttf';
 		$im = @imagecreate ($width, $height);
 		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
 		$transparent = imagecolorallocatealpha($im, 0, 0, 0, 127);
 		imagefill($im, 0, 0, $transparent);
 		imagesavealpha($im, true);
 	  
-        $width1 = imagefontwidth($fontsize) * strlen($string); 
-        imagestring ($im, $font,($width/2)-($width1/2), 5, $string, $text_color);
+        // $width1 = imagefontwidth($fontsize) * strlen($string) ; 
+        // imagestring ($im, $font,($width/2)-($width1/2), 5, $string, $text_color);
+        imagettftext($im, 32, 0, 78 , 32, $text_color, $font, $string);
 	  
         ob_start();
         imagealphablending($im, false);
