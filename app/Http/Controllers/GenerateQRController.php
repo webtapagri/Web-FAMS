@@ -65,7 +65,7 @@ class GenerateQRController extends Controller
                             }else{
                                 $file_qrcode = '\app\qrcode_tempe.png';
                             }
-                            $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(300)->generate(''.$qrcode.'')); 
+                            $file_data = 'data:image/png;base64, '.base64_encode(\QrCode::format('png')->merge(''.$file_qrcode.'', 1)->margin(5)->size(350)->generate(''.$qrcode.'')); 
                             $file_name = 'tmp_download/'.$dt->QR_CODE.'.png';
                             @list($type, $file_data) = explode(';', $file_data);                                                                                                                            
                             @list(, $file_data) = explode(',', $file_data); 
@@ -108,7 +108,7 @@ class GenerateQRController extends Controller
 		
 		if ($archive->open($archiveFile, \ZipArchive::CREATE | \ZipArchive::OVERWRITE)) {
 			foreach ($files as $file) {
-				$img = \Intervention\Image\Facades\Image::make($file)->crop(310, 420 )->encode('png');
+				$img = \Intervention\Image\Facades\Image::make($file)->crop(350, 350 )->encode('png');
 				$hash = basename($file);
 				$img->save(storage_path('app/public/tmp_download/'.$hash));
 				if ($archive->addFile($file, basename($file))) {
@@ -136,18 +136,17 @@ class GenerateQRController extends Controller
 		$string = $data; 
 
 		$width  = 350;
-		$height = 450;
+		$height = 350;
         $font = 16;
         // dd($fontfam);
 		$im = @imagecreate ($width, $height);
 		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
 		$transparent = imagecolorallocatealpha($im, 0, 0, 0, 127);
-		// imagefill($im, 0, 0, $transparent);
-		imagefill($im, 0, 0);
+		imagefill($im, 0, 0, $transparent);
 		imagesavealpha($im, true);
 	  
         $width1 = imagefontwidth($font) * strlen($string); 
-        imagestring ($im, $font,($width/2)-($width1/2), 40, $string, $text_color);
+        imagestring ($im, $font,($width/2)-($width1/2), 30, $string, $text_color);
 	  
         ob_start();
         imagealphablending($im, false);
