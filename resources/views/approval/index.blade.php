@@ -1861,9 +1861,9 @@
                 console.log(data.transfer);
                 if(data.no_fico == ''){
                     
-                    $("#posting_date_ams").show();
                     if(data.transfer != 0)
-                    {
+                    {                        
+                        $("#posting_date_ams").show();
                         $(".button-approved").hide();
                         $(".button-reject").hide();  
                         $("#create-button-trasfer-disposal").html('<button type="button" class="btn btn-flat label-danger button-trasfer-disposal" id="button-trasfer-disposal" OnClick="transferAmountDisposal()" style="margin-right: 5px;">TRANSFER AMOUNT (DISPOSAL)</button>');
@@ -5076,15 +5076,16 @@
         $("#box-detail-item").hide();
         
         var posting_date = $("#posting_date").val();
-        if( $.trim(posting_date) == "" )
-            {
-                notify({
-                    type: 'warning',
-                    message: " Posting Date is required"
-                });
-                return false;
-            }  
-
+        if($(#posting_date).is(":hidden") == 'false'){
+            if( $.trim(posting_date) == "" )
+                {
+                    notify({
+                        type: 'warning',
+                        message: " Posting Date is required"
+                    });
+                    return false;
+                }  
+        }
         if(confirm('Transfer Amount ?'))
         {
             var getnoreg = $("#getnoreg").val();
