@@ -53,7 +53,7 @@ class GenerateQRController extends Controller
                 if(count($getLup)!= 0) { 
                     foreach($getLup as $k=> $dt){
                         // print_r($dt);
-                        $trg = base64_encode($dt->QR_CODE);
+                        $trg = $dt->QR_CODE;
                         $data = $dt->QR_CODE;           
                         if( $this->gen_png_img($data) ){
                         
@@ -137,7 +137,7 @@ class GenerateQRController extends Controller
 
 		$width  = 350;
 		$height = 450;
-        $font = 8;
+        $font = 16;
         // dd($fontfam);
 		$im = @imagecreate ($width, $height);
 		$text_color = imagecolorallocate($im, 0, 0, 0); //black text
