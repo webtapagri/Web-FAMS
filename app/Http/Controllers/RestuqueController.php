@@ -18,12 +18,11 @@ class RestuqueController extends Controller
 {
     public function __construct()
     {
-		$this->restuque = 'http://apis.tap-agri.com/rtq-msa-approval/';
-		// if(env('APP_ENV') == 'production'){
-		// 	$this->restuque = 'http://apis.tap-agri.com/rtq-msa-approval/';
-		// }else{
-		// 	$this->restuque = 'http://apisqa.tap-agri.com/rtq-msa-qa-approval/';
-		// }
+		if(env('APP_ENV') == 'production'){
+			$this->restuque = 'http://apis.tap-agri.com/rtq-msa-approval/';
+		}else{
+			$this->restuque = 'http://apisqa.tap-agri.com/rtq-msa-qa-approval/';
+		}
     }
 
     //
