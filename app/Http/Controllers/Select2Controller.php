@@ -310,7 +310,7 @@ class Select2Controller extends Controller
                 "GENERAL_CODE" => "plant",
             )
         )
-        ->where("DESCRIPTION_CODE", "like", "".$request->type."%")
+        // ->where("DESCRIPTION_CODE", "like", "".$request->type."%")
         ->get();
 
         $arr = array();
