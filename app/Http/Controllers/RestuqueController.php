@@ -51,7 +51,6 @@ class RestuqueController extends Controller
 								date_format(a.CREATED_AT,'%Y-%m-%d') as document_date,
 								c.name as creator,
 								d.DESCRIPTION as plant_description,
-								d.DESCRIPTION as company_name,
 								CASE WHEN a.PO_TYPE = '0' THEN 'PO SAP'
 								WHEN a.PO_TYPE = '1' THEN 'PO AMP'
 								ELSE 'PO ASET LAIN' END as transaction_type,
@@ -66,7 +65,6 @@ class RestuqueController extends Controller
 			$sql_detail = "SELECT distinct
 									a.KODE_MATERIAL,
 											a.NAMA_MATERIAL,
-											concat(a.LOKASI_BA_CODE,' - ', b.DESCRIPTION) as LOKASI,
 											d.QUANTITY_SUBMIT as QTY
 							FROM v_email_data_approval a
 									LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
@@ -87,7 +85,6 @@ class RestuqueController extends Controller
 								date_format(a.CREATED_AT,'%Y-%m-%d') as document_date,
 								c.name as creator,
 								d.DESCRIPTION as plant_description,
-								d.DESCRIPTION as company_name,
 								CASE WHEN a.TYPE_TRANSAKSI = 'hilang' THEN 'DISPOSAL HILANG'
 									WHEN a.TYPE_TRANSAKSI = 'rusak' THEN 'DISPOSAL RUSAK'
 									ELSE 'DISPOSAL PENJUALAN' END as transaction_type,
@@ -101,9 +98,7 @@ class RestuqueController extends Controller
 							where b.seq is null
 							and a.NO_REG = '{$document_code}' ";
 			$sql_detail = "SELECT distinct
-									a.KODE_MATERIAL AS KODE_FAMS,
 									a.NAMA_MATERIAL AS NAMA_ASET,
-									concat(a.LOKASI_BA_CODE,' - ', b.DESCRIPTION) AS LOKASI,
 									a.TAHUN_ASSET as TAHUN_PEROLEHAN
 							FROM v_email_data_approval a
 									LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
@@ -124,7 +119,6 @@ class RestuqueController extends Controller
 								date_format(a.CREATED_AT,'%Y-%m-%d') as document_date,
 								c.name as creator,
 								d.DESCRIPTION as plant_description,
-								d.DESCRIPTION as company_name,
 								CASE WHEN a.JENIS_PENGAJUAN = '1' THEN 'MUTASI - ANTAR BA DALAM 1 PT'
 									ELSE 'MUTASI - SEWA AMP ANTAR BA' END as transaction_type,
 								b.description as header_note
@@ -136,7 +130,6 @@ class RestuqueController extends Controller
 							where b.seq is null
 							and a.NO_REG = '{$document_code}' ";
 			$sql_detail = "SELECT distinct
-									a.KODE_MATERIAL AS KODE_FAMS,
 									a.NAMA_MATERIAL AS NAMA_ASET,
 									concat(a.BA_PEMILIK_ASSET, ' - ',c.DESCRIPTION) AS PEMILIK_ASSET,
 									concat(a.LOKASI_BA_CODE,' - ', b.DESCRIPTION) AS LOKASI_AWAL_ASSET,
@@ -458,7 +451,6 @@ class RestuqueController extends Controller
 								date_format(a.CREATED_AT,'%Y-%m-%d') as document_date,
 								c.name as creator,
 								d.DESCRIPTION as plant_description,
-								d.DESCRIPTION as company_name,
 								CASE WHEN a.PO_TYPE = '0' THEN 'PO SAP'
 								WHEN a.PO_TYPE = '1' THEN 'PO AMP'
 								ELSE 'PO ASET LAIN' END as transaction_type,
@@ -473,7 +465,6 @@ class RestuqueController extends Controller
 			$sql_detail = "SELECT distinct
 									a.KODE_MATERIAL,
 											a.NAMA_MATERIAL,
-											concat(a.LOKASI_BA_CODE,' - ', b.DESCRIPTION) as LOKASI,
 											d.QUANTITY_SUBMIT as QTY
 							FROM v_email_data_approval a
 									LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
@@ -494,7 +485,6 @@ class RestuqueController extends Controller
 								date_format(a.CREATED_AT,'%Y-%m-%d') as document_date,
 								c.name as creator,
 								d.DESCRIPTION as plant_description,
-								d.DESCRIPTION as company_name,
 								CASE WHEN a.TYPE_TRANSAKSI = 'hilang' THEN 'DISPOSAL HILANG'
 									WHEN a.TYPE_TRANSAKSI = 'rusak' THEN 'DISPOSAL RUSAK'
 									ELSE 'DISPOSAL PENJUALAN' END as transaction_type,
@@ -508,9 +498,7 @@ class RestuqueController extends Controller
 							where b.seq is null
 							and a.NO_REG = '{$document_code}' ";
 			$sql_detail = "SELECT distinct
-									a.KODE_MATERIAL AS KODE_FAMS,
 									a.NAMA_MATERIAL AS NAMA_ASET,
-									concat(a.LOKASI_BA_CODE,' - ', b.DESCRIPTION) AS LOKASI,
 									a.TAHUN_ASSET as TAHUN_PEROLEHAN
 							FROM v_email_data_approval a
 									LEFT JOIN TM_GENERAL_DATA b ON a.LOKASI_BA_CODE = b.DESCRIPTION_CODE AND b.GENERAL_CODE = 'PLANT'
@@ -531,7 +519,6 @@ class RestuqueController extends Controller
 								date_format(a.CREATED_AT,'%Y-%m-%d') as document_date,
 								c.name as creator,
 								d.DESCRIPTION as plant_description,
-								d.DESCRIPTION as company_name,
 								CASE WHEN a.JENIS_PENGAJUAN = '1' THEN 'MUTASI - ANTAR BA DALAM 1 PT'
 									ELSE 'MUTASI - SEWA AMP ANTAR BA' END as transaction_type,
 								b.description as header_note
@@ -543,7 +530,6 @@ class RestuqueController extends Controller
 							where b.seq is null
 							and a.NO_REG = '{$document_code}' ";
 			$sql_detail = "SELECT distinct
-									a.KODE_MATERIAL AS KODE_FAMS,
 									a.NAMA_MATERIAL AS NAMA_ASET,
 									concat(a.BA_PEMILIK_ASSET, ' - ',c.DESCRIPTION) AS PEMILIK_ASSET,
 									concat(a.LOKASI_BA_CODE,' - ', b.DESCRIPTION) AS LOKASI_AWAL_ASSET,
