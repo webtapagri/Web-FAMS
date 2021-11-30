@@ -18,7 +18,7 @@ class RestuqueController extends Controller
 {
     public function __construct()
     {
-		$this->restuque = 'http://apis.tap-agri.com/rtq-msa-approval/';
+		$this->restuque = 'http://apisqa.tap-agri.com/rtq-msa-qa-approval/';
     }
 
     //
