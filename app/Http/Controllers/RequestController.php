@@ -89,10 +89,10 @@ class RequestController extends Controller
             'host' => 'ldap',
             'method' => "select_po/" . $param["no_po"]
         ));
-        
+        // dd($service);
         $data = $service;
 
-        //echo "<pre>"; print_r($data); die();
+        // echo "<pre>"; print_r($data); die();
         /*
             stdClass Object
             (
@@ -150,7 +150,7 @@ class RequestController extends Controller
 					'MAKTX'	=> $ar[1]['MAKTX'],
 					'MATNR'	=> $ar[1]['MATNR'],
 					'MEINS'	=> $ar[1]['MEINS'],
-					'MENGE'	=> $ar[0],
+					'MENGE'	=> $ar[1]['MENGE'],
 					'NETPR'	=> $ar[1]['NETPR'],
 					'WERKS'	=> $ar[1]['WERKS'],
 				);
