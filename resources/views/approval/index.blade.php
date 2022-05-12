@@ -4009,10 +4009,25 @@
         var no_registrasi= getnoreg.replace(/\//g, '-');
         var kode_asset_controller = $("#kode_aset_controller-"+no_reg_item+"").val();
         
-        if(po_type == 1 || po_type == 2 )
+        // if(po_type == 1 || po_type == 2 )
+        // {
+        //     // AMP & LAIN
+        //     var kode_asset_nilai = $("#kode_asset_ams-"+no_reg_item+"").val();
+        // }
+        // else
+        // {
+        //     // SAP
+        //     var kode_asset_nilai = $("#kode_aset_sap-"+no_reg_item+"").val();
+        // }
+        if(po_type == 1)
         {
-            // AMP & LAIN
+            // AMP
             var kode_asset_nilai = $("#kode_asset_ams-"+no_reg_item+"").val();
+        }
+        else if (po_type == 2)
+        {
+            //asset LAIN
+            var kode_asset_nilai = $("#kode_aset_sap-"+no_reg_item+"").val();
         }
         else
         {
