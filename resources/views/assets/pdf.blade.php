@@ -1,0 +1,38 @@
+ <table style="border-collapse:collapse;text-align:left;width:100%;height:auto">
+     <tr>
+         <th style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;background-color:#991821;background-image:none;background-repeat:repeat;background-position:center top;background-attachment:scroll;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');color:#FFFFFF;font-size:15px;font-weight:bold;border-left-width:1px;border-left-style:solid;border-left-color:#B01C26;">Kode Asset Fams</th>
+         <th style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;background-color:#991821;background-image:none;background-repeat:repeat;background-position:center top;background-attachment:scroll;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');color:#FFFFFF;font-size:15px;font-weight:bold;border-left-width:1px;border-left-style:solid;border-left-color:#B01C26;">header</th>
+         <th style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;background-color:#991821;background-image:none;background-repeat:repeat;background-position:center top;background-attachment:scroll;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');color:#FFFFFF;font-size:15px;font-weight:bold;border-left-width:1px;border-left-style:solid;border-left-color:#B01C26;">header</th>
+         <th style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;background-color:#991821;background-image:none;background-repeat:repeat;background-position:center top;background-attachment:scroll;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#991821', endColorstr='#80141C');color:#FFFFFF;font-size:15px;font-weight:bold;border-left-width:1px;border-left-style:solid;border-left-color:#B01C26;">header</th>
+     </tr>
+     <tr>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+     </tr>
+     <tr class="alt">
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+     </tr>
+     <tr>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+     </tr>
+     <tr class="alt">
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;background-color:#F7CDCD;background-image:none;background-repeat:repeat;background-position:top left;background-attachment:scroll;color:#80141C;">data</td>
+     </tr>
+     <tr>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+         <td style="padding-top:3px;padding-bottom:3px;padding-right:10px;padding-left:10px;color:#80141C;border-left-width:1px;border-left-style:solid;border-left-color:#F7CDCD;font-size:12px;font-weight:normal;">data</td>
+     </tr>
+ </table>
