@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  app:
+    container_name: Web-FAMS
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - 81:80
+    volumes:
+      - ./:/var/www/html/Web-FAMS
