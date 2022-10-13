@@ -2827,6 +2827,7 @@ WHERE a.NO_REG = '{$noreg}' AND (a.KODE_ASSET_CONTROLLER is null OR a.KODE_ASSET
                 else
                 {
                     $kode_asset_label = "KODE ASSET FAMS / SAP";    
+                    $kode_asset = "KODE_ASSET_SAP";
                 }
                    
             }
