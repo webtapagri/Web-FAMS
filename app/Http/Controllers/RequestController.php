@@ -547,9 +547,10 @@ class RequestController extends Controller
 
     public function get_reg_no()
     {
-        $sql = "SELECT count(*) AS total FROM TR_REG_ASSET WHERE YEAR(tanggal_reg) = YEAR(CURDATE()) AND MONTH(tanggal_reg) = MONTH(curdate())";
+        $sql = "SELECT count(*) AS total, BUSINESS_AREA, NO_PO FROM TR_REG_ASSET WHERE YEAR(tanggal_reg) = YEAR(CURDATE()) AND MONTH(tanggal_reg) = MONTH(curdate())";
         $data = DB::select($sql);
         $maxno = $data[0]->total+1;
+        $ba = $data[0]->BUSINESS_AREA;
         //echo "<pre>"; print_r($maxno); die();
         
         $year= date('y');
@@ -557,7 +558,7 @@ class RequestController extends Controller
         $year=$year.'.';
         $n=$maxno;
         $n = str_pad($n + 1, 5, 0, STR_PAD_LEFT);
-        $number=$year.$month.'/AMS/PDFA/'.$n;
+        $number=$year.$month.'/AMS/PDFA/'.$ba.'/'.$po.'/'.$n;
         //echo $number; die();
         return $number;
     }
